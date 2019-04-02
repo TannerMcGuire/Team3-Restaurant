@@ -34,7 +34,7 @@ public class Vendor extends EntityBase implements IView {
 		super(myTableName);
 
 		setDependencies();
-		String query = "SELECT * FROM " + myTableName + " WHERE (Id = " + Id + ")";
+		String query = "SELECT * FROM " + myTableName + " WHERE (ID = " + Id + ")";
 
 		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
 
@@ -44,7 +44,7 @@ public class Vendor extends EntityBase implements IView {
 
 			// There should be EXACTLY one vendor. More than that is an error
 			if (size != 1) {
-				throw new InvalidPrimaryKeyException("Multiple vendors matching id : " + Id + " found.");
+				throw new InvalidPrimaryKeyException("Multiple vendors matching ID : " + Id + " found.");
 			} else {
 				// copy all the retrieved data into persistent state
 				Properties retrievedVendorData = allDataRetrieved.elementAt(0);
@@ -141,10 +141,10 @@ public class Vendor extends EntityBase implements IView {
 				Integer Id = insertAutoIncrementalPersistentState(mySchema, persistentState);
 				persistentState.setProperty("Id", "" + Id.intValue());
 				updateStatusMessage = "Vendor data for new vendor : " + persistentState.getProperty("Id")
-						+ " shelved successfully in database!";
+						+ " added successfully to database!";
 			}
 		} catch (SQLException ex) {
-			updateStatusMessage = "Error in shelving vendor data in database!";
+			updateStatusMessage = "Error in adding vendor data to database!";
 		}
 		System.out.println("updateStateInDatabase " + updateStatusMessage);
 	}
