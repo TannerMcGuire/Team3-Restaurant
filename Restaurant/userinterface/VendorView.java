@@ -74,7 +74,7 @@ public class VendorView extends View {
 		HBox container = new HBox();
 		container.setAlignment(Pos.CENTER);
 
-		Text titleText = new Text(" Inventory Management ");
+		Text titleText = new Text(" Restaurant Inventory ");
 		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		titleText.setWrappingWidth(300);
 		titleText.setTextAlignment(TextAlignment.CENTER);
@@ -135,10 +135,10 @@ public class VendorView extends View {
 		grid.add(phoneNum, 1, 2);
 
 
-		activeInactive = new ComboBox<String>();
-		activeInactive.getItems().addAll("Active", "Inactive");
-		activeInactive.setValue("Active");
-		//grid.add(activeInactive, 1, 3);
+//		activeInactive = new ComboBox<String>();
+//		activeInactive.getItems().addAll("Active", "Inactive");
+//		activeInactive.setValue("Active");
+//		grid.add(activeInactive, 1, 3);
 
 		HBox buttons = new HBox(10);
 		buttons.setAlignment(Pos.CENTER);
@@ -202,7 +202,7 @@ public class VendorView extends View {
 	public void clearErrorMessage() {
 		statusLog.clearErrorMessage();
 	}
-
+	// ----------------------------------------------------------
 	public void processAction(Event evt) {
 
 		clearErrorMessage();

@@ -34,8 +34,6 @@ import impresario.IModel;
 public class InventoryManagerView extends View {
 
 	// GUI stuff
-	private TextField userid;
-	private PasswordField password;
 	private Button addIITButton;
 	private Button updateIITButton;
 	private Button deleteIITButton;
@@ -78,14 +76,18 @@ public class InventoryManagerView extends View {
 		populateFields();
 
 		// STEP 0: Be sure you tell your model what keys you are interested in
-		myModel.subscribe("", this);
+		myModel.subscribe("VendorView", this);
+		myModel.subscribe("VendorCollectionView", this);
+		myModel.subscribe("InventoryManager", this);
+		myModel.subscribe("InventoryItemTypeView", this);
+		myModel.subscribe("InventoryItemTypeCollectionView", this);
 	}
 
 	// Create the label (Text) for the title of the screen
 	// -------------------------------------------------------------
 	private Node createTitle() {
 
-		Text titleText = new Text("       Restaurant Inventory          ");
+		Text titleText = new Text(" 	    Restaurant Inventory	 ");
 		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		titleText.setTextAlignment(TextAlignment.CENTER);
 		titleText.setFill(Color.DARKGREEN);
@@ -104,6 +106,7 @@ public class InventoryManagerView extends View {
 
 		// data entry fields
 		addIITButton = new Button("Add Inventory Item Type");
+		addIITButton.setMinWidth(255);
 		addIITButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -111,19 +114,21 @@ public class InventoryManagerView extends View {
 				processAction(e);
 			}
 		});
-		grid.add(addIITButton, 1, 0);
+		//grid.add(addIITButton, 1, 0);
 		
 		updateIITButton = new Button("Update Inventory Item Type");
+		updateIITButton.setMinWidth(255);
 		updateIITButton.setOnAction(new EventHandler<ActionEvent>() {
-
+			
 			@Override
 			public void handle(ActionEvent e) {
 				processAction(e);
 			}
 		});
-		grid.add(updateIITButton, 1, 1);
+		//grid.add(updateIITButton, 1, 1);
 		
 		deleteIITButton = new Button("Delete Inventory Item Type");
+		deleteIITButton.setMinWidth(255);
 		deleteIITButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -131,19 +136,21 @@ public class InventoryManagerView extends View {
 				processAction(e);
 			}
 		});
-		grid.add(deleteIITButton, 1, 2);
+		//grid.add(deleteIITButton, 1, 2);
 		
 		addVendorButton = new Button("Add Vendor");
+		addVendorButton.setMinWidth(255);
 		addVendorButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				myModel.stateChangeRequest("VendorView", null);
 			}
 		});
-		grid.add(addVendorButton, 1, 3);
+		//grid.add(addVendorButton, 1, 3);
 		
 		modifyVendorButton = new Button("Modify Vendor");
+		modifyVendorButton.setMinWidth(255);
 		modifyVendorButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -151,19 +158,21 @@ public class InventoryManagerView extends View {
 				processAction(e);
 			}
 		});
-		grid.add(modifyVendorButton, 1, 4);
+		//grid.add(modifyVendorButton, 1, 4);
 		
 		addVIITButton = new Button("Add Vendor Inventory Item Type");
+		addVIITButton.setMinWidth(255);
 		addVIITButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				myModel.stateChangeRequest("VendorInventoryItemTypeView", null);
 			}
 		});
-		grid.add(addVIITButton, 1, 5);
+		//grid.add(addVIITButton, 1, 5);
 		
 		deleteVIITButton = new Button("Delete Vendor Inventory Item Type");
+		deleteVIITButton.setMinWidth(255);
 		deleteVIITButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -171,9 +180,10 @@ public class InventoryManagerView extends View {
 				processAction(e);
 			}
 		});
-		grid.add(deleteVIITButton, 1, 6);
+		//grid.add(deleteVIITButton, 1, 6);
 		
 		processButton = new Button("Process Invoice");
+		processButton.setMinWidth(255);
 		processButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -181,9 +191,10 @@ public class InventoryManagerView extends View {
 				processAction(e);
 			}
 		});
-		grid.add(processButton, 1, 7);
+		//grid.add(processButton, 1, 7);
 		
 		removeItemButton = new Button("Remove Item");
+		removeItemButton.setMinWidth(255);
 		removeItemButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -191,9 +202,10 @@ public class InventoryManagerView extends View {
 				processAction(e);
 			}
 		});
-		grid.add(removeItemButton, 1, 8);
+		//grid.add(removeItemButton, 1, 8);
 		
 		modifyIIstatusButton = new Button("Modify Inventory Item Status");
+		modifyIIstatusButton.setMinWidth(255);
 		modifyIIstatusButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -201,9 +213,10 @@ public class InventoryManagerView extends View {
 				processAction(e);
 			}
 		});
-		grid.add(modifyIIstatusButton, 1, 9);
+		//grid.add(modifyIIstatusButton, 1, 9);
 		
 		reorderButton = new Button("Reorder List");
+		reorderButton.setMinWidth(255);
 		reorderButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -211,9 +224,10 @@ public class InventoryManagerView extends View {
 				processAction(e);
 			}
 		});
-		grid.add(reorderButton, 1, 10);
+		//grid.add(reorderButton, 1, 10);
 		
 		inventoryButton = new Button("View Inventory");
+		inventoryButton.setMinWidth(255);
 		inventoryButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -221,18 +235,37 @@ public class InventoryManagerView extends View {
 				processAction(e);
 			}
 		});
-		grid.add(inventoryButton, 1, 11);
+		//grid.add(inventoryButton, 1, 11);
 		
 		doneButton = new Button("DONE");
+		doneButton.setTextFill(Color.WHITE);
+		doneButton.setMinWidth(255);
+		doneButton.setStyle("-fx-background-color: black");
 		doneButton.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				System.exit(0);
 			}
 		});
-		grid.add(doneButton, 1, 12);
+		//grid.add(doneButton, 1, 12);
 
+		VBox btnContainer = new VBox(10);
+		btnContainer.setAlignment(Pos.BOTTOM_CENTER);
+		btnContainer.getChildren().add(addIITButton);
+		btnContainer.getChildren().add(updateIITButton);
+		btnContainer.getChildren().add(deleteIITButton);
+		btnContainer.getChildren().add(addVendorButton);
+		btnContainer.getChildren().add(modifyVendorButton);
+		btnContainer.getChildren().add(addVIITButton);
+		btnContainer.getChildren().add(deleteVIITButton);
+		btnContainer.getChildren().add(processButton);
+		btnContainer.getChildren().add(removeItemButton);
+		btnContainer.getChildren().add(modifyIIstatusButton);
+		btnContainer.getChildren().add(reorderButton);
+		btnContainer.getChildren().add(inventoryButton);
+		btnContainer.getChildren().add(doneButton);
+		grid.add(btnContainer, 1, 0);
+		
 		return grid;
 	}
 
@@ -254,19 +287,19 @@ public class InventoryManagerView extends View {
 	// Make the ActionListeners delegate to this method
 	// -------------------------------------------------------------
 	public void processAction(Event evt) {
-		// DEBUG: System.out.println("TellerView.actionPerformed()");
-
-		clearErrorMessage();
-
-		String useridEntered = userid.getText();
-
-		if ((useridEntered == null) || (useridEntered.length() == 0)) {
-			displayErrorMessage("Please enter a user id!");
-			userid.requestFocus();
-		} else {
-			String passwordEntered = password.getText();
-			processUserIDAndPassword(useridEntered, passwordEntered);
-		}
+//		// DEBUG: System.out.println("TellerView.actionPerformed()");
+//
+//		clearErrorMessage();
+//
+//		String useridEntered = userid.getText();
+//
+//		if ((useridEntered == null) || (useridEntered.length() == 0)) {
+//			displayErrorMessage("Please enter a user id!");
+//			userid.requestFocus();
+//		} else {
+//			String passwordEntered = password.getText();
+//			processUserIDAndPassword(useridEntered, passwordEntered);
+//		}
 
 	}
 
@@ -276,15 +309,15 @@ public class InventoryManagerView extends View {
 	 */
 	// ----------------------------------------------------------
 	private void processUserIDAndPassword(String useridString, String passwordString) {
-		Properties props = new Properties();
-		props.setProperty("ID", useridString);
-		props.setProperty("Password", passwordString);
-
-		// clear fields for next time around
-		userid.setText("");
-		password.setText("");
-
-		myModel.stateChangeRequest("Login", props);
+//		Properties props = new Properties();
+//		props.setProperty("ID", useridString);
+//		props.setProperty("Password", passwordString);
+//
+//		// clear fields for next time around
+//		userid.setText("");
+//		password.setText("");
+//
+//		myModel.stateChangeRequest("Login", props);
 	}
 
 	// ---------------------------------------------------------
