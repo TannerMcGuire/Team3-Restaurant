@@ -13,6 +13,8 @@ import impresario.IView;
 import impresario.ModelRegistry;
 
 import event.Event;
+import exception.InvalidPrimaryKeyException;
+import exception.PasswordMismatchException;
 import userinterface.MainStageContainer;
 import userinterface.View;
 import userinterface.ViewFactory;
@@ -23,6 +25,11 @@ public class InventoryManager implements IView, IModel {
 	// Impresario
 	private Properties dependencies;
 	private ModelRegistry myRegistry;
+
+	private Vendor myVendor;
+	private InventoryItemType myIIT;
+	private VendorCollection accounts;
+	private Vendor selectedAccount;
 
 	// GUI
 	private Hashtable<String, Scene> myViews;
@@ -46,16 +53,16 @@ public class InventoryManager implements IView, IModel {
 		// Set up the initial view
 		createAndShowInventoryManagerView();
 	}
-	
+
 	// Editable to match our system requirements
 	// -----------------------------------------------------------------------------------
 	private void setDependencies() {
-//		dependencies = new Properties();
-//		dependencies.setProperty("Deposit", "TransactionError");
-//		dependencies.setProperty("Withdraw", "TransactionError");
-//		dependencies.setProperty("Transfer", "TransactionError");
-//		dependencies.setProperty("BalanceInquiry", "TransactionError");
-//		dependencies.setProperty("ImposeServiceCharge", "TransactionError");
+		dependencies = new Properties();
+		dependencies.setProperty("Deposit", "TransactionError");
+		dependencies.setProperty("Withdraw", "TransactionError");
+		dependencies.setProperty("Transfer", "TransactionError");
+		dependencies.setProperty("BalanceInquiry", "TransactionError");
+		dependencies.setProperty("ImposeServiceCharge", "TransactionError");
 
 		myRegistry.setDependencies(dependencies);
 	}
@@ -101,13 +108,61 @@ public class InventoryManager implements IView, IModel {
 		// just set up dependencies for
 		// DEBUG System.out.println("Librarian.sCR: key = " + key);
 		// This is where GUI popups change!!!
-		if (key.equals("NewView") == true) { // for new views
-			// createAndShowNewView();
-		} else if (key.equals("Exit") == true) {
+		if (key.equals("InventoryManagerView") == true) {
 			createAndShowInventoryManagerView();
+		} else if (key.equals("VendorInventoryItemTypeView") == true) { // for new views
+			createAndShowVendorInventoryItemTypeView();
+		} else if (key.equals("VendorView") == true) {
+			createAndShowVendorView();
+		} else if (key.equals("VendorInfo") == true) {
+			if (value != null) {
+				boolean flag = vendorFolder((Properties) value);
+				if (flag == true) {
+					try {
+						searchVendor((Properties) value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}else if (key.equals("InventoryItemTypeView") == true) {
+			createAndShowInventoryItemTypeView();
+		} else if (key.equals("IITInfo") == true) {
+			if (value != null) {
+				boolean flag = inventoryItemTypeFolder((Properties) value);
+				if (flag == true) {
+					try {
+						searchIIT((Properties) value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 
 		myRegistry.updateSubscribers(key, this);
+	}
+
+	// ----------------------------------------------------------
+	public boolean vendorFolder(Properties props) {
+		try {
+			myVendor = new Vendor(props);
+			return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+
+	// ----------------------------------------------------------
+	public boolean inventoryItemTypeFolder(Properties props) {
+		try {
+			myIIT = new InventoryItemType(props);
+			return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
 	}
 
 	/** Called via the IView relationship */
@@ -116,6 +171,20 @@ public class InventoryManager implements IView, IModel {
 		// DEBUG System.out.println("Librarian.updateState: key: " + key);
 
 		stateChangeRequest(key, value);
+	}
+
+	// ----------------------------------------------------------
+	private void searchVendor(Properties vend) throws Exception {
+		VendorCollection vc = new VendorCollection();
+		vc.findVendor(vend);
+		vc.createAndShowView();
+	}
+
+	// ----------------------------------------------------------
+	private void searchIIT(Properties item) throws Exception {
+		InventoryItemTypeCollection iit = new InventoryItemTypeCollection();
+		iit.findInventoryItemType(item);
+		iit.createAndShowView();
 	}
 
 	// ------------------------------------------------------------
@@ -128,6 +197,50 @@ public class InventoryManager implements IView, IModel {
 			myViews.put("InventoryManagerView", currentScene);
 		}
 
+		swapToView(currentScene);
+
+	}
+
+	// ------------------------------------------------------------
+	private void createAndShowVendorView() {
+		Scene currentScene = (Scene) myViews.get("VendorView");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("VendorView", this);
+			currentScene = new Scene(newView);
+			myViews.put("VendorView", currentScene);
+		}
+
+		swapToView(currentScene);
+
+	}
+
+	// ------------------------------------------------------------
+	private void createAndShowInventoryItemTypeView() {
+		Scene currentScene = (Scene) myViews.get("InventoryItemTypeView");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("InventoryItemTypeView", this);
+			currentScene = new Scene(newView);
+			myViews.put("InventoryItemTypeView", currentScene);
+		}
+
+		swapToView(currentScene);
+
+	}
+
+	// ----------------------------------------------------------
+	private void createAndShowVendorInventoryItemTypeView() {
+		Scene currentScene = (Scene) myViews.get("VendorInventoryItemTypeView");
+
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("VendorInventoryItemTypeView", this); // USE VIEW FACTORY
+			currentScene = new Scene(newView);
+			myViews.put("VendorInventoryItemTypeView", currentScene);
+		}
+
+		// make the view visible by installing it into the frame
 		swapToView(currentScene);
 
 	}
