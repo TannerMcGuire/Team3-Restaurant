@@ -35,7 +35,7 @@ import userinterface.MainStageContainer;
 import userinterface.WindowPosition;
 
 
-/** The class containing the main program  for the ATM application */
+/** The class containing the main program  for the Restaurant application */
 //==============================================================
 public class Tester extends Application
 {
