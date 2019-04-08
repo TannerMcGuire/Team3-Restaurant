@@ -70,8 +70,6 @@ public class VendorCollectionView extends View {
 		getChildren().add(container);
 
 		populateFields();
-		
-		myModel.subscribe("InventoryManagerView", this);
 	}
 
 	// --------------------------------------------------------------------------
@@ -180,6 +178,7 @@ public class VendorCollectionView extends View {
 		submitButton = new Button("Submit");
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
+				// myModel.stateChangeRequest("InventoryManagerView", null);
 				processVendorSelected();
 			}
 		});
@@ -187,7 +186,7 @@ public class VendorCollectionView extends View {
 		backButton = new Button("Back");
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				//myModel.stateChangeRequest("InventoryManagerView", null);
+				// myModel.stateChangeRequest("InventoryManagerView", null);
 				new model.InventoryManager();
 			}
 		});

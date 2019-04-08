@@ -35,294 +35,202 @@ import impresario.IModel;
 //==============================================================
 public class InventoryItemTypeView extends View {
 
-		// GUI components
-		protected TextField name;
-		protected TextField unit;
-		protected TextField measure;
-		protected TextField days;
-		protected TextField reorder;
-		protected TextField notes;
-		protected ComboBox<String> activeInactive;
+	// GUI components
+	protected TextField name;
+	protected TextField notes;
+	protected ComboBox<String> activeInactive;
 
-		private String history = "";
+	protected Button doneButton; // doneButton
+	protected Button submitButton; // new button
 
-		protected Button doneButton; // doneButton
-		protected Button submitButton; // new button
+	// For showing error message
+	protected MessageView statusLog;
 
-		// For showing error message
-		protected MessageView statusLog;
+	// constructor for this class -- takes a model object
+	// ----------------------------------------------------------
+	public InventoryItemTypeView(IModel account) {
+		super(account, "IITView");
 
-		// constructor for this class -- takes a model object
-		// ----------------------------------------------------------
-		public InventoryItemTypeView(IModel account) {
-			super(account, "InventoryItemTypeView");
+		// create a container for showing the contents
+		VBox container = new VBox(10);
+		container.setPadding(new Insets(15, 5, 5, 5));
 
-			history = (String) myModel.getState("his");
+		// Add a title for this panel
+		container.getChildren().add(createTitle());
 
-			// create a container for showing the contents
-			VBox container = new VBox(10);
-			container.setPadding(new Insets(15, 5, 5, 5));
+		// create our GUI components, add them to this Container
+		container.getChildren().add(createFormContent());
 
-			// Add a title for this panel
-			container.getChildren().add(createTitle());
+		container.getChildren().add(createStatusLog("             "));
 
-			// create our GUI components, add them to this Container
-			container.getChildren().add(createFormContent());
+		getChildren().add(container);
 
-			container.getChildren().add(createStatusLog("             "));
+		myModel.subscribe("UpdateStatusMessage", this);
+	}
 
-			getChildren().add(container);
+	// Create the title container
+	// -------------------------------------------------------------
+	private Node createTitle() // DONE
+	{
+		HBox container = new HBox();
+		container.setAlignment(Pos.CENTER);
 
-			myModel.subscribe("InventoryManager", this);
-		}
+		Text titleText = new Text(" Restaurant Inventory ");
+		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		titleText.setWrappingWidth(300);
+		titleText.setTextAlignment(TextAlignment.CENTER);
+		titleText.setFill(Color.DARKGREEN);
+		container.getChildren().add(titleText);
 
-		// Create the title container
-		// -------------------------------------------------------------
-		private Node createTitle() // DONE
-		{
-			HBox container = new HBox();
-			container.setAlignment(Pos.CENTER);
+		return container;
+	}
 
-			Text titleText = new Text(" Restaurant Inventory ");
-			titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-			titleText.setWrappingWidth(300);
-			titleText.setTextAlignment(TextAlignment.CENTER);
-			titleText.setFill(Color.DARKGREEN);
-			container.getChildren().add(titleText);
+	// Create the main form content
+	// -------------------------------------------------------------
+	private VBox createFormContent() {
+		VBox vbox = new VBox(10);
 
-			return container;
-		}
+		GridPane grid = new GridPane();
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(25, 25, 25, 25));
 
-		// Create the main form content
-		// -------------------------------------------------------------
-		private VBox createFormContent() {
-			VBox vbox = new VBox(10);
+		Text prompt = new Text("Please Enter Inventory Item Information");
+		prompt.setWrappingWidth(400);
+		prompt.setTextAlignment(TextAlignment.CENTER);
+		prompt.setFill(Color.BLACK);
+		grid.add(prompt, 0, 0, 2, 1);
 
-			GridPane grid = new GridPane();
-			grid.setAlignment(Pos.CENTER);
-			grid.setHgap(10);
-			grid.setVgap(10);
-			grid.setPadding(new Insets(25, 25, 25, 25));
+		Text nameLabel = new Text(" Item Type Name : ");
+		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+		nameLabel.setFont(myFont);
+		nameLabel.setWrappingWidth(150);
+		nameLabel.setTextAlignment(TextAlignment.RIGHT);
+		grid.add(nameLabel, 0, 1);
 
-			Text prompt = new Text("Please Enter Inventory Item Information");
-			prompt.setWrappingWidth(400);
-			prompt.setTextAlignment(TextAlignment.CENTER);
-			prompt.setFill(Color.BLACK);
-			grid.add(prompt, 0, 0, 2, 1);
+		name = new TextField();
+		name.setOnAction(new EventHandler<ActionEvent>() {
 
-			Text nameLabel = new Text(" Item Type Name : ");
-			Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
-			nameLabel.setFont(myFont);
-			nameLabel.setWrappingWidth(150);
-			nameLabel.setTextAlignment(TextAlignment.RIGHT);
-			grid.add(nameLabel, 0, 1);
-			name = new TextField();
-
-			grid.add(name, 1, 1);
-			
-			if (history.equals("addIIT")) {
-				Text unitsLabel = new Text(" Units : ");
-				unitsLabel.setFont(myFont);
-				unitsLabel.setWrappingWidth(150);
-				unitsLabel.setTextAlignment(TextAlignment.RIGHT);
-				grid.add(unitsLabel, 0, 2);
-				unit = new TextField("0");
-
-				grid.add(unit, 1, 2);
-
-				Text measureLabel = new Text(" Unit of Measure : ");
-				measureLabel.setFont(myFont);
-				measureLabel.setWrappingWidth(150);
-				measureLabel.setTextAlignment(TextAlignment.RIGHT);
-				grid.add(measureLabel, 0, 3);
-				measure = new TextField();
-
-				grid.add(measure, 1, 3);
-
-				Text daysLabel = new Text(" Validity Days (-1 if not expiration): ");
-				daysLabel.setFont(myFont);
-				daysLabel.setWrappingWidth(150);
-				daysLabel.setTextAlignment(TextAlignment.RIGHT);
-				grid.add(daysLabel, 0, 4);
-				days = new TextField();
-
-				grid.add(days, 1, 4);
-
-				Text orderLabel = new Text(" Reorder Point : ");
-				orderLabel.setFont(myFont);
-				orderLabel.setWrappingWidth(150);
-				orderLabel.setTextAlignment(TextAlignment.RIGHT);
-				grid.add(orderLabel, 0, 5);
-				reorder = new TextField();
-
-				grid.add(reorder, 1, 5);
-
-				Text noteLabel = new Text(" Notes : ");
-				noteLabel.setFont(myFont);
-				noteLabel.setWrappingWidth(150);
-				noteLabel.setTextAlignment(TextAlignment.RIGHT);
-				grid.add(noteLabel, 0, 6);
-				notes = new TextField();
-
-				grid.add(notes, 1, 6);
-			} else {
-				Text noteLabel = new Text(" Notes : ");
-				noteLabel.setFont(myFont);
-				noteLabel.setWrappingWidth(150);
-				noteLabel.setTextAlignment(TextAlignment.RIGHT);
-				grid.add(noteLabel, 0, 2);
-				notes = new TextField();
-
-				grid.add(notes, 1, 2);
+			@Override
+			public void handle(ActionEvent e) {
+				processAction(e);
 			}
-			HBox buttons = new HBox(10);
-			buttons.setAlignment(Pos.CENTER);
-			submitButton = new Button("Submit");
-			submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-			submitButton.setOnAction(new EventHandler<ActionEvent>() {
+		});
+		grid.add(name, 1, 1);
 
-				@Override
-				public void handle(ActionEvent e) {
-					processAction(e);
-				}
-			});
-			buttons.getChildren().add(submitButton);
+		Text noteLabel = new Text(" Notes : ");
+		noteLabel.setFont(myFont);
+		noteLabel.setWrappingWidth(150);
+		noteLabel.setTextAlignment(TextAlignment.RIGHT);
+		grid.add(noteLabel, 0, 2);
 
-			doneButton = new Button("Back");
-			doneButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-			doneButton.setOnAction(new EventHandler<ActionEvent>() {
+		notes = new TextField();
+		notes.setOnAction(new EventHandler<ActionEvent>() {
 
-				@Override
-				public void handle(ActionEvent e) {
-					clearErrorMessage();
-					// myModel.stateChangeRequest("InventoryManagerView", null);
-					new model.InventoryManager();
-				}
-			});
-			buttons.getChildren().add(doneButton);
-
-			vbox.getChildren().add(grid);
-			vbox.getChildren().add(buttons);
-
-			return vbox;
-		}
-
-		// Create the status log field
-		// -------------------------------------------------------------
-		protected MessageView createStatusLog(String initialMessage) {
-			statusLog = new MessageView(initialMessage);
-
-			return statusLog;
-		}
-
-		/**
-		 * Display error message
-		 */
-		// ----------------------------------------------------------
-		public void displayErrorMessage(String message) {
-			statusLog.displayErrorMessage(message);
-		}
-
-		/**
-		 * Display info message
-		 */
-		// ----------------------------------------------------------
-		public void displayMessage(String message) {
-			statusLog.displayMessage(message);
-		}
-
-		/**
-		 * Clear error message
-		 */
-		// ----------------------------------------------------------
-		public void clearErrorMessage() {
-			statusLog.clearErrorMessage();
-		}
-
-		// ----------------------------------------------------------
-		public void processAction(Event evt) {
-
-			clearErrorMessage();
-
-			String nameEntered = name.getText();
-			String notesEntered = notes.getText();
-			
-			if (history.equals("addIIT")) {
-			String unitsEntered = unit.getText();
-			String measureEntered = measure.getText();
-			String daysEntered = days.getText();
-			String orderEntered = reorder.getText();		
-				if ((nameEntered == "") || (nameEntered.length() == 0)) {
-					displayErrorMessage("Please enter a valid item name");
-					name.requestFocus();
-				} else if (Integer.parseInt(unitsEntered) < 0) {
-					displayErrorMessage("Please enter positive integer for units");
-					unit.requestFocus();
-				} else if ((measureEntered == "") || (measureEntered.length() == 0)) {
-					displayErrorMessage("Please enter type of measure ie bottle");
-					measure.requestFocus();
-				} else if ((daysEntered == "") || (Integer.parseInt(daysEntered) < -1)) {
-					displayErrorMessage("Please enter positive integer for validity of item");
-					days.requestFocus();
-				} else if ((orderEntered == "") || (Double.parseDouble(orderEntered) < 0)) {
-					displayErrorMessage("Please enter positive decimal for a reorder point");
-					reorder.requestFocus();
-				} else if ((notesEntered == "") || (notesEntered.length() == 0)) {
-					displayErrorMessage("Please enter notes about " + nameEntered);
-					notes.requestFocus();
-				} else {
-					processInventoryItemType(nameEntered, unitsEntered, measureEntered, daysEntered, orderEntered,
-							notesEntered);
-				}
-			} else if (((nameEntered == "") || (nameEntered.length() == 0))
-					&& ((notesEntered == "") || (notesEntered.length() == 0))) {
-				displayErrorMessage("Please enter a valid item name or notes");
-				name.requestFocus();
-			} else {
-				processIIT(nameEntered, notesEntered);
+			@Override
+			public void handle(ActionEvent e) {
+				processAction(e);
 			}
+		});
+		grid.add(notes, 1, 2);
+
+		HBox buttons = new HBox(10);
+		buttons.setAlignment(Pos.CENTER);
+		submitButton = new Button("Submit");
+		submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+		submitButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				processAction(e);
+			}
+		});
+		buttons.getChildren().add(submitButton);
+
+		doneButton = new Button("Back");
+		doneButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+		doneButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				clearErrorMessage();
+				//myModel.stateChangeRequest("InventoryManagerView", null);
+				new model.InventoryManager();
+			}
+		});
+		buttons.getChildren().add(doneButton);
+
+		vbox.getChildren().add(grid);
+		vbox.getChildren().add(buttons);
+
+		return vbox;
+	}
+
+	// Create the status log field
+	// -------------------------------------------------------------
+	protected MessageView createStatusLog(String initialMessage) {
+		statusLog = new MessageView(initialMessage);
+
+		return statusLog;
+	}
+
+	/**
+	 * Display error message
+	 */
+	// ----------------------------------------------------------
+	public void displayErrorMessage(String message) {
+		statusLog.displayErrorMessage(message);
+	}
+
+	/**
+	 * Display info message
+	 */
+	// ----------------------------------------------------------
+	public void displayMessage(String message) {
+		statusLog.displayMessage(message);
+	}
+
+	/**
+	 * Clear error message
+	 */
+	// ----------------------------------------------------------
+	public void clearErrorMessage() {
+		statusLog.clearErrorMessage();
+	}
+	// ----------------------------------------------------------
+	public void processAction(Event evt) {
+
+		clearErrorMessage();
+
+		String nameEntered = name.getText();
+		String notesEntered = notes.getText();
+		
+		
+		if (((nameEntered == "") || (nameEntered.length() == 0)) 
+				&& ((notesEntered == "") || (notesEntered.length() == 0))) {
+			displayErrorMessage("Please enter a valid item name or notes");
+			name.requestFocus();
+		} else {
+			processIIT(nameEntered, notesEntered);
 		}
+	}
 
-		private void processIIT(String nameString, String noteString) {
-			Properties props = new Properties();
-			props.setProperty("ItemTypeName", nameString);
-			props.setProperty("Notes", noteString);
+	private void processIIT(String nameString, String noteString) {
+		Properties props = new Properties();
+		props.setProperty("ItemTypeName", nameString);
+		props.setProperty("Notes", noteString);
 
-			// clear fields for next time around
-			name.setText("");
-			notes.setText("");
+		// clear fields for next time around
+		name.setText("");
+		notes.setText("");
 
-			myModel.stateChangeRequest("IITInfo", props);
-		}
+		myModel.stateChangeRequest("IITInfo", props);
+	}
 
-		private void processInventoryItemType(String nameString, String unitString, String measureString, String dayString,
-				String orderString, String noteString) {
-			Properties props = new Properties();
-			props.setProperty("ItemTypeName", nameString);
-			props.setProperty("Units", unitString);
-			props.setProperty("UnitMeasure", measureString);
-			props.setProperty("ValidityDays", dayString);
-			props.setProperty("ReorderPoint", orderString);
-			props.setProperty("Notes", noteString);
-			props.setProperty("Status", "Active");
-
-			// clear fields for next time around
-			name.setText("");
-			unit.setText("");
-			measure.setText("");
-			days.setText("");
-			reorder.setText("");
-			notes.setText("");
-
-			InventoryItemType i = new InventoryItemType(props);
-			i.update();
-			displayMessage("Successfully added to database");
-			myModel.stateChangeRequest("Login", props);
-		}
-
-		@Override
-		public void updateState(String key, Object value) {
-
-		}
+	@Override
+	public void updateState(String key, Object value) {
 
 	}
+
+}

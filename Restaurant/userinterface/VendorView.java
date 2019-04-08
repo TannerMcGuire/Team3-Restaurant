@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -36,6 +37,7 @@ public class VendorView extends View {
 	// GUI components
 	protected TextField name;
 	protected TextField phoneNum;
+	protected ComboBox<String> activeInactive;
 
 	protected Button doneButton; // doneButton
 	protected Button submitButton; // new button
@@ -132,6 +134,12 @@ public class VendorView extends View {
 		});
 		grid.add(phoneNum, 1, 2);
 
+
+//		activeInactive = new ComboBox<String>();
+//		activeInactive.getItems().addAll("Active", "Inactive");
+//		activeInactive.setValue("Active");
+//		grid.add(activeInactive, 1, 3);
+
 		HBox buttons = new HBox(10);
 		buttons.setAlignment(Pos.CENTER);
 		submitButton = new Button("Submit");
@@ -152,7 +160,7 @@ public class VendorView extends View {
 			@Override
 			public void handle(ActionEvent e) {
 				clearErrorMessage();
-				new model.InventoryManager();
+				myModel.stateChangeRequest("InventoryManagerView", null);
 			}
 		});
 		buttons.getChildren().add(doneButton);
@@ -201,6 +209,7 @@ public class VendorView extends View {
 
 		String nameEntered = name.getText();
 		String phoneEntered = phoneNum.getText();
+		String status = activeInactive.getValue();
 		
 		
 		if ((nameEntered == "") || (nameEntered.length() == 0)) {
@@ -211,15 +220,15 @@ public class VendorView extends View {
 			phoneNum.requestFocus();
 		}
 		else {
-			processVendor(nameEntered, phoneEntered);
+			processVendor(nameEntered, phoneEntered, status);
 		}
 	}
 
-	private void processVendor(String nameString, String phoneString) {
+	private void processVendor(String nameString, String phoneString, String statusString) {
 		Properties props = new Properties();
 		props.setProperty("Name", nameString);
 		props.setProperty("PhoneNumber", phoneString);
-		props.setProperty("Status", "Active");
+		props.setProperty("Status", statusString);
 
 		// clear fields for next time around
 		name.setText("");
@@ -227,7 +236,6 @@ public class VendorView extends View {
 
 		Vendor b = new Vendor(props);
 		b.update();
-		displayMessage("Successfully added to database");
 		myModel.stateChangeRequest("Login", props);
 	}
 

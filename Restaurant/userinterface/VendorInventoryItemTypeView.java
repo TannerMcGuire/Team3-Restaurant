@@ -139,8 +139,7 @@ public class VendorInventoryItemTypeView extends View{
 		backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				//myModel.stateChangeRequest("InventoryManagerView", null);
-				new model.InventoryManager();
+				myModel.stateChangeRequest("InventoryManagerView", null);
 			}
 		});
 		buttons.getChildren().add(backButton);

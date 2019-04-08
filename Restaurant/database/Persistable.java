@@ -84,7 +84,7 @@ abstract public class Persistable
     //------------------------------------------------------------
     protected Properties getSchemaInfo(String tableName)
     {	
-    	//DEBUG System.out.println("Persistable.getSchemaInfo for table " + tableName);
+    	// DEBUG System.out.println("Persistable.getSchemaInfo for table " + tableName);
     	try
 		{
 		// Create a connection to the database
@@ -614,6 +614,7 @@ abstract public class Persistable
 			// The method executeUpdate executes a query on the database. The
 			// return result is of type integer which indicates the number of rows updated
 			int returnCode = theStatement.executeUpdate(theSQLStatement.toString());
+
 			// DEBUG: throw new SQLException("Testing only");
 
 			

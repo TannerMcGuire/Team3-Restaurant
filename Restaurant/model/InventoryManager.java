@@ -31,7 +31,6 @@ public class InventoryManager implements IView, IModel {
 	private VendorCollection accounts;
 	private Vendor selectedAccount;
 
-	public String history = "";
 	// GUI
 	private Hashtable<String, Scene> myViews;
 	private Stage myStage;
@@ -59,7 +58,7 @@ public class InventoryManager implements IView, IModel {
 	// -----------------------------------------------------------------------------------
 	private void setDependencies() {
 		dependencies = new Properties();
-		dependencies.setProperty("ModifyVIIT", "modifyVIIT");
+		dependencies.setProperty("Deposit", "TransactionError");
 		dependencies.setProperty("Withdraw", "TransactionError");
 		dependencies.setProperty("Transfer", "TransactionError");
 		dependencies.setProperty("BalanceInquiry", "TransactionError");
@@ -78,11 +77,17 @@ public class InventoryManager implements IView, IModel {
 	 * @return Value associated with the field
 	 */
 	// Example for later
-	// ----------------------------------------------------------
+//	// ----------------------------------------------------------
 	public Object getState(String key) {
-		if (key.equals("his") == true) {
-			return history;
-		}
+//		if (key.equals("LoginError") == true)
+//		{
+//			return loginErrorMessage;
+//		}
+//		else
+//		if (key.equals("TransactionError") == true)
+//		{
+//			return transactionErrorMessage;
+//		}
 //		else
 //		if (key.equals("Name") == true)
 //		{
@@ -93,8 +98,8 @@ public class InventoryManager implements IView, IModel {
 //			else
 //				return "Undefined";
 //		}
-		else
-			return "";
+//		else
+		return "";
 	}
 
 	// ----------------------------------------------------------------
@@ -105,16 +110,7 @@ public class InventoryManager implements IView, IModel {
 		// This is where GUI popups change!!!
 		if (key.equals("InventoryManagerView") == true) {
 			createAndShowInventoryManagerView();
-		} else if (key.equals("InventoryItemTypeView") == true) {
-			if (((String) value).equals("addIIT") == true) {
-				history = "addIIT";
-			} else if (((String) value).equals("update") == true) {
-				history = "update";
-			} else {
-				history = "VIIT";
-			}
-			createAndShowInventoryItemTypeView();
-		} else if (key.equals("VendorInventoryItemTypeView") == true) {
+		} else if (key.equals("VendorInventoryItemTypeView") == true) { // for new views
 			createAndShowVendorInventoryItemTypeView();
 		} else if (key.equals("VendorView") == true) {
 			createAndShowVendorView();
@@ -129,6 +125,8 @@ public class InventoryManager implements IView, IModel {
 					}
 				}
 			}
+		}else if (key.equals("InventoryItemTypeView") == true) {
+			createAndShowInventoryItemTypeView();
 		} else if (key.equals("IITInfo") == true) {
 			if (value != null) {
 				boolean flag = inventoryItemTypeFolder((Properties) value);
@@ -179,7 +177,7 @@ public class InventoryManager implements IView, IModel {
 	private void searchVendor(Properties vend) throws Exception {
 		VendorCollection vc = new VendorCollection();
 		vc.findVendor(vend);
-		createAndShowVendorCollectionView(vc);
+		vc.createAndShowView();
 	}
 
 	// ----------------------------------------------------------
@@ -217,22 +215,6 @@ public class InventoryManager implements IView, IModel {
 
 	}
 
-	// ------------------------------------------------------
-	protected void createAndShowVendorCollectionView(VendorCollection v) {
-
-		Scene localScene = myViews.get("VendorCollectionView");
-
-		if (localScene == null) {
-			// create our new view
-			View newView = ViewFactory.createView("VendorCollectionView", v);
-			localScene = new Scene(newView);
-			myViews.put("VendorCollectionView", localScene);
-		}
-		// make the view visible by installing it into the frame
-		swapToView(localScene);
-
-	}
-
 	// ------------------------------------------------------------
 	private void createAndShowInventoryItemTypeView() {
 		Scene currentScene = (Scene) myViews.get("InventoryItemTypeView");
@@ -253,7 +235,7 @@ public class InventoryManager implements IView, IModel {
 
 		if (currentScene == null) {
 			// create our initial view
-			View newView = ViewFactory.createView("VendorInventoryItemTypeView", this);
+			View newView = ViewFactory.createView("VendorInventoryItemTypeView", this); // USE VIEW FACTORY
 			currentScene = new Scene(newView);
 			myViews.put("VendorInventoryItemTypeView", currentScene);
 		}

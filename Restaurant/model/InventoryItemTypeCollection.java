@@ -109,13 +109,6 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 		} else if (key.equals("IITInfo") == true) {
 			iname = (String) value;
 			createAndShowVIITPriceView();
-		} else if (key.equals("IITchange") == true) {
-			iname = (String) value;
-			try {
-				createAndShowInventoryItemTypeView(new InventoryItemType(iname));
-			} catch (InvalidPrimaryKeyException e) {
-				e.printStackTrace();
-			}
 		} else if (key.equals("Success") == true) {
 			createAndShowYay();
 		}
@@ -156,20 +149,6 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 		}
 		// make the view visible by installing it into the frame
 		swapToView(localScene);
-
-	}
-
-	// ------------------------------------------------------------
-	private void createAndShowInventoryItemTypeView(InventoryItemType i) {
-		Scene currentScene = (Scene) myViews.get("InventoryItemTypeView");
-		if (currentScene == null) {
-			// create our initial view
-			View newView = ViewFactory.createView("InventoryItemTypeView", i);
-			currentScene = new Scene(newView);
-			myViews.put("InventoryItemTypeView", currentScene);
-		}
-
-		swapToView(currentScene);
 
 	}
 
