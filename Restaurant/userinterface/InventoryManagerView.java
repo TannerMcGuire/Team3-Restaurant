@@ -111,7 +111,7 @@ public class InventoryManagerView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				myModel.stateChangeRequest("InventoryItemTypeView", "addIIT");
 			}
 		});
 		//grid.add(addIITButton, 1, 0);
@@ -122,7 +122,7 @@ public class InventoryManagerView extends View {
 			
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				myModel.stateChangeRequest("InventoryItemTypeView", "update");
 			}
 		});
 		//grid.add(updateIITButton, 1, 1);
@@ -166,7 +166,7 @@ public class InventoryManagerView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				myModel.stateChangeRequest("VendorInventoryItemTypeView", null);
+				myModel.stateChangeRequest("VendorInventoryItemTypeView", "addVIIT");
 			}
 		});
 		//grid.add(addVIITButton, 1, 5);

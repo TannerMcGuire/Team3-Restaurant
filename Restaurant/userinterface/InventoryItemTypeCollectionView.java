@@ -218,11 +218,10 @@ public class InventoryItemTypeCollectionView extends View {
 	// --------------------------------------------------------------------------
 	protected void processInventoryItemTypeSelected() {
 		InventoryItemTypeTableModel selectedItem = tableOfItemTypes.getSelectionModel().getSelectedItem();
-
 		if (selectedItem != null) {
 			String selectedItemTypeName = selectedItem.getItemTypeName();
 			myModel.stateChangeRequest("IITInfo", selectedItemTypeName);
-		}
+		} 
 	}
 
 	// --------------------------------------------------------------------------
