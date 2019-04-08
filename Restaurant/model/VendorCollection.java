@@ -101,6 +101,8 @@ public class VendorCollection extends EntityBase implements IView {
 			return vendorList;
 		else if (key.equals("VendorList"))
 			return this;
+		else if (key.equals("his"))
+			return " ";
 		return null;
 	}
 
@@ -143,22 +145,6 @@ public class VendorCollection extends EntityBase implements IView {
 	// ----------------------------------------------------------
 	public void updateState(String key, Object value) {
 		stateChangeRequest(key, value);
-	}
-
-	// ------------------------------------------------------
-	protected void createAndShowView() {
-
-		Scene localScene = myViews.get("VendorCollectionView");
-
-		if (localScene == null) {
-			// create our new view
-			View newView = ViewFactory.createView("VendorCollectionView", this);
-			localScene = new Scene(newView);
-			myViews.put("VendorCollectionView", localScene);
-		}
-		// make the view visible by installing it into the frame
-		swapToView(localScene);
-
 	}
 
 	// ------------------------------------------------------

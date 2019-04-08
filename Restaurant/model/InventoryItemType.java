@@ -54,7 +54,7 @@ public class InventoryItemType extends EntityBase implements IView {
 				while (allKeys.hasMoreElements() == true) {
 					String nextKey = (String) allKeys.nextElement();
 					String nextValue = retrievedVendorData.getProperty(nextKey);
-					
+
 					if (nextValue != null) {
 						persistentState.setProperty(nextKey, nextValue);
 					}
@@ -131,17 +131,10 @@ public class InventoryItemType extends EntityBase implements IView {
 	private void updateStateInDatabase() {
 		try {
 			if (persistentState.getProperty("ItemTypeName") != null) {
-				Properties whereClause = new Properties();
-				whereClause.setProperty("ItemTypeName", persistentState.getProperty("ItemTypeName"));
-				updatePersistentState(mySchema, persistentState, whereClause);
-				updateStatusMessage = "Inventory Item type data for type name : " + persistentState.getProperty("ItemTypeName")
-						+ " updated successfully in database!";
-			} //else {
-//				Integer Id = insertAutoIncrementalPersistentState(mySchema, persistentState);
-//				persistentState.setProperty("Id", "" + Id.intValue());
-//				updateStatusMessage = "Vendor data for new vendor : " + persistentState.getProperty("Id")
-//						+ " shelved successfully in database!";
-//			}
+				insertPersistentState(mySchema, persistentState);
+				updateStatusMessage = "Inventory Item type data for type name : "
+						+ persistentState.getProperty("ItemTypeName") + " inserted successfully in database!";
+			}
 		} catch (SQLException ex) {
 			updateStatusMessage = "Error in shelving inventory item type data in database!";
 		}
@@ -149,8 +142,8 @@ public class InventoryItemType extends EntityBase implements IView {
 	}
 
 	/**
-	 * This method is needed solely to enable the Vendor information to be displayable
-	 * in a table
+	 * This method is needed solely to enable the Vendor information to be
+	 * displayable in a table
 	 *
 	 */
 	// --------------------------------------------------------------------------

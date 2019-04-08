@@ -35,7 +35,7 @@ import userinterface.MainStageContainer;
 import userinterface.WindowPosition;
 
 
-/** The class containing the main program  for the ATM application */
+/** The class containing the main program  for the Restaurant application */
 //==============================================================
 public class Tester extends Application
 {
@@ -50,11 +50,11 @@ public class Tester extends Application
 	//----------------------------------------------------------
 	public void start(Stage primaryStage)
 	{
-	   System.out.println("Restaurant Version 0.1");
+	   System.out.println("Restaurant Version 0.2");
 	   System.out.println("Copyright Team 3 2019");
 
            // Create the top-level container (main frame) and add contents to it.
-	   MainStageContainer.setStage(primaryStage, "Restaurant Inventory Version 0.1");
+	   MainStageContainer.setStage(primaryStage, "Restaurant Inventory Version 0.2");
 	   mainStage = MainStageContainer.getInstance();
 
 	   // Finish setting up the stage (ENABLE THE GUI TO BE CLOSED USING THE TOP RIGHT

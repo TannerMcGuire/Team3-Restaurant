@@ -108,7 +108,7 @@ public class YayView extends View {
 			@Override
 			public void handle(ActionEvent e) {
 				clearErrorMessage();
-				myModel.stateChangeRequest("InventoryManagerView", null);
+				new model.InventoryManager();
 			}
 		});
 		buttons.getChildren().add(doneButton);
