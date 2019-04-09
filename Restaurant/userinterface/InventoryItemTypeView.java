@@ -240,6 +240,7 @@ public class InventoryItemTypeView extends View {
 		}
 
 		// ----------------------------------------------------------
+		// ----------------------------------------------------------
 		public void processAction(Event evt) {
 
 			clearErrorMessage();
@@ -252,24 +253,22 @@ public class InventoryItemTypeView extends View {
 			String measureEntered = measure.getText();
 			String daysEntered = days.getText();
 			String orderEntered = reorder.getText();		
-				if ((nameEntered == "") || (nameEntered.length() == 0)) {
+				if ((nameEntered == "") || (nameEntered.length() == 0) || (nameEntered.length()> 32)) {
 					displayErrorMessage("Please enter a valid item name");
-					name.requestFocus();
-				} else if (Integer.parseInt(unitsEntered) < 0) {
+					name.requestFocus();	
+				}
+				else if ((Integer.parseInt(unitsEntered) < 0) ||(unitsEntered.matches("[0-9]+"))){
 					displayErrorMessage("Please enter positive integer for units");
 					unit.requestFocus();
-				} else if ((measureEntered == "") || (measureEntered.length() == 0)) {
+				} else if ((measureEntered == "") || (measureEntered.length() == 0) || (nameEntered.length()> 15))   {
 					displayErrorMessage("Please enter type of measure ie bottle");
 					measure.requestFocus();
-				} else if ((daysEntered == "") || (Integer.parseInt(daysEntered) < -1)) {
+				} else if ((daysEntered == "") || (Integer.parseInt(daysEntered) < -1) || (unitsEntered.matches("[0-9]+"))) {
 					displayErrorMessage("Please enter positive integer for validity of item");
 					days.requestFocus();
-				} else if ((orderEntered == "") || (Double.parseDouble(orderEntered) < 0)) {
+				} else if ((orderEntered == "") || (Double.parseDouble(orderEntered) < 0)) { //still requires double check 
 					displayErrorMessage("Please enter positive decimal for a reorder point");
 					reorder.requestFocus();
-				} else if ((notesEntered == "") || (notesEntered.length() == 0)) {
-					displayErrorMessage("Please enter notes about " + nameEntered);
-					notes.requestFocus();
 				} else {
 					processInventoryItemType(nameEntered, unitsEntered, measureEntered, daysEntered, orderEntered,
 							notesEntered);
