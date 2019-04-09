@@ -34,7 +34,7 @@ public class InventoryItemType extends EntityBase implements IView {
 		super(myTableName);
 
 		setDependencies();
-		String query = "SELECT * FROM " + myTableName + " WHERE (ItemTypeName = " + name + ")";
+		String query = "SELECT * FROM " + myTableName + " WHERE (ItemTypeName = '" + name + "')";
 
 		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
 
@@ -66,6 +66,15 @@ public class InventoryItemType extends EntityBase implements IView {
 		else {
 			throw new InvalidPrimaryKeyException("No inventory matching name : " + name + " found.");
 		}
+	}
+
+	// ----------------------------------------------------------
+	public InventoryItemType() {
+		super(myTableName);
+
+		setDependencies();
+		persistentState = new Properties();
+
 	}
 
 	// Can also be used to create a NEW Vendor (if the system it is part of
@@ -104,8 +113,18 @@ public class InventoryItemType extends EntityBase implements IView {
 
 	// ----------------------------------------------------------------
 	public void stateChangeRequest(String key, Object value) {
+		if (key.equals("SUBMIT")) {
+			processUpdate((Properties) value);
+		}
 
 		myRegistry.updateSubscribers(key, this);
+	}
+
+	// ----------------------------------------------------------------
+	private void processUpdate(Properties properties) {
+		persistentState = properties;
+
+		update();
 	}
 
 	/** Called via the IView relationship */
@@ -131,11 +150,18 @@ public class InventoryItemType extends EntityBase implements IView {
 	private void updateStateInDatabase() {
 		try {
 			if (persistentState.getProperty("ItemTypeName") != null) {
-				insertPersistentState(mySchema, persistentState);
+				Properties whereClause = new Properties();
+				whereClause.setProperty("ItemTypeName", persistentState.getProperty("ItemTypeName"));
+				updatePersistentState(mySchema, persistentState, whereClause);
 				updateStatusMessage = "Inventory Item type data for type name : "
-						+ persistentState.getProperty("ItemTypeName") + " inserted successfully in database!";
+						+ persistentState.getProperty("ItemTypeName") + " updated successfully in database!";
+			} else {
+				updateStatusMessage = "Inventory Item Type data for new Inventory Item Type : "
+						+ persistentState.getProperty("ItemTypeName") + " shelved successfully in database!";
 			}
-		} catch (SQLException ex) {
+		} catch (
+
+		SQLException ex) {
 			updateStatusMessage = "Error in shelving inventory item type data in database!";
 		}
 		System.out.println("updateStateInDatabase " + updateStatusMessage);

@@ -22,6 +22,12 @@ public class ViewFactory {
 			return new PriceView(model);
 		} else if (viewName.equals("Yay") == true) {
 			return new YayView(model);
+		} else if (viewName.equals("InventoryItemTypeSelectionScreen")) {
+			return new InventoryItemTypeSelectionScreen(model);
+		} else if (viewName.equals("EnterInventoryItemTypeAndNotesScreen")) {
+			return new EnterInventoryItemTypeAndNotesScreen(model);
+		} else if (viewName.equals("InventoryItemTypeChangesScreen")) {
+			return new InventoryItemTypeChangesScreen(model);
 		}
 		return null;
 	}

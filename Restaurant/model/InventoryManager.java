@@ -114,6 +114,15 @@ public class InventoryManager implements IView, IModel {
 				history = "VIIT";
 			}
 			createAndShowInventoryItemTypeView();
+		} else if (key.equals("MODIFY INVENTORY ITEM TYPE")) {
+
+			createAndShowEnterInventoryItemTypeNameAndNotesScreen();
+
+		} else if (key.equals("SUBMIT IIT NAME AND NOTES")) {
+			createAndShowInventoryItemTypeSelectionScreen(((Properties) value).getProperty("ItemTypeName"), 
+					((Properties) value).getProperty("Notes"));
+		} else if (key.equals("BACK")) {
+			createAndShowInventoryManagerView();
 		} else if (key.equals("VendorInventoryItemTypeView") == true) {
 			createAndShowVendorInventoryItemTypeView();
 		} else if (key.equals("VendorView") == true) {
@@ -200,6 +209,49 @@ public class InventoryManager implements IView, IModel {
 		}
 
 		swapToView(currentScene);
+
+	}
+
+	// ------------------------------------------------------------
+	private void createAndShowEnterInventoryItemTypeNameAndNotesScreen() {
+		// LOAD THE "Enter Inventory Item Type Name and Notes Screen"
+
+		Scene currentScene = (Scene) myViews.get("EnterInventoryItemTypeAndNotesScreen");
+
+		if (currentScene == null) {
+
+			View newView = ViewFactory.createView("EnterInventoryItemTypeAndNotesScreen", this);
+			currentScene = new Scene(newView);
+			myViews.put("EnterInventoryItemTypeAndNotesScreen", currentScene);
+		}
+
+		swapToView(currentScene);
+	}
+
+	// ------------------------------------------------------------
+	private void createAndShowInventoryItemTypeSelectionScreen(String itemTypeName, String notes) {
+		// LOAD THE "Inventory Item Type Selection Screen"
+
+		InventoryItemTypeCollection inventoryItemTypeCollection = new InventoryItemTypeCollection();
+
+		inventoryItemTypeCollection.subscribe("MODIFY IIT", this);
+		inventoryItemTypeCollection.subscribe("Submit new IIT info", this);
+		inventoryItemTypeCollection.subscribe("BACK", this);
+
+		try {
+			if (itemTypeName != null && notes != null) {
+				inventoryItemTypeCollection.findInventoryItemTypesWithNameAndNotesLike(itemTypeName, notes);
+				inventoryItemTypeCollection.createAndShowInventoryItemTypeSelectionScreens();
+			} else if (itemTypeName != null) {
+				inventoryItemTypeCollection.findInventoryItemTypesWithNameLike(itemTypeName);
+				inventoryItemTypeCollection.createAndShowInventoryItemTypeSelectionScreens();
+			} else if (notes != null) {
+				inventoryItemTypeCollection.findInventoryItemTypesWithNotesLike(notes);
+				inventoryItemTypeCollection.createAndShowInventoryItemTypeSelectionScreens();
+			}
+		} catch (InvalidPrimaryKeyException e) {
+
+		}
 
 	}
 

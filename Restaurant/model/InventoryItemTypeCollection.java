@@ -21,6 +21,7 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	private static final String myTableName = "InventoryItemType";
 
 	private Vector<InventoryItemType> inventoryItemTypeList;
+	private InventoryItemType _selectedInventoryItemType;
 	public static String iname;
 	// GUI Components
 
@@ -29,6 +30,7 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	public InventoryItemTypeCollection() {
 		super(myTableName);
 		inventoryItemTypeList = new Vector<InventoryItemType>();
+		_selectedInventoryItemType = new InventoryItemType();
 	}
 
 	// ----------------------------------------------------------------------------------
@@ -65,6 +67,75 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------------------------------
+	public void findInventoryItemTypesWithNameLike(String name) throws InvalidPrimaryKeyException {
+
+		String query = "SELECT * FROM " + myTableName + " WHERE (ItemTypeName LIKE '%" + name + "%');";
+
+		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null) {
+
+			for (int index = 0; index < allDataRetrieved.size(); index++) {
+
+				Properties inventoryItemTypeProperties = (Properties) allDataRetrieved.elementAt(index);
+
+				InventoryItemType inventoryItemType = new InventoryItemType(inventoryItemTypeProperties);
+
+				inventoryItemTypeList.add(inventoryItemType);
+			}
+		} else {
+			throw new InvalidPrimaryKeyException("No InventoryItemTypes with name like : " + name + ".");
+		}
+	}
+
+	// ----------------------------------------------------------------------------------
+	public void findInventoryItemTypesWithNotesLike(String notes) throws InvalidPrimaryKeyException {
+
+		String query = "SELECT * FROM " + myTableName + " WHERE (Notes LIKE '%" + notes + "%');";
+
+		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null) {
+
+			for (int index = 0; index < allDataRetrieved.size(); index++) {
+
+				Properties inventoryItemTypeProperties = (Properties) allDataRetrieved.elementAt(index);
+
+				InventoryItemType inventoryItemType = new InventoryItemType(inventoryItemTypeProperties);
+
+				inventoryItemTypeList.add(inventoryItemType);
+			}
+		} else {
+			throw new InvalidPrimaryKeyException("No InventoryItemTypes with Notes like : " + notes + ".");
+		}
+	}
+
+	// ----------------------------------------------------------------------------------
+	public void findInventoryItemTypesWithNameAndNotesLike(String name, String notes)
+			throws InvalidPrimaryKeyException {
+
+		String query = "SELECT * FROM " + myTableName + " WHERE (ItemTypeName LIKE '%" + name + "%') AND (Notes LIKE '%"
+				+ notes + "%');";
+
+		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null) {
+
+			for (int index = 0; index < allDataRetrieved.size(); index++) {
+
+				Properties inventoryItemTypeProperties = (Properties) allDataRetrieved.elementAt(index);
+
+				InventoryItemType inventoryItemType = new InventoryItemType(inventoryItemTypeProperties);
+
+				inventoryItemTypeList.add(inventoryItemType);
+			}
+		} else {
+			throw new InvalidPrimaryKeyException(
+					"No InventoryItemTypes with ItemTypeName like : " + name + " and Notes like : " + notes + ".");
+		}
+	}
+
+	// ----------------------------------------------------------------------------------
 	private int findIndexToAdd(InventoryItemType a) {
 		// users.add(u);
 		int low = 0;
@@ -97,6 +168,10 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	public Object getState(String key) {
 		if (key.equals("InventoryItemType"))
 			return inventoryItemTypeList;
+		else if (key.equals("InventoryItemTypes"))
+			return inventoryItemTypeList;
+		else if (key.equals("InventoryItemTypeCollection"))
+			return this;
 		else if (key.equals("InventoryItemTypeList"))
 			return this;
 		return null;
@@ -116,7 +191,19 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 			} catch (InvalidPrimaryKeyException e) {
 				e.printStackTrace();
 			}
-		} else if (key.equals("Success") == true) {
+		} else if (key.equals("MODIFY IIT")) {
+			try {
+				_selectedInventoryItemType = new InventoryItemType((String) value);
+			} catch (InvalidPrimaryKeyException e) {
+				e.printStackTrace();
+			}
+			createAndShowEnterInventoryItemTypeChangesScreen();
+		} else if (key.equals("Submit new IIT Info")) {
+			InventoryItemType inventoryItemType = new InventoryItemType();
+			inventoryItemType.stateChangeRequest("SUBMIT", (Properties) value);
+		}
+
+		else if (key.equals("Success") == true) {
 			createAndShowYay();
 		}
 		myRegistry.updateSubscribers(key, this);
@@ -144,6 +231,12 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	}
 
 	// ------------------------------------------------------
+	public InventoryItemType getSelectInventoryItemType() {
+        return _selectedInventoryItemType;
+    }
+
+	
+	// ------------------------------------------------------
 	protected void createAndShowView() {
 
 		Scene localScene = myViews.get("InventoryItemTypeCollectionView");
@@ -159,6 +252,34 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 
 	}
 
+	// ------------------------------------------------------------
+	public void createAndShowInventoryItemTypeSelectionScreens() {
+        Scene currentScene = (Scene) myViews.get("InventoryItemTypeSelectionScreen");
+
+        if (currentScene == null) {
+        	
+            View newView = ViewFactory.createView("InventoryItemTypeSelectionScreen", this);
+            currentScene = new Scene(newView);
+            myViews.put("InventoryItemTypeSelectionScreen", currentScene);
+        }
+
+        swapToView(currentScene);
+    }
+
+	// ------------------------------------------------------------
+    public void createAndShowEnterInventoryItemTypeChangesScreen() {
+        Scene currentScene = (Scene) myViews.get("InventoryItemTypeChangesScreen");
+
+        if (currentScene == null) {
+
+            View newView = ViewFactory.createView("InventoryItemTypeChangesScreen", this);
+            currentScene = new Scene(newView);
+            myViews.put("InventoryItemTypeChangesScreen", currentScene);
+        }
+
+        swapToView(currentScene);
+}
+	
 	// ------------------------------------------------------------
 	private void createAndShowInventoryItemTypeView(InventoryItemType i) {
 		Scene currentScene = (Scene) myViews.get("InventoryItemTypeView");
