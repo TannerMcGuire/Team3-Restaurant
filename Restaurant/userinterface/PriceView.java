@@ -189,7 +189,7 @@ public class PriceView extends View {
 
 		String priceEntered = price.getText();
 		
-		if ((priceEntered == "") || (priceEntered.length() == 0) || !(priceEntered.matches("^\\$?[0-9]+\\.[0-9]*$"))) {
+		if ((priceEntered == "") || (priceEntered.length() == 0) || !(priceEntered.matches("^\\$?[0-9]+\\.[0-9][0-9]$"))) {
 			displayErrorMessage("Please enter a valid price with decimal point");
 			price.requestFocus();
 		} else {

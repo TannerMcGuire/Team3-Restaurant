@@ -257,16 +257,16 @@ public class InventoryItemTypeView extends View {
 					displayErrorMessage("Please enter a valid item name");
 					name.requestFocus();	
 				}
-				else if ((Integer.parseInt(unitsEntered) < 0) ||(unitsEntered.matches("[0-9]+"))){
+				else if ((Integer.parseInt(unitsEntered) < 0) || !(unitsEntered.matches("[0-9]+"))){
 					displayErrorMessage("Please enter positive integer for units");
 					unit.requestFocus();
 				} else if ((measureEntered == "") || (measureEntered.length() == 0) || (nameEntered.length()> 15))   {
 					displayErrorMessage("Please enter type of measure ie bottle");
 					measure.requestFocus();
-				} else if ((daysEntered == "") || (Integer.parseInt(daysEntered) < -1) || (unitsEntered.matches("[0-9]+"))) {
+				} else if ((daysEntered == "") || (Integer.parseInt(daysEntered) < -1) || !(unitsEntered.matches("[0-9]+"))) {
 					displayErrorMessage("Please enter positive integer for validity of item");
 					days.requestFocus();
-				} else if ((orderEntered == "") || (Double.parseDouble(orderEntered) < 0)) { //still requires double check 
+				} else if ((orderEntered == "") || (Double.parseDouble(orderEntered) < 0) || !(orderEntered.matches("^\\$?[0-9]+\\.[0-9]+$"))) { //still requires double check 
 					displayErrorMessage("Please enter positive decimal for a reorder point");
 					reorder.requestFocus();
 				} else {
