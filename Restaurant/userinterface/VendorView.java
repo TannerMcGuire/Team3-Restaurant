@@ -212,7 +212,7 @@ public class VendorView extends View {
 		if ((nameEntered == "") || (nameEntered.length() == 0)) {
 			displayErrorMessage("Please enter a valid vendor name");
 			name.requestFocus();
-		} else if ((phoneEntered == "") || (phoneEntered.length() < 12)) {
+		} else if ((phoneEntered == "") || (phoneEntered.length() != 12) || (!(checkPhoneNumber(phoneEntered)))) {
 			displayErrorMessage("Please enter a valid Phone Number");
 			phoneNum.requestFocus();
 		}
@@ -263,6 +263,17 @@ public class VendorView extends View {
 		myModel.stateChangeRequest("VendorInfo", props);
 	}
 
+	
+	public boolean checkPhoneNumber(String number) {
+		for(int i = 0; i < number.length(); i++) {
+			if((i==3||i==7) && number.charAt(i) != '-') 
+				return false;
+			else if(number.charAt(i) <= '0' && number.charAt(i) >= '9') 
+				return false;
+		}
+		return true;
+	}
+	
 	@Override
 	public void updateState(String key, Object value) {
 
