@@ -140,7 +140,13 @@ public class VendorView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				
+				if(myModel.getState("his") == "addVendor") {
+					processAction(e);
+				}
+				if(myModel.getState("his") == "modifyVendor") {
+					processSubmitModify(e);
+				}
 			}
 		});
 		buttons.getChildren().add(submitButton);
@@ -229,6 +235,32 @@ public class VendorView extends View {
 		b.update();
 		displayMessage("Successfully added to database");
 		myModel.stateChangeRequest("Login", props);
+	}
+	
+	private void processSubmitModify(Event evt) {
+		
+		clearErrorMessage();
+		String nameEntered = name.getText();
+		String phoneEntered = phoneNum.getText();
+		
+		if ((nameEntered == "") || (nameEntered.length() == 0) && 
+			((phoneEntered == "") || (phoneEntered.length() < 12))) {
+			displayErrorMessage("Please enter a valid vendor name or phone number");
+			name.requestFocus();
+		}
+		else {
+			processModify(nameEntered, phoneEntered);
+		}
+	}
+	
+	private void processModify(String name, String phone) {
+		Properties props = new Properties();
+		props.setProperty("Name", name);
+		props.setProperty("PhoneNumber", phone);
+		this.name.clear();
+		phoneNum.clear();
+		clearErrorMessage();
+		myModel.stateChangeRequest("VendorInfo", props);
 	}
 
 	@Override

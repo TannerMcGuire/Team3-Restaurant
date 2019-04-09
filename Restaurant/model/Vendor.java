@@ -146,7 +146,7 @@ public class Vendor extends EntityBase implements IView {
 		} catch (SQLException ex) {
 			updateStatusMessage = "Error in shelving vendor data in database!";
 		}
-		System.out.println("updateStateInDatabase " + updateStatusMessage);
+		//System.out.println("updateStateInDatabase " + updateStatusMessage);
 	}
 
 	/**

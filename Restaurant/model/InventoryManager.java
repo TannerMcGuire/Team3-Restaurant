@@ -126,7 +126,20 @@ public class InventoryManager implements IView, IModel {
 		} else if (key.equals("VendorInventoryItemTypeView") == true) {
 			createAndShowVendorInventoryItemTypeView();
 		} else if (key.equals("VendorView") == true) {
-			createAndShowVendorView();
+			if((String)value == "modifyVendor") {
+				history = (String)value;
+				createAndShowVendorView();
+			}
+			else if((String)value == "addVendor") {
+				history = (String)value;
+				createAndShowVendorView();
+			}
+		} else if (key.equals("ModifyVendorView") == true) {
+			try {
+				modifyVendor((Properties) value);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else if (key.equals("VendorInfo") == true) {
 			if (value != null) {
 				boolean flag = vendorFolder((Properties) value);
@@ -187,10 +200,16 @@ public class InventoryManager implements IView, IModel {
 	// ----------------------------------------------------------
 	private void searchVendor(Properties vend) throws Exception {
 		VendorCollection vc = new VendorCollection();
+		vc.setManager(this);
 		vc.findVendor(vend);
 		createAndShowVendorCollectionView(vc);
 	}
 
+	// ----------------------------------------------------------
+	private void modifyVendor(Properties vend) throws Exception {
+		Vendor vendor = new Vendor(vend);
+		createAndShowModifyVendorView(vendor);
+	}
 	// ----------------------------------------------------------
 	private void searchIIT(Properties item) throws Exception {
 		InventoryItemTypeCollection iit = new InventoryItemTypeCollection();
@@ -283,6 +302,20 @@ public class InventoryManager implements IView, IModel {
 		// make the view visible by installing it into the frame
 		swapToView(localScene);
 
+	}
+
+	// ------------------------------------------------------------
+	
+	private void createAndShowModifyVendorView(Vendor vend) {
+		Scene currentScene = (Scene) myViews.get("ModifyVendorView");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("ModifyVendorView", vend);
+			currentScene = new Scene(newView);
+			myViews.put("ModifyVendorView", currentScene);
+		}
+
+		swapToView(currentScene);
 	}
 
 	// ------------------------------------------------------------

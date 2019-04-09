@@ -37,6 +37,7 @@ import java.util.Vector;
 import exception.InvalidPrimaryKeyException;
 
 import java.util.Enumeration;
+import java.util.Properties;
 
 // project imports
 import impresario.IModel;
@@ -49,6 +50,7 @@ public class VendorCollectionView extends View {
 	protected TableView<VendorTableModel> tableOfVendors;
 	protected Button submitButton;
 	protected Button backButton;
+	private InventoryManager manager;
 
 	protected MessageView statusLog;
 
@@ -70,6 +72,8 @@ public class VendorCollectionView extends View {
 		getChildren().add(container);
 
 		populateFields();
+		
+		manager = (InventoryManager)((VendorCollection) myModel).getManager();
 		
 		myModel.subscribe("InventoryManagerView", this);
 	}
@@ -169,7 +173,12 @@ public class VendorCollectionView extends View {
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.isPrimaryButtonDown() && event.getClickCount() >= 2) {
-					processVendorSelected();
+					if(manager.getState("his") == "addVendor") {
+						processVendorSelected();
+					}
+					if(manager.getState("his") == "modifyVendor") {
+						modifySelected();
+					}
 				}
 			}
 		});
@@ -218,6 +227,23 @@ public class VendorCollectionView extends View {
 		}
 	}
 
+	// --------------------------------------------------------------------------
+	
+	private void modifySelected() {
+		VendorTableModel selectedItem = tableOfVendors.getSelectionModel().getSelectedItem();
+
+		if (selectedItem != null) {
+			String selectedVendorID = selectedItem.getVendorId();
+			Properties prop = new Properties();
+			prop.setProperty("Id", selectedItem.getVendorId());
+			prop.setProperty("Name", selectedItem.getName());
+			prop.setProperty("PhoneNumber", selectedItem.getPhoneNumber());
+			prop.setProperty("Status", selectedItem.getStatus());
+			
+			manager.stateChangeRequest("ModifyVendorView", prop);
+		}
+	}
+	
 	// --------------------------------------------------------------------------
 	protected MessageView createStatusLog(String initialMessage) {
 		statusLog = new MessageView(initialMessage);

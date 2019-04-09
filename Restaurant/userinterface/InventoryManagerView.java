@@ -144,7 +144,7 @@ public class InventoryManagerView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				myModel.stateChangeRequest("VendorView", null);
+				myModel.stateChangeRequest("VendorView", "addVendor");
 			}
 		});
 		//grid.add(addVendorButton, 1, 3);
@@ -155,7 +155,7 @@ public class InventoryManagerView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				myModel.stateChangeRequest("VendorView", "modifyVendor");
 			}
 		});
 		//grid.add(modifyVendorButton, 1, 4);

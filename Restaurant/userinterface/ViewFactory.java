@@ -14,6 +14,8 @@ public class ViewFactory {
 			return new VendorCollectionView(model);
 		} else if (viewName.equals("VendorView") == true) {
 			return new VendorView(model);
+		} else if (viewName.equals("ModifyVendorView") == true) {
+			return new ModifyVendorView(model);
 		} else if (viewName.equals("InventoryItemTypeView") == true) {
 			return new InventoryItemTypeView(model);
 		} else if (viewName.equals("InventoryItemTypeCollectionView") == true) {
