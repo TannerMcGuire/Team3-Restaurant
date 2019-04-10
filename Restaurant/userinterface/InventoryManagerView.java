@@ -133,7 +133,7 @@ public class InventoryManagerView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				myModel.stateChangeRequest("InventoryItemTypeView", "deleteIIT");
 			}
 		});
 		//grid.add(deleteIITButton, 1, 2);

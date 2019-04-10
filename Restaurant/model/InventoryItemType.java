@@ -14,6 +14,7 @@ import database.*;
 
 import impresario.IView;
 
+import model.InventoryManager;
 import userinterface.View;
 import userinterface.ViewFactory;
 
@@ -107,7 +108,6 @@ public class InventoryItemType extends EntityBase implements IView {
 	public Object getState(String key) {
 		if (key.equals("UpdateStatusMessage") == true)
 			return updateStatusMessage;
-
 		return persistentState.getProperty(key);
 	}
 
@@ -142,6 +142,12 @@ public class InventoryItemType extends EntityBase implements IView {
 	}
 
 	// -----------------------------------------------------------------------------------
+	public void delete() {
+		persistentState.setProperty("Status", "Inactive");
+		update();
+	}
+	
+	// -----------------------------------------------------------------------------------
 	public void update() {
 		updateStateInDatabase();
 	}
@@ -150,14 +156,17 @@ public class InventoryItemType extends EntityBase implements IView {
 	private void updateStateInDatabase() {
 		try {
 			if (persistentState.getProperty("ItemTypeName") != null) {
-				Properties whereClause = new Properties();
-				whereClause.setProperty("ItemTypeName", persistentState.getProperty("ItemTypeName"));
-				updatePersistentState(mySchema, persistentState, whereClause);
-				updateStatusMessage = "Inventory Item type data for type name : "
-						+ persistentState.getProperty("ItemTypeName") + " updated successfully in database!";
-			} else {
-				updateStatusMessage = "Inventory Item Type data for new Inventory Item Type : "
-						+ persistentState.getProperty("ItemTypeName") + " shelved successfully in database!";
+				if (!(InventoryManager.history.equals("addIIT"))) {
+					Properties whereClause = new Properties();
+					whereClause.setProperty("ItemTypeName", persistentState.getProperty("ItemTypeName"));
+					updatePersistentState(mySchema, persistentState, whereClause);
+					updateStatusMessage = "Inventory Item type data for type name : "
+							+ persistentState.getProperty("ItemTypeName") + " updated successfully in database!";
+				} else {
+					insertPersistentState(mySchema, persistentState);
+					updateStatusMessage = "Inventory Item Type data for new Inventory Item Type : "
+							+ persistentState.getProperty("ItemTypeName") + " shelved successfully in database!";
+				}
 			}
 		} catch (
 

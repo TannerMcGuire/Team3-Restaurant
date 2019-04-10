@@ -59,6 +59,7 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 				InventoryItemType inventoryItemType = new InventoryItemType(nextIITData);
 
 				if (inventoryItemType != null)
+					if (!(inventoryItemType.getState("Status").equals("Inactive")))
 					addInventoryItemType(inventoryItemType);
 			}
 		else {
@@ -232,10 +233,9 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 
 	// ------------------------------------------------------
 	public InventoryItemType getSelectInventoryItemType() {
-        return _selectedInventoryItemType;
-    }
+		return _selectedInventoryItemType;
+	}
 
-	
 	// ------------------------------------------------------
 	protected void createAndShowView() {
 
@@ -252,34 +252,50 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 
 	}
 
+	// ------------------------------------------------------
+	public void createAndShowView2() {
+
+		Scene localScene = myViews.get("InventoryItemTypeCollectionView2");
+
+		if (localScene == null) {
+			// create our new view
+			View newView = ViewFactory.createView("InventoryItemTypeCollectionView2", this);
+			localScene = new Scene(newView);
+			myViews.put("InventoryItemTypeCollectionView2", localScene);
+		}
+		// make the view visible by installing it into the frame
+		swapToView(localScene);
+
+	}
+
 	// ------------------------------------------------------------
 	public void createAndShowInventoryItemTypeSelectionScreens() {
-        Scene currentScene = (Scene) myViews.get("InventoryItemTypeSelectionScreen");
+		Scene currentScene = (Scene) myViews.get("InventoryItemTypeSelectionScreen");
 
-        if (currentScene == null) {
-        	
-            View newView = ViewFactory.createView("InventoryItemTypeSelectionScreen", this);
-            currentScene = new Scene(newView);
-            myViews.put("InventoryItemTypeSelectionScreen", currentScene);
-        }
+		if (currentScene == null) {
 
-        swapToView(currentScene);
-    }
+			View newView = ViewFactory.createView("InventoryItemTypeSelectionScreen", this);
+			currentScene = new Scene(newView);
+			myViews.put("InventoryItemTypeSelectionScreen", currentScene);
+		}
+
+		swapToView(currentScene);
+	}
 
 	// ------------------------------------------------------------
-    public void createAndShowEnterInventoryItemTypeChangesScreen() {
-        Scene currentScene = (Scene) myViews.get("InventoryItemTypeChangesScreen");
+	public void createAndShowEnterInventoryItemTypeChangesScreen() {
+		Scene currentScene = (Scene) myViews.get("InventoryItemTypeChangesScreen");
 
-        if (currentScene == null) {
+		if (currentScene == null) {
 
-            View newView = ViewFactory.createView("InventoryItemTypeChangesScreen", this);
-            currentScene = new Scene(newView);
-            myViews.put("InventoryItemTypeChangesScreen", currentScene);
-        }
+			View newView = ViewFactory.createView("InventoryItemTypeChangesScreen", this);
+			currentScene = new Scene(newView);
+			myViews.put("InventoryItemTypeChangesScreen", currentScene);
+		}
 
-        swapToView(currentScene);
-}
-	
+		swapToView(currentScene);
+	}
+
 	// ------------------------------------------------------------
 	private void createAndShowInventoryItemTypeView(InventoryItemType i) {
 		Scene currentScene = (Scene) myViews.get("InventoryItemTypeView");
