@@ -237,7 +237,6 @@ public class SubmitBarcodeView extends View {
 		myModel.stateChangeRequest("VendorInfo", props);
 	} */
 
-	} */
 	
 	@Override
 	public void updateState(String key, Object value) {
