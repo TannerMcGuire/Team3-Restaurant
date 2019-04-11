@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -85,7 +84,7 @@ public class InventoryItemTypeView extends View {
 		HBox container = new HBox();
 		container.setAlignment(Pos.CENTER);
 
-		Text titleText = new Text(" Restaurant Inventory ");
+		Text titleText = new Text(" Restaurant Inventory ");//change
 		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		titleText.setWrappingWidth(300);
 		titleText.setTextAlignment(TextAlignment.CENTER);
