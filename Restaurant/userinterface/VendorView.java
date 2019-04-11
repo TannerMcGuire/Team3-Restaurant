@@ -140,7 +140,13 @@ public class VendorView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				
+				if(myModel.getState("his") == "addVendor") {
+					processAction(e);
+				}
+				if(myModel.getState("his") == "modifyVendor") {
+					processSubmitModify(e);
+				}
 			}
 		});
 		buttons.getChildren().add(submitButton);
@@ -206,7 +212,7 @@ public class VendorView extends View {
 		if ((nameEntered == "") || (nameEntered.length() == 0)) {
 			displayErrorMessage("Please enter a valid vendor name");
 			name.requestFocus();
-		} else if ((phoneEntered == "") || (phoneEntered.length() < 12)) {
+		} else if ((phoneEntered == "") || (phoneEntered.length() != 12) || (!(checkPhoneNumber(phoneEntered)))) {
 			displayErrorMessage("Please enter a valid Phone Number");
 			phoneNum.requestFocus();
 		}
@@ -230,7 +236,44 @@ public class VendorView extends View {
 		displayMessage("Successfully added to database");
 		myModel.stateChangeRequest("Login", props);
 	}
+	
+	private void processSubmitModify(Event evt) {
+		
+		clearErrorMessage();
+		String nameEntered = name.getText();
+		String phoneEntered = phoneNum.getText();
+		
+		if ((nameEntered == "") || (nameEntered.length() == 0) && 
+			((phoneEntered == "") || (phoneEntered.length() < 12))) {
+			displayErrorMessage("Please enter a valid vendor name or phone number");
+			name.requestFocus();
+		}
+		else {
+			processModify(nameEntered, phoneEntered);
+		}
+	}
+	
+	private void processModify(String name, String phone) {
+		Properties props = new Properties();
+		props.setProperty("Name", name);
+		props.setProperty("PhoneNumber", phone);
+		this.name.clear();
+		phoneNum.clear();
+		clearErrorMessage();
+		myModel.stateChangeRequest("VendorInfo", props);
+	}
 
+	
+	public boolean checkPhoneNumber(String number) {
+		for(int i = 0; i < number.length(); i++) {
+			if((i==3||i==7) && number.charAt(i) != '-') 
+				return false;
+			else if(number.charAt(i) <= '0' && number.charAt(i) >= '9') 
+				return false;
+		}
+		return true;
+	}
+	
 	@Override
 	public void updateState(String key, Object value) {
 

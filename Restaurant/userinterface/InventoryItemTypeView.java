@@ -24,10 +24,12 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.InventoryItemType;
+import model.InventoryItemTypeCollection;
 import model.Vendor;
 
 import java.util.Properties;
 
+import exception.InvalidPrimaryKeyException;
 // project imports
 import impresario.IModel;
 
@@ -262,8 +264,8 @@ public class InventoryItemTypeView extends View {
 			} else if ((measureEntered == "") || (measureEntered.length() == 0) || (nameEntered.length() > 15)) {
 				displayErrorMessage("Please enter type of measure ie bottle");
 				measure.requestFocus();
-			} else if ((daysEntered == "") || (Integer.parseInt(daysEntered) < -1)
-					|| !(daysEntered.matches("[0-9]+"))) {
+			} else if ((daysEntered == "") || !(daysEntered.matches("-?[1-9]\\d*"))
+					|| (Integer.parseInt(daysEntered) < -1)) {
 				displayErrorMessage("Please enter positive integer for validity of item");
 				days.requestFocus();
 			} else if ((orderEntered == "") || !(orderEntered.matches("^\\$?[0-9]+\\.[0-9]+$"))
@@ -294,8 +296,18 @@ public class InventoryItemTypeView extends View {
 		// clear fields for next time around
 		name.setText("");
 		notes.setText("");
-
-		myModel.stateChangeRequest("IITInfo", props);
+		if (history.equals("update")) {
+			myModel.stateChangeRequest("IITInfo", props);
+		} else {
+			 InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
+			 try {
+				ic.findInventoryItemType(props);
+				ic.createAndShowView2();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+					
+		}
 	}
 
 	private void processInventoryItemType(String nameString, String unitString, String measureString, String dayString,

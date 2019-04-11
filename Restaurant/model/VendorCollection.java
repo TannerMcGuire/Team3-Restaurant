@@ -23,6 +23,8 @@ public class VendorCollection extends EntityBase implements IView {
 	private Vector<Vendor> vendorList;
 	private InventoryItemType myIIT;
 	public static String v;
+	private Vendor selectedVendor;
+	private InventoryManager manager;
 
 	// GUI Components
 
@@ -122,6 +124,10 @@ public class VendorCollection extends EntityBase implements IView {
 					}
 				}
 			}
+		} else if (key.equals("ModifyVendorView") == true){
+			String vendorID = (String) value;
+			selectedVendor = retrieve(vendorID);
+			createAndShowModifyView();
 		}
 		myRegistry.updateSubscribers(key, this);
 	}
@@ -164,6 +170,34 @@ public class VendorCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------
+	protected void createAndShowView() {
+
+		Scene localScene = myViews.get("VendorCollectionView");
+
+		if (localScene == null) {
+			// create our new view
+			View newView = ViewFactory.createView("VendorCollectionView", this);
+			localScene = new Scene(newView);
+			myViews.put("VendorCollectionView", localScene);
+		}
+		// make the view visible by installing it into the frame
+		swapToView(localScene);
+
+	}
+
+	// -----------------------------------------------------------
+	
+	
+	protected void createAndShowModifyView() {
+		// create our new view
+		View newView = ViewFactory.createView("ModifyVendorView", selectedVendor);
+		Scene newScene = new Scene(newView);
+
+		// make the view visible by installing it into the frame
+		swapToView(newScene);
+	}
+
+	// ----------------------------------------------------------
 	public boolean inventoryItemTypeFolder(Properties props) {
 		try {
 			myIIT = new InventoryItemType(props);
@@ -196,4 +230,13 @@ public class VendorCollection extends EntityBase implements IView {
 		}
 		System.out.println("==============================================");
 	}
+	
+	public void setManager(InventoryManager manager) {
+		this.manager = manager;
+	}
+	
+	public InventoryManager getManager() {
+		return manager;
+	}
+	
 }

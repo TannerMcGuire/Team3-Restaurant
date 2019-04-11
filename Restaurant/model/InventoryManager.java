@@ -31,7 +31,7 @@ public class InventoryManager implements IView, IModel {
 	private VendorCollection accounts;
 	private Vendor selectedAccount;
 
-	public String history = "";
+	public static String history = "";
 	// GUI
 	private Hashtable<String, Scene> myViews;
 	private Stage myStage;
@@ -110,23 +110,35 @@ public class InventoryManager implements IView, IModel {
 				history = "addIIT";
 			} else if (((String) value).equals("update") == true) {
 				history = "update";
-			} else {
-				history = "VIIT";
+			} else if (((String) value).equals("deleteIIT") == true){
+				history = "deleteIIT";
 			}
 			createAndShowInventoryItemTypeView();
 		} else if (key.equals("MODIFY INVENTORY ITEM TYPE")) {
-
+			history = "";
 			createAndShowEnterInventoryItemTypeNameAndNotesScreen();
 
 		} else if (key.equals("SUBMIT IIT NAME AND NOTES")) {
-			createAndShowInventoryItemTypeSelectionScreen(((Properties) value).getProperty("ItemTypeName"), 
+			createAndShowInventoryItemTypeSelectionScreen(((Properties) value).getProperty("ItemTypeName"),
 					((Properties) value).getProperty("Notes"));
 		} else if (key.equals("BACK")) {
 			createAndShowInventoryManagerView();
 		} else if (key.equals("VendorInventoryItemTypeView") == true) {
 			createAndShowVendorInventoryItemTypeView();
 		} else if (key.equals("VendorView") == true) {
-			createAndShowVendorView();
+			if ((String) value == "modifyVendor") {
+				history = (String) value;
+				createAndShowVendorView();
+			} else if ((String) value == "addVendor") {
+				history = (String) value;
+				createAndShowVendorView();
+			}
+		} else if (key.equals("ModifyVendorView") == true) {
+			try {
+				modifyVendor((Properties) value);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else if (key.equals("VendorInfo") == true) {
 			if (value != null) {
 				boolean flag = vendorFolder((Properties) value);
@@ -139,6 +151,17 @@ public class InventoryManager implements IView, IModel {
 				}
 			}
 		} else if (key.equals("IITInfo") == true) {
+			if (value != null) {
+				boolean flag = inventoryItemTypeFolder((Properties) value);
+				if (flag == true) {
+					try {
+						searchIIT((Properties) value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} else if (key.equals("IITdelete") == true) {
 			if (value != null) {
 				boolean flag = inventoryItemTypeFolder((Properties) value);
 				if (flag == true) {
@@ -187,8 +210,15 @@ public class InventoryManager implements IView, IModel {
 	// ----------------------------------------------------------
 	private void searchVendor(Properties vend) throws Exception {
 		VendorCollection vc = new VendorCollection();
+		vc.setManager(this);
 		vc.findVendor(vend);
 		createAndShowVendorCollectionView(vc);
+	}
+
+	// ----------------------------------------------------------
+	private void modifyVendor(Properties vend) throws Exception {
+		Vendor vendor = new Vendor(vend);
+		createAndShowModifyVendorView(vendor);
 	}
 
 	// ----------------------------------------------------------
@@ -210,6 +240,20 @@ public class InventoryManager implements IView, IModel {
 
 		swapToView(currentScene);
 
+	}
+
+	// ------------------------------------------------------------
+
+	private void createAndShowDeleteIITView() {
+		Scene localScene = myViews.get("InventoryItemTypeDeleteView");
+		if (localScene == null) {
+			// create our new view
+			View newView = ViewFactory.createView("InventoryItemTypeDeleteView", this);
+			localScene = new Scene(newView);
+			myViews.put("InventoryItemTypeDeleteView", localScene);
+		}
+
+		swapToView(localScene);
 	}
 
 	// ------------------------------------------------------------
@@ -283,6 +327,20 @@ public class InventoryManager implements IView, IModel {
 		// make the view visible by installing it into the frame
 		swapToView(localScene);
 
+	}
+
+	// ------------------------------------------------------------
+
+	private void createAndShowModifyVendorView(Vendor vend) {
+		Scene currentScene = (Scene) myViews.get("ModifyVendorView");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("ModifyVendorView", vend);
+			currentScene = new Scene(newView);
+			myViews.put("ModifyVendorView", currentScene);
+		}
+
+		swapToView(currentScene);
 	}
 
 	// ------------------------------------------------------------
