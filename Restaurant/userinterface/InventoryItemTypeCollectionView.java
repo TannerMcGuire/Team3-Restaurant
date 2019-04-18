@@ -40,12 +40,14 @@ import impresario.IModel;
 import model.InventoryItemType;
 import model.InventoryItemTypeCollection;
 import model.InventoryManager;
+import model.VendorCollection;
 
 //==============================================================================
 public class InventoryItemTypeCollectionView extends View {
 	protected TableView<InventoryItemTypeTableModel> tableOfItemTypes;
 	protected Button submitButton;
 	protected Button backButton;
+	private InventoryManager manager;
 
 	protected MessageView statusLog;
 
@@ -67,6 +69,8 @@ public class InventoryItemTypeCollectionView extends View {
 		getChildren().add(container);
 
 		populateFields();
+		
+		manager = (InventoryManager) ((InventoryItemTypeCollection) myModel).getManager();
 	}
 
 	// --------------------------------------------------------------------------
@@ -185,6 +189,7 @@ public class InventoryItemTypeCollectionView extends View {
 		scrollPane.setContent(tableOfItemTypes);
 
 		submitButton = new Button("Submit");
+		submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				processInventoryItemTypeSelected();
@@ -192,6 +197,7 @@ public class InventoryItemTypeCollectionView extends View {
 		});
 		
 		backButton = new Button("Back");
+		backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				//myModel.stateChangeRequest("InventoryManagerView", null);
@@ -199,7 +205,7 @@ public class InventoryItemTypeCollectionView extends View {
 			}
 		});
 
-		HBox btnContainer = new HBox(100);
+		HBox btnContainer = new HBox(10);
 		btnContainer.setAlignment(Pos.CENTER);
 		btnContainer.getChildren().add(submitButton);
 		btnContainer.getChildren().add(backButton);

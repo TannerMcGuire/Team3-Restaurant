@@ -147,7 +147,7 @@ public class InventoryItemTypeChangesScreen extends View {
 		grid.add(_reorderPoint, 1, 5);
 		grid.add(_notes, 1, 6);
 		
-		_doneBtn = new Button("Done");
+		_doneBtn = new Button("Submit");
 		_doneBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		_doneBtn.setOnAction(new EventHandler<ActionEvent>() {
 

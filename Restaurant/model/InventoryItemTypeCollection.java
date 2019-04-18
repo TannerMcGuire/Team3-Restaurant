@@ -23,6 +23,7 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	private Vector<InventoryItemType> inventoryItemTypeList;
 	private InventoryItemType _selectedInventoryItemType;
 	public static String iname;
+	private InventoryManager manager;
 	// GUI Components
 
 	// constructor for this class
@@ -237,7 +238,7 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	}
 
 	// ------------------------------------------------------
-	protected void createAndShowView() {
+	public void createAndShowView() {
 
 		Scene localScene = myViews.get("InventoryItemTypeCollectionView");
 
@@ -366,5 +367,12 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 			System.out.println(inventoryItemTypeList.get(cnt));
 		}
 		System.out.println("===========================================================");
+	}
+	
+	public void setManager(InventoryManager manager) {
+		this.manager = manager;
+	}
+	public InventoryManager getManager() {
+		return manager;
 	}
 }

@@ -101,31 +101,47 @@ public class InventoryManager implements IView, IModel {
 	public void stateChangeRequest(String key, Object value) {
 		// STEP 4: Write the sCR method component for the key you
 		// just set up dependencies for
-		// DEBUG System.out.println("Librarian.sCR: key = " + key);
+		// DEBUG System.out.println("Manager.sCR: key = " + key);
 		// This is where GUI popups change!!!
+		
+		//Inventory Start Screen
 		if (key.equals("InventoryManagerView") == true) {
 			createAndShowInventoryManagerView();
-		} else if (key.equals("InventoryItemTypeView") == true) {
+		} 
+		
+		//Inventory Item Type screen
+		else if (key.equals("InventoryItemTypeView") == true) {
 			if (((String) value).equals("addIIT") == true) {
 				history = "addIIT";
-			} else if (((String) value).equals("update") == true) {
-				history = "update";
+				createAndShowInventoryItemTypeView();
+			} else if (((String) value).equals("updateIIT") == true) {
+				history = "updateIIT";
+				createAndShowEnterInventoryItemTypeNameAndNotesScreen();
 			} else if (((String) value).equals("deleteIIT") == true){
 				history = "deleteIIT";
+				createAndShowInventoryItemTypeView();
 			}
-			createAndShowInventoryItemTypeView();
-		} else if (key.equals("MODIFY INVENTORY ITEM TYPE")) {
-			history = "";
-			createAndShowEnterInventoryItemTypeNameAndNotesScreen();
-
-		} else if (key.equals("SUBMIT IIT NAME AND NOTES")) {
+		} 
+		
+		//Update IIT
+		else if (key.equals("SUBMIT IIT NAME AND NOTES")) {
 			createAndShowInventoryItemTypeSelectionScreen(((Properties) value).getProperty("ItemTypeName"),
 					((Properties) value).getProperty("Notes"));
-		} else if (key.equals("BACK")) {
+		}
+		
+		//Back to start
+		else if (key.equals("BACK")) {
 			createAndShowInventoryManagerView();
-		} else if (key.equals("VendorInventoryItemTypeView") == true) {
+		} 
+		
+		//Vendor Inventory Item Type changes
+		else if (key.equals("VendorInventoryItemTypeView") == true) {
+			history = (String) value;
 			createAndShowVendorInventoryItemTypeView();
-		} else if (key.equals("VendorView") == true) {
+		} 
+		
+		//Vendor changes
+		else if (key.equals("VendorView") == true) {
 			if ((String) value == "modifyVendor") {
 				history = (String) value;
 				createAndShowVendorView();
@@ -174,6 +190,15 @@ public class InventoryManager implements IView, IModel {
 			}
 		}
 
+		
+		//Invoice
+		
+		//2 Inventory Item changes
+		
+		//reorder list
+		
+		//full inventory
+		
 		myRegistry.updateSubscribers(key, this);
 	}
 
@@ -224,6 +249,7 @@ public class InventoryManager implements IView, IModel {
 	// ----------------------------------------------------------
 	private void searchIIT(Properties item) throws Exception {
 		InventoryItemTypeCollection iit = new InventoryItemTypeCollection();
+		iit.setManager(this);
 		iit.findInventoryItemType(item);
 		iit.createAndShowView();
 	}

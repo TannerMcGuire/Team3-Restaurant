@@ -137,7 +137,7 @@ public class InventoryItemTypeCollectionView2 extends View {
 		title.setFill(Color.BLACK);
 		grid.add(title, 0, 0, 2, 1);
 
-		Text prompt = new Text("Select proper InventoryItemType by double clicking or selecting and clicking submit");
+		Text prompt = new Text("Select correct InventoryItemType by double clicking or selecting and clicking submit");
 		prompt.setWrappingWidth(350);
 		prompt.setTextAlignment(TextAlignment.CENTER);
 		prompt.setFill(Color.BLACK);
@@ -191,6 +191,7 @@ public class InventoryItemTypeCollectionView2 extends View {
 		scrollPane.setContent(tableOfItemTypes);
 
 		submitButton = new Button("Submit");
+		submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				processInventoryItemTypeSelected();
@@ -198,6 +199,7 @@ public class InventoryItemTypeCollectionView2 extends View {
 		});
 
 		backButton = new Button("Back");
+		backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				// myModel.stateChangeRequest("InventoryManagerView", null);
@@ -205,7 +207,7 @@ public class InventoryItemTypeCollectionView2 extends View {
 			}
 		});
 
-		HBox btnContainer = new HBox(100);
+		HBox btnContainer = new HBox(10);
 		btnContainer.setAlignment(Pos.CENTER);
 		btnContainer.getChildren().add(submitButton);
 		btnContainer.getChildren().add(backButton);

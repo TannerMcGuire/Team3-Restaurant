@@ -295,13 +295,19 @@ public class InventoryItemTypeView extends View {
 		// clear fields for next time around
 		name.setText("");
 		notes.setText("");
-		if (history.equals("update")) {
-			myModel.stateChangeRequest("IITInfo", props);
+		if (history.equals("deleteIIT")) {
+			InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
+			 try {
+				ic.findInventoryItemType(props);
+				ic.createAndShowView2();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			 InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
 			 try {
 				ic.findInventoryItemType(props);
-				ic.createAndShowView2();
+				ic.createAndShowView();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

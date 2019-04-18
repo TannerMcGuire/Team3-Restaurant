@@ -122,7 +122,7 @@ public class InventoryManagerView extends View {
 			
 			@Override
 			public void handle(ActionEvent e) {
-				myModel.stateChangeRequest("MODIFY INVENTORY ITEM TYPE", null);
+				myModel.stateChangeRequest("InventoryItemTypeView", "updateIIT");
 			}
 		});
 		//grid.add(updateIITButton, 1, 1);

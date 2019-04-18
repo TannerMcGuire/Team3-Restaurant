@@ -72,9 +72,9 @@ public class VendorCollectionView extends View {
 		getChildren().add(container);
 
 		populateFields();
-		
-		manager = (InventoryManager)((VendorCollection) myModel).getManager();
-		
+
+		manager = (InventoryManager) ((VendorCollection) myModel).getManager();
+
 		myModel.subscribe("InventoryManagerView", this);
 	}
 
@@ -173,10 +173,10 @@ public class VendorCollectionView extends View {
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.isPrimaryButtonDown() && event.getClickCount() >= 2) {
-					if(manager.getState("his") == "addVendor") {
+					if (manager.getState("his") == "addVIIT") {
 						processVendorSelected();
 					}
-					if(manager.getState("his") == "modifyVendor") {
+					if (manager.getState("his") == "modifyVendor") {
 						modifySelected();
 					}
 				}
@@ -187,21 +187,28 @@ public class VendorCollectionView extends View {
 		scrollPane.setContent(tableOfVendors);
 
 		submitButton = new Button("Submit");
+		submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				processVendorSelected();
+				if (manager.getState("his") == "addVIIT") {
+					processVendorSelected();
+				}
+				if (manager.getState("his") == "modifyVendor") {
+					modifySelected();
+				}
 			}
 		});
 
 		backButton = new Button("Back");
+		backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				//myModel.stateChangeRequest("InventoryManagerView", null);
+				// myModel.stateChangeRequest("InventoryManagerView", null);
 				new model.InventoryManager();
 			}
 		});
 
-		HBox btnContainer = new HBox(100);
+		HBox btnContainer = new HBox(10);
 		btnContainer.setAlignment(Pos.CENTER);
 		btnContainer.getChildren().add(submitButton);
 		btnContainer.getChildren().add(backButton);
@@ -218,7 +225,7 @@ public class VendorCollectionView extends View {
 	}
 
 	// --------------------------------------------------------------------------
-	protected void processVendorSelected(){
+	protected void processVendorSelected() {
 		VendorTableModel selectedItem = tableOfVendors.getSelectionModel().getSelectedItem();
 
 		if (selectedItem != null) {
@@ -228,7 +235,7 @@ public class VendorCollectionView extends View {
 	}
 
 	// --------------------------------------------------------------------------
-	
+
 	private void modifySelected() {
 		VendorTableModel selectedItem = tableOfVendors.getSelectionModel().getSelectedItem();
 
@@ -239,11 +246,11 @@ public class VendorCollectionView extends View {
 			prop.setProperty("Name", selectedItem.getName());
 			prop.setProperty("PhoneNumber", selectedItem.getPhoneNumber());
 			prop.setProperty("Status", selectedItem.getStatus());
-			
+
 			manager.stateChangeRequest("ModifyVendorView", prop);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------
 	protected MessageView createStatusLog(String initialMessage) {
 		statusLog = new MessageView(initialMessage);
@@ -271,7 +278,12 @@ public class VendorCollectionView extends View {
 	public void mouseClicked(MouseEvent click) {
 		if (click.getClickCount() >= 2) {
 			System.out.print("Double\n");
-			processVendorSelected();
+			if (manager.getState("his").equals("addVIIT")) {
+				processVendorSelected();
+			}
+			if (manager.getState("his").equals("modifyVendor")) {
+				modifySelected();
+			}
 		}
 	}
 
