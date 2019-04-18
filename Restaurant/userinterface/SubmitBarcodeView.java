@@ -21,7 +21,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import model.Vendor;
+import model.InventoryItem;
 
 import java.util.Properties;
 
@@ -189,7 +189,7 @@ public class SubmitBarcodeView extends View {
 
 		String barcodeEntered = barcode.getText();
 		
-		if ((barcodeEntered == "") || (barcodeEntered.length() == 0)) {
+		if ((barcodeEntered == "") || (barcodeEntered.length() == 0)) || (barcodeEntered.length() != 9){
 			displayErrorMessage("Please enter a valid barcode");
 			barcode.requestFocus();
 		}
@@ -205,8 +205,8 @@ public class SubmitBarcodeView extends View {
 		// clear fields for next time around
 		barcode.setText("");
 
-		 /*Vendor b = new Vendor(props);							//REPLACE WHEN INVENTORY ITEM IS DONE
-		b.update(); */
+		InventoryItem b = new InventoryItem(props);				
+		b.update();
 		displayMessage("Successfully added to database");
 		myModel.stateChangeRequest("Login", props);
 	}
@@ -225,7 +225,7 @@ public class SubmitBarcodeView extends View {
 		else {
 			processModify(barcodeEntered, phoneEntered);
 		}
-	} 
+	}
 	
 	private void processModify(String barcode, String phone) {
 		Properties props = new Properties();
@@ -234,7 +234,7 @@ public class SubmitBarcodeView extends View {
 		this.barcode.clear();
 		phoneNum.clear();
 		clearErrorMessage();
-		myModel.stateChangeRequest("VendorInfo", props);
+		myModel.stateChangeRequest("InventoryItemInfo", props);
 	} */
 
 	
