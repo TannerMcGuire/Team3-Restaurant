@@ -172,7 +172,14 @@ public class InventoryManager implements IView, IModel {
 					}
 				}
 			}
-		}
+		} else if (key.equals("SubmitBarcodeView") == true) {
+			if ((String) value == "removeItem") {
+				history = (String) value;
+				createAndShowSubmitBarcodeView();
+			} /*else if ((String) value == "addVendor") {
+				history = (String) value;
+				createAndShowVendorView();
+			}  UPDATE WITH MODIFY ITEM STATUS */
 
 		myRegistry.updateSubscribers(key, this);
 	}
@@ -371,6 +378,18 @@ public class InventoryManager implements IView, IModel {
 		// make the view visible by installing it into the frame
 		swapToView(currentScene);
 
+	}
+	// ----------------------------------------------------------
+	private void createAndShowSubmitBarcodeView() {
+		Scene localScene = myViews.get("SubmitBarcodeView");
+		if (localScene == null) {
+			// create our new view
+			View newView = ViewFactory.createView("SubmitBarcodeView", this);
+			localScene = new Scene(newView);
+			myViews.put("SubmitBarcodeView", localScene);
+		}
+
+		swapToView(localScene);
 	}
 
 	// -----------------------------------------------------------------------------
