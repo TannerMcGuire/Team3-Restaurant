@@ -17,6 +17,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.TextField;
+import model.InventoryItem;
 
 import java.awt.*;
 
@@ -32,7 +33,7 @@ public class ConfirmInventoryItemRemovalView extends View {
     private Button yesBtn;
     private Button noBtn;
 
-    protected MessageView statusLog;
+    protected MessageView _statusLog;
 
     public ConfirmInventoryItemRemovalView(IModel model) {
         super(model,"ConfirmInventoryItemRemovalView");
@@ -96,14 +97,20 @@ public class ConfirmInventoryItemRemovalView extends View {
         grid.add(labelDateOfLastUse, 0, 5, 2, 1);
         grid.add(labelNotes, 0, 6, 2, 1);
 
-        //InventoryItem inventoryItem = myModel.getSelectedInventoryItem();
+        InventoryItem inventoryItem = (InventoryItem) myModel.getState("SelectedInventoryItem");
 
-        barcode = new TextField("BARCODE"/*inventoryItem.getState("Barcode").toString()*/);
-        inventoryItemTypeName = new TextField("INVENTORY ITEM TYPE NAME"/*inventoryItem.getState("InventoryItemTypeName").toString()*/);
-        vendorId = new TextField("VENDOR ID"/*inventoryItem.getState("VendorId").toString()*/);
-        dateReceived = new TextField("DATE RECEIVED"/*inventoryItem.getState("DateReceived").toString()*/);
-        dateOfLastUse = new TextField("DATE OF LAST USE"/*inventoryItem.getState("DateOfLastUse").toString()*/);
-        notes = new TextField("NOTES"/*inventoryItem.getState("Notes").toString()*/);
+       /* System.out.println(inventoryItem.getState("Barcode"));
+        System.out.println(inventoryItem.getState("InventoryItemTypeName"));
+        System.out.println(inventoryItem.getState("VendorId"));
+        System.out.println(inventoryItem.getState("DateReceived"));*/
+
+
+        barcode = new TextField(inventoryItem.getState("Barcode").toString());
+        inventoryItemTypeName = new TextField(inventoryItem.getState("InventoryItemTypeName").toString());
+        vendorId = new TextField(inventoryItem.getState("VendorId").toString());
+        dateReceived = new TextField(inventoryItem.getState("DateReceived").toString());
+        dateOfLastUse = new TextField(inventoryItem.getState("DateOfLastUse").toString());
+        notes = new TextField(inventoryItem.getState("Notes").toString());
 
         grid.add(barcode, 2, 1, 2, 1);
         grid.add(inventoryItemTypeName, 2, 2, 2, 1);
@@ -115,11 +122,12 @@ public class ConfirmInventoryItemRemovalView extends View {
 
         HBox buttonContainer = new HBox();
 
-        yesBtn = new javafx.scene.control.Button("DONE");
+        yesBtn = new javafx.scene.control.Button("REMOVE");
         yesBtn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent e) {
+                displayMessage("Inventory Item Type removed.");
                 myModel.stateChangeRequest("InventoryItemRemoval", null);
 
             }
@@ -146,11 +154,15 @@ public class ConfirmInventoryItemRemovalView extends View {
 
     }
 
+    public void displayMessage(String message) {
+        _statusLog.displayMessage(message);
+    }
+
     protected MessageView createStatusLog(String initialMessage)
     {
-        statusLog = new MessageView(initialMessage);
+        _statusLog = new MessageView(initialMessage);
 
-        return statusLog;
+        return _statusLog;
     }
 
     public void updateState(String key, Object value)

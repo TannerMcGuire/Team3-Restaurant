@@ -83,6 +83,8 @@ public class InventoryManager implements IView, IModel {
 	public Object getState(String key) {
 		if (key.equals("his") == true) {
 			return history;
+		} else if (key.equals("SelectedInventoryItem")) {
+			return myInventoryItem;
 		}
 //		else
 //		if (key.equals("Name") == true)
@@ -183,8 +185,11 @@ public class InventoryManager implements IView, IModel {
 			}  UPDATE WITH MODIFY ITEM STATUS */
 
 			myRegistry.updateSubscribers(key, this);
-		} else if (key.equals("BarcodeSearch") == true) {
+		} else if (key.equals("BarcodeSearch")) {
 			if (value != null) {
+				/*System.out.println("BARCODE" + ((Properties)value).getProperty("Barcode"));
+				System.out.println("NAME" + ((Properties)value).getProperty("InventoryItemTypeName"));
+				System.out.println("VENDORID" + ((Properties)value).getProperty("VendorId"));*/
 				boolean flag = inventoryItemFolder((Properties) value);
 				if (flag == true) {
 					try {
@@ -194,6 +199,8 @@ public class InventoryManager implements IView, IModel {
 					}
 				}
 			}
+		} else if (key.equals("InventoryItemRemoval")) {
+			myInventoryItem.takeOut();
 		}
 	}
 
@@ -229,6 +236,9 @@ public class InventoryManager implements IView, IModel {
 		}
 	}
 
+	public InventoryItem getSelectedInventoryItem() {
+		return myInventoryItem;
+	}
 	/** Called via the IView relationship */
 	// ----------------------------------------------------------
 	public void updateState(String key, Object value) {
@@ -421,10 +431,10 @@ public class InventoryManager implements IView, IModel {
 	}
 
 	private void createAndShowConfirmInventoryItemRemovalView (Properties item) {			//FINISH THIS
-		Scene currentScene = (Scene) myViews.get("ConfirmInventoryItemRemovalView ");
+		Scene currentScene = (Scene) myViews.get("ConfirmInventoryItemRemovalView");
 		if (currentScene == null) {
 			// create our initial view
-			View newView = ViewFactory.createView("ConfirmInventoryItemRemovalView ", this);
+			View newView = ViewFactory.createView("ConfirmInventoryItemRemovalView", this);
 			currentScene = new Scene(newView);
 			myViews.put("ConfirmInventoryItemRemovalView ", currentScene);
 		}

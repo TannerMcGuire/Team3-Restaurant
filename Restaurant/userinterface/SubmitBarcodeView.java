@@ -1,6 +1,7 @@
 package userinterface;
 
 // system imports
+import exception.InvalidPrimaryKeyException;
 import javafx.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,6 +28,7 @@ import java.util.Properties;
 
 // project imports
 import impresario.IModel;
+import sun.dc.pr.PRError;
 
 /** The class containing the Submit Barcode View for the Restaurant application */
 //==============================================================
@@ -189,7 +191,7 @@ public class SubmitBarcodeView extends View {
 		clearErrorMessage();
 
 		String barcodeEntered = barcode.getText();
-		
+
 		if ((barcodeEntered == "") || (barcodeEntered.length() != 9)){
 			displayErrorMessage("Please enter a valid barcode");
 			barcode.requestFocus();
@@ -200,13 +202,30 @@ public class SubmitBarcodeView extends View {
 	}
 
 	private void processBarcode(String barcodeString) {
-		Properties props = new Properties();
-		props.setProperty("Barcode", barcodeString);
 
-		// clear fields for next time around
-		barcode.setText("");
-		clearErrorMessage();
-		myModel.stateChangeRequest("BarcodeSearch", props);
+		int barcode = Integer.parseInt(barcodeString);
+
+		try {
+			InventoryItem inventoryItem = new InventoryItem(barcode);
+
+			Properties props = new Properties();
+
+			props.setProperty("Barcode", barcodeString);
+			props.setProperty("InventoryItemTypeName", inventoryItem.getState("InventoryItemTypeName").toString());
+			props.setProperty("VendorId", inventoryItem.getState("VendorId").toString());
+			props.setProperty("DateReceived", inventoryItem.getState("DateReceived").toString());
+			props.setProperty("DateOfLastUse", inventoryItem.getState("DateOfLastUse").toString());
+			props.setProperty("Notes", inventoryItem.getState("Notes").toString());
+			props.setProperty("Status", inventoryItem.getState("Status").toString());
+
+
+
+			myModel.stateChangeRequest("BarcodeSearch", props);
+		} catch (InvalidPrimaryKeyException e) {
+			e.printStackTrace();
+		}
+
+
 	}
 	
 	/*private void processSubmitModify(Event evt) {
@@ -235,7 +254,7 @@ public class SubmitBarcodeView extends View {
 		myModel.stateChangeRequest("InventoryItemInfo", props);
 	} */
 
-	
+
 	@Override
 	public void updateState(String key, Object value) {
 

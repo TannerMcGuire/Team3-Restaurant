@@ -31,13 +31,13 @@ public class InventoryItem extends EntityBase implements IView {
 
 	// constructor for this class
 	// ----------------------------------------------------------
-	/*public InventoryItem(int barcode) throws InvalidPrimaryKeyException {
+	public InventoryItem(int barcode) throws InvalidPrimaryKeyException {
 		//UPDATE FOR USE CASE 8
 		//----METHOD FOR INVENTORYITEMTYPE CONSTRUCTOR BELOW----
-		/*super(myTableName);
+		super(myTableName);
 
 		setDependencies();
-		String query = "SELECT * FROM " + myTableName + " WHERE (ItemTypeName = '" + barcode + "')";
+		String query = "SELECT * FROM " + myTableName + " WHERE (Barcode = " + barcode + ")";
 
 		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
 
@@ -69,7 +69,7 @@ public class InventoryItem extends EntityBase implements IView {
 		else {
 			throw new InvalidPrimaryKeyException("No inventory matching barcode : " + barcode + " found.");
 		}
-	} */
+	}
 
 	// ----------------------------------------------------------
 	public InventoryItem() {
@@ -160,7 +160,7 @@ public class InventoryItem extends EntityBase implements IView {
 			if (persistentState.getProperty("Barcode") != null) {
 				if (!(InventoryManager.history.equals("processInvoice"))) {
 					Properties whereClause = new Properties();
-					whereClause.setProperty("ItemTypeName", persistentState.getProperty("ItemTypeName"));
+					whereClause.setProperty("InventoryItemTypeName", persistentState.getProperty("InventoryItemTypeName"));
 					updatePersistentState(mySchema, persistentState, whereClause);
 					updateStatusMessage = "Inventory Item type data for barcode : "
 							+ persistentState.getProperty("Barcode") + " updated successfully in database!";
