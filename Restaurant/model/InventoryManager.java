@@ -28,6 +28,7 @@ public class InventoryManager implements IView, IModel {
 
 	private Vendor myVendor;
 	private InventoryItemType myIIT;
+	private InventoryItem myInventoryItem;
 	private VendorCollection accounts;
 	private Vendor selectedAccount;
 
@@ -110,7 +111,7 @@ public class InventoryManager implements IView, IModel {
 				history = "addIIT";
 			} else if (((String) value).equals("update") == true) {
 				history = "update";
-			} else if (((String) value).equals("deleteIIT") == true){
+			} else if (((String) value).equals("deleteIIT") == true) {
 				history = "deleteIIT";
 			}
 			createAndShowInventoryItemTypeView();
@@ -181,7 +182,19 @@ public class InventoryManager implements IView, IModel {
 				createAndShowVendorView();
 			}  UPDATE WITH MODIFY ITEM STATUS */
 
-		myRegistry.updateSubscribers(key, this);
+			myRegistry.updateSubscribers(key, this);
+		} else if (key.equals("BarcodeSearch") == true) {
+			if (value != null) {
+				boolean flag = inventoryItemFolder((Properties) value);
+				if (flag == true) {
+					try {
+						searchInventoryItem((Properties) value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
 	// ----------------------------------------------------------
@@ -199,6 +212,16 @@ public class InventoryManager implements IView, IModel {
 	public boolean inventoryItemTypeFolder(Properties props) {
 		try {
 			myIIT = new InventoryItemType(props);
+			return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean inventoryItemFolder(Properties props) {
+		try {
+			myInventoryItem = new InventoryItem(props);
 			return true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -233,6 +256,11 @@ public class InventoryManager implements IView, IModel {
 		InventoryItemTypeCollection iit = new InventoryItemTypeCollection();
 		iit.findInventoryItemType(item);
 		iit.createAndShowView();
+	}
+
+	private void searchInventoryItem(Properties item) throws Exception {  //FINISH THIS
+
+		createAndShowConfirmInventoryItemRemovalView (item);
 	}
 
 	// ------------------------------------------------------------
@@ -381,15 +409,27 @@ public class InventoryManager implements IView, IModel {
 	}
 	// ----------------------------------------------------------
 	private void createAndShowSubmitBarcodeView() {
-		Scene localScene = myViews.get("SubmitBarcodeView");
-		if (localScene == null) {
+		Scene currentScene = (Scene) myViews.get("SubmitBarcodeView");
+		if (currentScene == null) {
 			// create our new view
 			View newView = ViewFactory.createView("SubmitBarcodeView", this);
-			localScene = new Scene(newView);
-			myViews.put("SubmitBarcodeView", localScene);
+			currentScene = new Scene(newView);
+			myViews.put("SubmitBarcodeView", currentScene);
 		}
 
-		swapToView(localScene);
+		swapToView(currentScene);
+	}
+
+	private void createAndShowConfirmInventoryItemRemovalView (Properties item) {			//FINISH THIS
+		Scene currentScene = (Scene) myViews.get("ConfirmInventoryItemRemovalView ");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("ConfirmInventoryItemRemovalView ", this);
+			currentScene = new Scene(newView);
+			myViews.put("ConfirmInventoryItemRemovalView ", currentScene);
+		}
+
+		swapToView(currentScene);
 	}
 
 	// -----------------------------------------------------------------------------

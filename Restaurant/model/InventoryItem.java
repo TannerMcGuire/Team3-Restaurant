@@ -31,7 +31,7 @@ public class InventoryItem extends EntityBase implements IView {
 
 	// constructor for this class
 	// ----------------------------------------------------------
-	public InventoryItem(int barcode) throws InvalidPrimaryKeyException {
+	/*public InventoryItem(int barcode) throws InvalidPrimaryKeyException {
 		//UPDATE FOR USE CASE 8
 		//----METHOD FOR INVENTORYITEMTYPE CONSTRUCTOR BELOW----
 		/*super(myTableName);
@@ -68,8 +68,8 @@ public class InventoryItem extends EntityBase implements IView {
 		// If no vendor found for this ID, throw an exception
 		else {
 			throw new InvalidPrimaryKeyException("No inventory matching barcode : " + barcode + " found.");
-		} */
-	}
+		}
+	} */
 
 	// ----------------------------------------------------------
 	public InventoryItem() {
@@ -155,19 +155,19 @@ public class InventoryItem extends EntityBase implements IView {
 	}
 
 	// -----------------------------------------------------------------------------------
-	/*private void updateStateInDatabase() {
+	private void updateStateInDatabase() {
 		try {
-			if (persistentState.getProperty("ItemTypeName") != null) {
-				if (!(InventoryManager.history.equals("addIIT"))) {
+			if (persistentState.getProperty("Barcode") != null) {
+				if (!(InventoryManager.history.equals("processInvoice"))) {
 					Properties whereClause = new Properties();
 					whereClause.setProperty("ItemTypeName", persistentState.getProperty("ItemTypeName"));
 					updatePersistentState(mySchema, persistentState, whereClause);
-					updateStatusMessage = "Inventory Item type data for type name : "
-							+ persistentState.getProperty("ItemTypeName") + " updated successfully in database!";
+					updateStatusMessage = "Inventory Item type data for barcode : "
+							+ persistentState.getProperty("Barcode") + " updated successfully in database!";
 				} else {
 					insertPersistentState(mySchema, persistentState);
-					updateStatusMessage = "Inventory Item Type data for new Inventory Item Type : "
-							+ persistentState.getProperty("ItemTypeName") + " shelved successfully in database!";
+					updateStatusMessage = "Inventory Item Type data for new Inventory Item : "
+							+ persistentState.getProperty("Barcode") + " shelved successfully in database!";
 				}
 			}
 		} catch (
@@ -176,7 +176,7 @@ public class InventoryItem extends EntityBase implements IView {
 			updateStatusMessage = "Error in shelving inventory item data in database!";
 		}
 		System.out.println("updateStateInDatabase " + updateStatusMessage);
-	} */
+	}
  
 	/**
 	 * This method is needed solely to enable the Vendor information to be
