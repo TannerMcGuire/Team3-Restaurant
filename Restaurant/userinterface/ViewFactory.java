@@ -32,6 +32,10 @@ public class ViewFactory {
 			return new EnterInventoryItemTypeAndNotesScreen(model);
 		} else if (viewName.equals("InventoryItemTypeChangesScreen")) {
 			return new InventoryItemTypeChangesScreen(model);
+		} else if (viewName.equals("SubmitBarcodeView") == true) {
+			return new SubmitBarcodeView(model);
+		} else if (viewName.equals("ConfirmInventoryItemRemovalView") == true) {
+			return new ConfirmInventoryItemRemovalView(model);
 		}
 		return null;
 	}
