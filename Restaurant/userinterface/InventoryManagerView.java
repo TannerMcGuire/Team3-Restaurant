@@ -291,15 +291,9 @@ public class InventoryManagerView extends View {
 //
 //		clearErrorMessage();
 //
-//		String useridEntered = userid.getText();
-//
-//		if ((useridEntered == null) || (useridEntered.length() == 0)) {
-//			displayErrorMessage("Please enter a user id!");
-//			userid.requestFocus();
-//		} else {
-//			String passwordEntered = password.getText();
-//			processUserIDAndPassword(useridEntered, passwordEntered);
-//		}
+		if(evt.getSource() == processButton) {
+			myModel.stateChangeRequest("VendorView", "processInvoice");
+		}
 
 	}
 

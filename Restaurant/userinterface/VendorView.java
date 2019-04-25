@@ -111,7 +111,7 @@ public class VendorView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				processAction();
 			}
 		});
 		grid.add(name, 1, 1);
@@ -127,7 +127,7 @@ public class VendorView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				processAction();
 			}
 		});
 		grid.add(phoneNum, 1, 2);
@@ -141,12 +141,12 @@ public class VendorView extends View {
 			@Override
 			public void handle(ActionEvent e) {
 				
-				if(myModel.getState("his") == "addVendor") {
-					processAction(e);
-				}
-				if(myModel.getState("his") == "modifyVendor") {
-					processSubmitModify(e);
-				}
+				if(myModel.getState("his") == "addVendor")
+					processAction();
+				else if(myModel.getState("his") == "modifyVendor")
+					processSubmitModify();
+				else if(myModel.getState("his") == "processInvoice")
+					processInvoice();
 			}
 		});
 		buttons.getChildren().add(submitButton);
@@ -201,7 +201,7 @@ public class VendorView extends View {
 		statusLog.clearErrorMessage();
 	}
 	// ----------------------------------------------------------
-	public void processAction(Event evt) {
+	public void processAction() {
 
 		clearErrorMessage();
 
@@ -237,7 +237,7 @@ public class VendorView extends View {
 		myModel.stateChangeRequest("Login", props);
 	}
 	
-	private void processSubmitModify(Event evt) {
+	private void processSubmitModify() {
 		
 		clearErrorMessage();
 		String nameEntered = name.getText();
@@ -261,6 +261,30 @@ public class VendorView extends View {
 		phoneNum.clear();
 		clearErrorMessage();
 		myModel.stateChangeRequest("VendorInfo", props);
+	}
+	
+	private void processInvoice() {
+		
+		clearErrorMessage();
+		String nameEntered = name.getText();
+		String phoneEntered = phoneNum.getText();
+		
+		if ((nameEntered == "") || (nameEntered.length() == 0) && 
+			((phoneEntered == "") || (phoneEntered.length() < 12))) {
+			displayErrorMessage("Please enter a valid vendor name or phone number");
+			name.requestFocus();
+		}
+		else {
+			
+		}
+		Properties props = new Properties();
+		props.setProperty("Name", nameEntered);
+		props.setProperty("PhoneNumber", phoneEntered);
+		this.name.clear();
+		phoneNum.clear();
+		clearErrorMessage();
+		myModel.stateChangeRequest("VendorInfo", props);
+		
 	}
 
 	

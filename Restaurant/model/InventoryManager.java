@@ -80,19 +80,8 @@ public class InventoryManager implements IView, IModel {
 	// Example for later
 	// ----------------------------------------------------------
 	public Object getState(String key) {
-		if (key.equals("his") == true) {
+		if (key.equals("his") == true)
 			return history;
-		}
-//		else
-//		if (key.equals("Name") == true)
-//		{
-//			if (myAccountHolder != null)
-//			{
-//				return myAccountHolder.getState("Name");
-//			}
-//			else
-//				return "Undefined";
-//		}
 		else
 			return "";
 	}
@@ -126,13 +115,8 @@ public class InventoryManager implements IView, IModel {
 		} else if (key.equals("VendorInventoryItemTypeView") == true) {
 			createAndShowVendorInventoryItemTypeView();
 		} else if (key.equals("VendorView") == true) {
-			if ((String) value == "modifyVendor") {
-				history = (String) value;
-				createAndShowVendorView();
-			} else if ((String) value == "addVendor") {
-				history = (String) value;
-				createAndShowVendorView();
-			}
+			history = (String) value;
+			createAndShowVendorView();
 		} else if (key.equals("ModifyVendorView") == true) {
 			try {
 				modifyVendor((Properties) value);
@@ -144,7 +128,8 @@ public class InventoryManager implements IView, IModel {
 				boolean flag = vendorFolder((Properties) value);
 				if (flag == true) {
 					try {
-						searchVendor((Properties) value);
+						if (history.contentEquals("processInvoice")) searchActiveVendor((Properties) value);
+						else searchVendor((Properties) value);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -229,6 +214,15 @@ public class InventoryManager implements IView, IModel {
 	}
 
 	// ------------------------------------------------------------
+	
+	private void searchActiveVendor(Properties vend) throws Exception {
+		VendorCollection vc = new VendorCollection();
+		vc.setManager(this);
+		vc.findActiveVendor(vend);
+		createAndShowVendorCollectionView(vc);
+	}
+
+	// ----------------------------------------------------------
 	private void createAndShowInventoryManagerView() {
 		Scene currentScene = (Scene) myViews.get("InventoryManagerView");
 		if (currentScene == null) {

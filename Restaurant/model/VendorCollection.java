@@ -69,6 +69,33 @@ public class VendorCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------------------------------
+	
+	public void findActiveVendor(Properties prop) throws Exception {
+		String name = prop.getProperty("Name");
+		String number = prop.getProperty("PhoneNumber");
+		String query;
+		if (name != null) {
+			query = "SELECT * FROM " + myTableName + " WHERE (Name LIKE '%" + name + "%') AND Status = 'Active'";
+		} else {
+			query = "SELECT * FROM " + myTableName + " WHERE (PhoneNumber = " + number + ") AND Status = 'Active'";
+		}
+
+		Vector allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null)
+			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
+				Properties nextVendorData = (Properties) allDataRetrieved.elementAt(cnt);
+				Vendor vendor = new Vendor(nextVendorData);
+
+				if (vendor != null)
+					addVendor(vendor);
+			}
+		else {
+			throw new InvalidPrimaryKeyException("No vendors matching: " + name + " or " + number);
+		}
+	}
+
+	// ----------------------------------------------------------------------------------
 	private int findIndexToAdd(Vendor a) {
 		// users.add(u);
 		int low = 0;
