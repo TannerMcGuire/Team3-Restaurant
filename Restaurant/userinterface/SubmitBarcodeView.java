@@ -180,6 +180,7 @@ public class SubmitBarcodeView extends View {
 	 */
 	// ----------------------------------------------------------
 	public void clearErrorMessage() {
+
 		statusLog.clearErrorMessage();
 	}
 	// ----------------------------------------------------------
@@ -189,7 +190,7 @@ public class SubmitBarcodeView extends View {
 
 		String barcodeEntered = barcode.getText();
 		
-		if ((barcodeEntered == "") || (barcodeEntered.length() == 0)) || (barcodeEntered.length() != 9){
+		if ((barcodeEntered == "") || (barcodeEntered.length() != 9)){
 			displayErrorMessage("Please enter a valid barcode");
 			barcode.requestFocus();
 		}
@@ -204,11 +205,8 @@ public class SubmitBarcodeView extends View {
 
 		// clear fields for next time around
 		barcode.setText("");
-
-		InventoryItem b = new InventoryItem(props);				
-		b.update();
-		displayMessage("Successfully added to database");
-		myModel.stateChangeRequest("Login", props);
+		clearErrorMessage();
+		myModel.stateChangeRequest("BarcodeSearch", props);
 	}
 	
 	/*private void processSubmitModify(Event evt) {
