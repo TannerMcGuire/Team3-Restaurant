@@ -11,7 +11,7 @@ import event.Event;
 import database.*;
 
 import impresario.IView;
-
+import userinterface.VendorCollectionView;
 import userinterface.View;
 import userinterface.ViewFactory;
 
@@ -25,7 +25,6 @@ public class VendorCollection extends EntityBase implements IView {
 	public static String v;
 	private Vendor selectedVendor;
 	private InventoryManager manager;
-
 	// GUI Components
 
 	// constructor for this class
@@ -69,6 +68,26 @@ public class VendorCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------------------------------
+	public void findAllVendors() throws Exception {
+		String query;
+			query = "SELECT * FROM " + myTableName;
+
+		Vector allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null)
+			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
+				Properties nextVendorData = (Properties) allDataRetrieved.elementAt(cnt);
+				Vendor vendor = new Vendor(nextVendorData);
+
+				if (vendor != null)
+					addVendor(vendor);
+			}
+		else {
+			throw new InvalidPrimaryKeyException("No vendors found");
+		}
+	}
+	
+	// ----------------------------------------------------------------------------------
 	private int findIndexToAdd(Vendor a) {
 		// users.add(u);
 		int low = 0;
@@ -104,7 +123,7 @@ public class VendorCollection extends EntityBase implements IView {
 		else if (key.equals("VendorList"))
 			return this;
 		else if (key.equals("his"))
-			return " ";
+			return manager.getState("his");
 		return null;
 	}
 
@@ -233,6 +252,7 @@ public class VendorCollection extends EntityBase implements IView {
 	
 	public void setManager(InventoryManager manager) {
 		this.manager = manager;
+		//System.out.println((String) manager.getState("his") + " vc");
 	}
 	
 	public InventoryManager getManager() {

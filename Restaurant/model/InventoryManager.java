@@ -103,13 +103,13 @@ public class InventoryManager implements IView, IModel {
 		// just set up dependencies for
 		// DEBUG System.out.println("Manager.sCR: key = " + key);
 		// This is where GUI popups change!!!
-		
-		//Inventory Start Screen
+
+		// Inventory Start Screen
 		if (key.equals("InventoryManagerView") == true) {
 			createAndShowInventoryManagerView();
-		} 
-		
-		//Inventory Item Type screen
+		}
+
+		// Inventory Item Type screen
 		else if (key.equals("InventoryItemTypeView") == true) {
 			if (((String) value).equals("addIIT") == true) {
 				history = "addIIT";
@@ -117,30 +117,31 @@ public class InventoryManager implements IView, IModel {
 			} else if (((String) value).equals("updateIIT") == true) {
 				history = "updateIIT";
 				createAndShowEnterInventoryItemTypeNameAndNotesScreen();
-			} else if (((String) value).equals("deleteIIT") == true){
+			} else if (((String) value).equals("deleteIIT") == true) {
 				history = "deleteIIT";
 				createAndShowInventoryItemTypeView();
 			}
-		} 
-		
-		//Update IIT
+		}
+
+		// Update IIT
 		else if (key.equals("SUBMIT IIT NAME AND NOTES")) {
 			createAndShowInventoryItemTypeSelectionScreen(((Properties) value).getProperty("ItemTypeName"),
 					((Properties) value).getProperty("Notes"));
 		}
-		
-		//Back to start
+
+		// Back to start
 		else if (key.equals("BACK")) {
 			createAndShowInventoryManagerView();
-		} 
-		
-		//Vendor Inventory Item Type changes
+		}
+
+		// Vendor Inventory Item Type changes
 		else if (key.equals("VendorInventoryItemTypeView") == true) {
 			history = (String) value;
+			//System.out.println(history);
 			createAndShowVendorInventoryItemTypeView();
-		} 
-		
-		//Vendor changes
+		}
+
+		// Vendor changes
 		else if (key.equals("VendorView") == true) {
 			if ((String) value == "modifyVendor") {
 				history = (String) value;
@@ -164,6 +165,12 @@ public class InventoryManager implements IView, IModel {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				}
+			} else {
+				try {
+					searchVendor(value);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		} else if (key.equals("IITInfo") == true) {
@@ -190,15 +197,14 @@ public class InventoryManager implements IView, IModel {
 			}
 		}
 
-		
-		//Invoice
-		
-		//2 Inventory Item changes
-		
-		//reorder list
-		
-		//full inventory
-		
+		// Invoice
+
+		// 2 Inventory Item changes
+
+		// reorder list
+
+		// full inventory
+
 		myRegistry.updateSubscribers(key, this);
 	}
 
@@ -233,11 +239,16 @@ public class InventoryManager implements IView, IModel {
 	}
 
 	// ----------------------------------------------------------
-	private void searchVendor(Properties vend) throws Exception {
+	private void searchVendor(Object vend) throws Exception {
 		VendorCollection vc = new VendorCollection();
 		vc.setManager(this);
-		vc.findVendor(vend);
-		createAndShowVendorCollectionView(vc);
+		if (vend == null) {
+			vc.findAllVendors();
+			createAndShowVendorCollectionView(vc);
+		} else {
+			vc.findVendor((Properties) vend);
+			createAndShowVendorCollectionView(vc);
+		}
 	}
 
 	// ----------------------------------------------------------
@@ -266,20 +277,6 @@ public class InventoryManager implements IView, IModel {
 
 		swapToView(currentScene);
 
-	}
-
-	// ------------------------------------------------------------
-
-	private void createAndShowDeleteIITView() {
-		Scene localScene = myViews.get("InventoryItemTypeDeleteView");
-		if (localScene == null) {
-			// create our new view
-			View newView = ViewFactory.createView("InventoryItemTypeDeleteView", this);
-			localScene = new Scene(newView);
-			myViews.put("InventoryItemTypeDeleteView", localScene);
-		}
-
-		swapToView(localScene);
 	}
 
 	// ------------------------------------------------------------

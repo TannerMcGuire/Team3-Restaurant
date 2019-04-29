@@ -10,6 +10,8 @@ public class ViewFactory {
 			return new InventoryManagerView(model);
 		} else if (viewName.equals("VendorInventoryItemTypeView") == true) {
 			return new VendorInventoryItemTypeView(model);
+		} else if (viewName.equals("VendorInventoryItemTypeCollectionView") == true) {
+			return new VendorInventoryItemTypeCollectionView(model);
 		} else if (viewName.equals("VendorCollectionView") == true) {
 			return new VendorCollectionView(model);
 		} else if (viewName.equals("VendorView") == true) {

@@ -41,22 +41,25 @@ import java.util.Properties;
 
 // project imports
 import impresario.IModel;
-import model.Vendor;
-import model.VendorCollection;
+import model.InventoryItemType;
+import model.InventoryItemTypeCollection;
 import model.InventoryManager;
+import model.VendorCollection;
+import model.VendorInventoryItemType;
+import model.VendorInventoryItemTypeCollection;
 
 //==============================================================================
-public class VendorCollectionView extends View {
-	protected TableView<VendorTableModel> tableOfVendors;
+public class VendorInventoryItemTypeCollectionView extends View {
+	protected TableView<VendorInventoryItemTypeTableModel> tableOfVendorItemTypes;
 	protected Button submitButton;
 	protected Button backButton;
 	private InventoryManager manager;
-	
+
 	protected MessageView statusLog;
 
 	// --------------------------------------------------------------------------
-	public VendorCollectionView(IModel wsc) {
-		super(wsc, "VendorCollectionView");
+	public VendorInventoryItemTypeCollectionView(IModel wsc) {
+		super(wsc, "VendorInventoryItemTypeCollectionView");
 
 		// create a container for showing the contents
 		VBox container = new VBox(10);
@@ -72,10 +75,9 @@ public class VendorCollectionView extends View {
 		getChildren().add(container);
 
 		populateFields();
-
-		manager = (InventoryManager) ((VendorCollection) myModel).getManager();
-		//System.out.println((String) myModel.getState("his") + " here");
-		//myModel.subscribe("InventoryManagerView", this);
+		
+		myModel.subscribe("VendorInventoryItemTypeCollectionView", this);
+		
 	}
 
 	// --------------------------------------------------------------------------
@@ -86,24 +88,25 @@ public class VendorCollectionView extends View {
 	// --------------------------------------------------------------------------
 	protected void getEntryTableModelValues() {
 
-		ObservableList<VendorTableModel> tableData = FXCollections.observableArrayList();
+		ObservableList<VendorInventoryItemTypeTableModel> tableData = FXCollections.observableArrayList();
 		try {
-			VendorCollection vendorCollection = (VendorCollection) myModel.getState("VendorList");
+			VendorInventoryItemTypeCollection vendorItemCollection = (VendorInventoryItemTypeCollection) myModel.getState("VendorInventoryItemTypeList");
 
-			Vector entryList = (Vector) vendorCollection.getState("Vendors");
+			Vector entryList = (Vector) vendorItemCollection.getState("VendorInventoryItemType");
 			Enumeration entries = entryList.elements();
 
 			while (entries.hasMoreElements() == true) {
-				Vendor nextVendor = (Vendor) entries.nextElement();
-				Vector<String> view = nextVendor.getEntryListView();
+				VendorInventoryItemType nextVendorInventoryItemType = (VendorInventoryItemType) entries.nextElement();
+				Vector<String> view = nextVendorInventoryItemType.getEntryListView();
 
 				// add this list entry to the list
-				VendorTableModel nextTableRowData = new VendorTableModel(view);
+				VendorInventoryItemTypeTableModel nextTableRowData = new VendorInventoryItemTypeTableModel(view);
 				tableData.add(nextTableRowData);
 
 			}
-			
-			tableOfVendors.setItems(tableData);
+			//vendorItemCollection.printVendorItems();//debug
+			//System.out.println((String) myModel.getState("his"));
+			tableOfVendorItemTypes.setItems(tableData);
 		} catch (Exception e) {// SQLException e) {
 			// Need to handle this exception
 		}
@@ -136,74 +139,68 @@ public class VendorCollectionView extends View {
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
 
-		Text title = new Text("LIST OF VENDORS");
+		Text title = new Text("LIST OF VENDOR INVENTORY ITEM TYPES");
 		title.setWrappingWidth(350);
 		title.setTextAlignment(TextAlignment.CENTER);
 		title.setFill(Color.BLACK);
 		grid.add(title, 0, 0, 2, 1);
-
-		Text prompt = new Text("Select proper Vendor by double clicking or selecting and clicking submit");
+		
+		Text prompt = new Text("Select VendorInventoryItemType to delete by double clicking or selecting and clicking submit");
 		prompt.setWrappingWidth(350);
 		prompt.setTextAlignment(TextAlignment.CENTER);
 		prompt.setFill(Color.BLACK);
 		grid.add(prompt, 0, 1, 2, 1);
 
-		tableOfVendors = new TableView<VendorTableModel>();
-		tableOfVendors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		tableOfVendorItemTypes = new TableView<VendorInventoryItemTypeTableModel>();
+		tableOfVendorItemTypes.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-		TableColumn vendorIDColumn = new TableColumn("ID");
+		TableColumn iDColumn = new TableColumn("Item Type ID");
+		iDColumn.setMinWidth(70);
+		iDColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("id"));
+
+		TableColumn vendorIDColumn = new TableColumn("Vendor ID");
 		vendorIDColumn.setMinWidth(30);
-		vendorIDColumn.setCellValueFactory(new PropertyValueFactory<VendorTableModel, String>("vendorId"));
+		vendorIDColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("vendorID"));
 
-		TableColumn nameColumn = new TableColumn("Name");
+		TableColumn nameColumn = new TableColumn("Inventory Item Type Name");
 		nameColumn.setMinWidth(200);
-		nameColumn.setCellValueFactory(new PropertyValueFactory<VendorTableModel, String>("name"));
+		nameColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("inventoryItemTypeName"));
+		
+		TableColumn priceColumn = new TableColumn("Price");
+		priceColumn.setMinWidth(50);
+		priceColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("vendorPrice"));
+		
+		TableColumn dateColumn = new TableColumn("Last Updated");
+		dateColumn.setMinWidth(150);
+		dateColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("dateOfLastUpdate"));
 
-		TableColumn phoneNumberColumn = new TableColumn("Phone Number");
-		phoneNumberColumn.setMinWidth(150);
-		phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<VendorTableModel, String>("phoneNumber"));
+		tableOfVendorItemTypes.getColumns().addAll(iDColumn, vendorIDColumn, nameColumn, priceColumn, dateColumn);
 
-		TableColumn statusColumn = new TableColumn("Status");
-		statusColumn.setMinWidth(50);
-		statusColumn.setCellValueFactory(new PropertyValueFactory<VendorTableModel, String>("status"));
-
-		tableOfVendors.getColumns().addAll(vendorIDColumn, nameColumn, phoneNumberColumn, statusColumn);
-
-		tableOfVendors.setOnMousePressed(new EventHandler<MouseEvent>() {
+		tableOfVendorItemTypes.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.isPrimaryButtonDown() && event.getClickCount() >= 2) {
-					if (manager.getState("his").equals("addVIIT") || manager.getState("his").equals("deleteVIIT")) {
-						processVendorSelected();
-					}
-					if (manager.getState("his").equals("modifyVendor")) {
-						modifySelected();
-					}
+					processVendorInventoryItemTypeSelected();
 				}
 			}
 		});
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setPrefSize(300, 200);
-		scrollPane.setContent(tableOfVendors);
+		scrollPane.setContent(tableOfVendorItemTypes);
 
 		submitButton = new Button("Submit");
 		submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				if (manager.getState("his").equals("addVIIT") || manager.getState("his").equals("deleteVIIT")) {
-					processVendorSelected();
-				}
-				if (manager.getState("his").equals("modifyVendor")) {
-					modifySelected();
-				}
+				processVendorInventoryItemTypeSelected();
 			}
 		});
-
+		
 		backButton = new Button("Back");
 		backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				// myModel.stateChangeRequest("InventoryManagerView", null);
+				//myModel.stateChangeRequest("InventoryManagerView", null);
 				new model.InventoryManager();
 			}
 		});
@@ -222,34 +219,30 @@ public class VendorCollectionView extends View {
 
 	// --------------------------------------------------------------------------
 	public void updateState(String key, Object value) {
+		if (key == null) {
+			tableOfVendorItemTypes.refresh();
+			displayMessage("VendorInventoryItemType Removed");
+		}
 		
 	}
 
 	// --------------------------------------------------------------------------
-	protected void processVendorSelected() {
-		VendorTableModel selectedItem = tableOfVendors.getSelectionModel().getSelectedItem();
-
+	protected void processVendorInventoryItemTypeSelected() {
+		VendorInventoryItemTypeTableModel selectedItem = tableOfVendorItemTypes.getSelectionModel().getSelectedItem();
 		if (selectedItem != null) {
-			String selectedVendorID = selectedItem.getVendorId();
-			myModel.stateChangeRequest("InventoryItemTypeView", selectedVendorID);
-		}
-	}
-
-	// --------------------------------------------------------------------------
-
-	private void modifySelected() {
-		VendorTableModel selectedItem = tableOfVendors.getSelectionModel().getSelectedItem();
-
-		if (selectedItem != null) {
-			String selectedVendorID = selectedItem.getVendorId();
-			Properties prop = new Properties();
-			prop.setProperty("Id", selectedItem.getVendorId());
-			prop.setProperty("Name", selectedItem.getName());
-			prop.setProperty("PhoneNumber", selectedItem.getPhoneNumber());
-			prop.setProperty("Status", selectedItem.getStatus());
-
-			manager.stateChangeRequest("ModifyVendorView", prop);
-		}
+			String selectedID = selectedItem.getVendorID();
+			String selectedName = selectedItem.getInventoryItemTypeName();
+			try {
+				VendorInventoryItemType viit = new VendorInventoryItemType(selectedID,selectedName);
+				Properties prop = new Properties();
+				prop.setProperty("Id", selectedID);
+				prop.setProperty("InventoryItemTypeName", selectedName);
+				viit.delete(prop);
+			} catch (InvalidPrimaryKeyException e) {
+				e.printStackTrace();
+			}
+			updateState(null, null);
+		} 
 	}
 
 	// --------------------------------------------------------------------------
@@ -274,18 +267,10 @@ public class VendorCollectionView extends View {
 	public void clearErrorMessage() {
 		statusLog.clearErrorMessage();
 	}
-
-	// --------------------------------------------------------------------------
-	public void mouseClicked(MouseEvent click) {
-		if (click.getClickCount() >= 2) {
-			System.out.print("Double\n");
-			if (manager.getState("his").equals("addVIIT")) {
-				processVendorSelected();
-			}
-			if (manager.getState("his").equals("modifyVendor")) {
-				modifySelected();
-			}
-		}
-	}
+	/*
+	 * //--------------------------------------------------------------------------
+	 * public void mouseClicked(MouseEvent click) { if(click.getClickCount() >= 2) {
+	 * processInventoryItemTypeSelected(); } }
+	 */
 
 }
