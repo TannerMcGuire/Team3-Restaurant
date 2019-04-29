@@ -22,6 +22,8 @@ public class ViewFactory {
 			return new InventoryItemTypeCollectionView(model);
 		} else if (viewName.equals("InventoryItemTypeCollectionView2") == true) {
 			return new InventoryItemTypeCollectionView2(model);
+		} else if (viewName.equals("ProcessInvoiceView")) {
+			return new ProcessInvoiceView(model);
 		} else if (viewName.equals("VIITPriceView") == true) {
 			return new PriceView(model);
 		} else if (viewName.equals("Yay") == true) {

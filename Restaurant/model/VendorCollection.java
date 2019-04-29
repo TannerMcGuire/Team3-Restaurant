@@ -155,6 +155,10 @@ public class VendorCollection extends EntityBase implements IView {
 			String vendorID = (String) value;
 			selectedVendor = retrieve(vendorID);
 			createAndShowModifyView();
+		} else if (key.equals("ProcessInvoiceView") == true){
+			String vendorID = (String) value;
+			selectedVendor = retrieve(vendorID);
+			createAndShowProcessInvoiceView();
 		}
 		myRegistry.updateSubscribers(key, this);
 	}
@@ -218,6 +222,17 @@ public class VendorCollection extends EntityBase implements IView {
 	protected void createAndShowModifyView() {
 		// create our new view
 		View newView = ViewFactory.createView("ModifyVendorView", selectedVendor);
+		Scene newScene = new Scene(newView);
+
+		// make the view visible by installing it into the frame
+		swapToView(newScene);
+	}
+	
+	// -----------------------------------------------------------
+	
+	protected void createAndShowProcessInvoiceView() {
+		// create our new view
+		View newView = ViewFactory.createView("ProcessInvoiceView", selectedVendor);
 		Scene newScene = new Scene(newView);
 
 		// make the view visible by installing it into the frame

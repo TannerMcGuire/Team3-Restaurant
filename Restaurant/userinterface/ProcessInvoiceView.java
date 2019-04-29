@@ -22,10 +22,16 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import model.InventoryItem;
+import model.InventoryItemType;
 import model.Vendor;
+import model.VendorInventoryItemType;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
+import exception.InvalidPrimaryKeyException;
 // project imports
 import impresario.IModel;
 
@@ -36,6 +42,10 @@ public class ProcessInvoiceView extends View {
 	// GUI components
 	protected TextField name;
 	protected TextField barcode;
+	protected TextField notes;
+	protected TextField date;
+	protected TextField dateUsed;
+	
 
 	protected Button doneButton; // doneButton
 	protected Button submitButton; // new button
@@ -46,7 +56,7 @@ public class ProcessInvoiceView extends View {
 	// constructor for this class -- takes a model object
 	// ----------------------------------------------------------
 	public ProcessInvoiceView(IModel account) {
-		super(account, "VendorView");
+		super(account, "ProcessInvoiceView");
 
 		// create a container for showing the contents
 		VBox container = new VBox(10);
@@ -93,12 +103,14 @@ public class ProcessInvoiceView extends View {
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
 
-		Text prompt = new Text("Please Inventory Item Information");
+		Text prompt = new Text("Please Inventory Item Information From Invoice");
 		prompt.setWrappingWidth(400);
 		prompt.setTextAlignment(TextAlignment.CENTER);
 		prompt.setFill(Color.BLACK);
 		grid.add(prompt, 0, 0, 2, 1);
 
+		//------------------------------------------------------
+		
 		Text nameLabel = new Text(" Inventory Item Type Name : ");
 		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
 		nameLabel.setFont(myFont);
@@ -107,30 +119,56 @@ public class ProcessInvoiceView extends View {
 		grid.add(nameLabel, 0, 1);
 
 		name = new TextField();
-		name.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				processAction(e);
-			}
-		});
 		grid.add(name, 1, 1);
+		
+		//------------------------------------------------------
 
-		Text phoneLabel = new Text(" Item Barcode : ");
-		phoneLabel.setFont(myFont);
-		phoneLabel.setWrappingWidth(150);
-		phoneLabel.setTextAlignment(TextAlignment.RIGHT);
-		grid.add(phoneLabel, 0, 2);
+		Text barcodeLabel = new Text(" Item Barcode : ");
+		barcodeLabel.setFont(myFont);
+		barcodeLabel.setWrappingWidth(150);
+		barcodeLabel.setTextAlignment(TextAlignment.RIGHT);
+		grid.add(barcodeLabel, 0, 2);
 
 		barcode = new TextField();
-		barcode.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				processAction(e);
-			}
-		});
+		barcode.setDisable(true);
 		grid.add(barcode, 1, 2);
+		
+		//------------------------------------------------------
+		Text dateRecievedLabel = new Text(" Date Recieved : ");
+		dateRecievedLabel.setFont(myFont);
+		dateRecievedLabel.setWrappingWidth(150);
+		dateRecievedLabel.setTextAlignment(TextAlignment.RIGHT);
+		grid.add(dateRecievedLabel, 0, 3);
+
+		date = new TextField();
+		date.setDisable(true);
+		grid.add(date, 1, 3);
+		
+		//------------------------------------------------------
+		
+		Text dateUsedLabel = new Text(" Date of Last Use : ");
+		dateUsedLabel.setFont(myFont);
+		dateUsedLabel.setWrappingWidth(150);
+		dateUsedLabel.setTextAlignment(TextAlignment.RIGHT);
+		grid.add(dateUsedLabel, 0, 4);
+
+		dateUsed = new TextField();
+		dateUsed.setDisable(true);
+		grid.add(dateUsed, 1, 4);
+		
+		//------------------------------------------------------
+		
+		Text notesLabel = new Text(" Notes : ");
+		notesLabel.setFont(myFont);
+		notesLabel.setWrappingWidth(150);
+		notesLabel.setTextAlignment(TextAlignment.RIGHT);
+		grid.add(notesLabel, 0, 5);
+
+		notes = new TextField();
+		notes.setDisable(true);
+		grid.add(notes, 1, 5);
+		
+		//------------------------------------------------------
 
 		HBox buttons = new HBox(10);
 		buttons.setAlignment(Pos.CENTER);
@@ -158,6 +196,8 @@ public class ProcessInvoiceView extends View {
 		});
 		buttons.getChildren().add(doneButton);
 
+		//------------------------------------------------------
+		
 		vbox.getChildren().add(grid);
 		vbox.getChildren().add(buttons);
 
@@ -196,23 +236,108 @@ public class ProcessInvoiceView extends View {
 		statusLog.clearErrorMessage();
 	}
 	// ----------------------------------------------------------
+	
+	boolean allowed = false;
+	Vendor temp = (Vendor) myModel.getState("selectedVendor");
+	String vendorID = (String) temp.getState("Id");
+	
 	public void processAction(Event evt) {
-
-		clearErrorMessage();
-
-		String nameEntered = name.getText();
-		String barcodeEntered = barcode.getText();
 		
-		
-		if ((nameEntered == "") || (nameEntered.length() == 0)) {
-			displayErrorMessage("Please enter a valid vendor name");
-			name.requestFocus();
-		} else if ((barcode.getText() == "") || (barcode.getLength() != 12)) {
-			displayErrorMessage("Please enter a valid Phone Number");
-			barcode.requestFocus();
+		if (!allowed) { //enter name, check to see if ITT is allowed by vendor
+			if ((name.getText() == "") || (name.getText().length() == 0)) {
+				displayErrorMessage("Please enter an Inventory Item Type Name name");
+				name.requestFocus();
+			}
+			else {
+				try {
+					new InventoryItemType(name.getText());
+					allowed = true;
+					try {
+						new VendorInventoryItemType(vendorID, name.getText());
+					} catch (InvalidPrimaryKeyException e) {
+						displayErrorMessage("Entered item is not carried by vendor.");
+						allowed = false;
+						e.printStackTrace();
+					}
+				} catch (InvalidPrimaryKeyException e) {
+					displayErrorMessage("Entered item is not carried by store.");
+					allowed = false;
+					e.printStackTrace();
+				}
+			}
+
+			if(allowed) {
+				displayMessage("Enter item information");
+				
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+				LocalDate now = LocalDate.now();
+				String currentDate = dtf.format(now);
+				date.setText(currentDate);
+				dateUsed.setText(currentDate);
+				
+				name.setDisable(true);
+				barcode.setDisable(false);
+				date.setDisable(false);
+				dateUsed.setDisable(false);
+				notes.setDisable(false);
+				barcode.requestFocus();
+			}
+//			else {
+//				displayErrorMessage("Please enter a valid Inventory Item Type Name.");
+//			}
 		}
-		else {
-			//correct input
+		
+		else { //ITT is allowed, enter remaining information for inventory item
+			clearErrorMessage();
+			name.setDisable(true);
+			String nameEntered = name.getText();
+			String barcodeEntered = barcode.getText();
+			String notesEntered = notes.getText();
+			
+
+			if (barcodeEntered.length() != 9 || !barcodeEntered.matches("[0-9]+")) {
+				displayErrorMessage("Please enter a valid barcode");
+				barcode.requestFocus();
+			}
+			
+			else if(!checkDate(date.getText())) {
+				displayErrorMessage("Please enter a valid date");
+				date.requestFocus();
+			}
+			
+			else if(!checkDate(dateUsed.getText())) {
+				displayErrorMessage("Please enter a valid date");
+				dateUsed.requestFocus();
+			}
+			
+			else {
+				Properties props = new Properties();
+				
+				props.setProperty("Barcode", barcodeEntered);
+				props.setProperty("InventoryItemTypeName", nameEntered);
+				props.setProperty("VendorId", vendorID);
+				props.setProperty("DateReceived", date.getText());
+				props.setProperty("DateOfLastUse", dateUsed.getText());
+				props.setProperty("Notes", notesEntered);
+				props.setProperty("Status", "Available");
+				
+				InventoryItem newItem = new InventoryItem(props);
+				newItem.update();
+				displayMessage("Successfully added item!");
+				
+				name.clear();
+				barcode.clear();
+				date.clear();
+				dateUsed.clear();
+				notes.clear();
+				name.setDisable(false);
+				barcode.setDisable(true);
+				date.setDisable(true);
+				dateUsed.setDisable(true);
+				notes.setDisable(true);
+				allowed = false;
+			
+			}
 		}
 	}
 
@@ -220,6 +345,17 @@ public class ProcessInvoiceView extends View {
 	@Override
 	public void updateState(String key, Object value) {
 
+		
+	}
+	
+	public boolean checkDate(String check) {
+		if(check.length() != 10) return false;
+		if(!check.matches("^[0-9-]*$")) return false;
+		for(int i = 0; i < check.length(); i++) {
+			if((i==2||i==5) && check.charAt(i) != '-')
+				return false;
+		}
+		return true;
 	}
 
 }

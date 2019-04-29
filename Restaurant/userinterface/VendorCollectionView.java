@@ -173,12 +173,7 @@ public class VendorCollectionView extends View {
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.isPrimaryButtonDown() && event.getClickCount() >= 2) {
-					if(manager.getState("his") == "addVendor") {
-						processVendorSelected();
-					}
-					if(manager.getState("his") == "modifyVendor") {
-						modifySelected();
-					}
+					select();
 				}
 			}
 		});
@@ -189,7 +184,8 @@ public class VendorCollectionView extends View {
 		submitButton = new Button("Submit");
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				processVendorSelected();
+				//processVendorSelected();
+				select();
 			}
 		});
 
@@ -215,8 +211,23 @@ public class VendorCollectionView extends View {
 
 	// --------------------------------------------------------------------------
 	public void updateState(String key, Object value) {
+		
 	}
+	
+	// --------------------------------------------------------------------------
 
+	private void select() {
+		if(manager.getState("his") == "addVendor") {
+			processVendorSelected();
+		}
+		if(manager.getState("his") == "modifyVendor") {
+			modifySelected();
+		}
+		if(manager.getState("his") == "processInvoice") {
+			processInvoice();
+		}
+	}
+	
 	// --------------------------------------------------------------------------
 	protected void processVendorSelected(){
 		VendorTableModel selectedItem = tableOfVendors.getSelectionModel().getSelectedItem();
@@ -241,6 +252,21 @@ public class VendorCollectionView extends View {
 			prop.setProperty("Status", selectedItem.getStatus());
 			
 			manager.stateChangeRequest("ModifyVendorView", prop);
+		}
+	}
+	
+	// --------------------------------------------------------------------------
+	
+	private void processInvoice() {
+		VendorTableModel selectedItem = tableOfVendors.getSelectionModel().getSelectedItem();
+
+		if (selectedItem != null) {
+			Properties prop = new Properties();
+			prop.setProperty("Id", selectedItem.getVendorId());
+			prop.setProperty("Name", selectedItem.getName());
+			prop.setProperty("PhoneNumber", selectedItem.getPhoneNumber());
+			prop.setProperty("Status", selectedItem.getStatus());
+			manager.stateChangeRequest("ProcessInvoice", prop);
 		}
 	}
 	

@@ -15,7 +15,7 @@ import impresario.IView;
 import userinterface.View;
 import userinterface.ViewFactory;
 
-/** The class containing the AccountCollection for the ATM application */
+/** The class containing the InventoryItemTypeCollection for the Inventory Management application */
 //==============================================================
 public class InventoryItemTypeCollection extends EntityBase implements IView {
 	private static final String myTableName = "InventoryItemType";

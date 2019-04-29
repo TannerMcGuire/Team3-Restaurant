@@ -30,22 +30,21 @@ public class VendorInventoryItemType extends EntityBase {
 
 	// constructor
 	// --------------------------------------------
-	public VendorInventoryItemType(String Id) throws InvalidPrimaryKeyException {
+	public VendorInventoryItemType(String vendorID, String name) throws InvalidPrimaryKeyException {
 		super(myTableName);
 
 		setDependencies();
 
-		String query = "SELECT * FROM " + myTableName + " WHERE (Id = " + Id + ")";
-
+		String query = "SELECT * FROM " + myTableName + " WHERE (VendorId = " + vendorID + ") AND (InventoryItemTypeName = '" + name + "')";
 		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
 
 		// You must get one book at least
 		if (allDataRetrieved != null) {
 			int size = allDataRetrieved.size();
 
-			// There should be EXACTLY one book. More than that is an error
+			// There should be EXACTLY one VIIT. More than that is an error
 			if (size != 1) {
-				throw new InvalidPrimaryKeyException("Multiple items matching id : " + Id + " found.");
+				throw new InvalidPrimaryKeyException("Multiple or no items matching id : " + vendorID + " and " + name + " found.");
 			} else {
 				// copy all the retrieved data into persistent state
 				Properties retrievedVIITData = allDataRetrieved.elementAt(0);
@@ -63,9 +62,9 @@ public class VendorInventoryItemType extends EntityBase {
 
 			}
 		}
-		// If no book found for this ID, throw an exception
+		// If no VIIT found for this ID, throw an exception
 		else {
-			throw new InvalidPrimaryKeyException("No vendor inventory item types matching id : " + Id + " found.");
+			throw new InvalidPrimaryKeyException("No vendor inventory item types matching id : " + vendorID + " and " + name + " found.");
 		}
 	}
 

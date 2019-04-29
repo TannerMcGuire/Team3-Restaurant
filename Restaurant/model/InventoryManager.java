@@ -29,7 +29,7 @@ public class InventoryManager implements IView, IModel {
 	private Vendor myVendor;
 	private InventoryItemType myIIT;
 	private VendorCollection accounts;
-	private Vendor selectedAccount;
+	private Vendor selectedVendor;
 
 	public static String history = "";
 	// GUI
@@ -82,8 +82,10 @@ public class InventoryManager implements IView, IModel {
 	public Object getState(String key) {
 		if (key.equals("his") == true)
 			return history;
-		else
-			return "";
+		else if(key.equals("selectedVendor")) {
+			return selectedVendor;
+		}
+		else return "";
 	}
 
 	// ----------------------------------------------------------------
@@ -157,8 +159,14 @@ public class InventoryManager implements IView, IModel {
 					}
 				}
 			}
+		} else if (key.equals("ProcessInvoice") == true) {
+			try {
+				processInvoice((Properties) value);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-
+		
 		myRegistry.updateSubscribers(key, this);
 	}
 
@@ -221,8 +229,31 @@ public class InventoryManager implements IView, IModel {
 		vc.findActiveVendor(vend);
 		createAndShowVendorCollectionView(vc);
 	}
-
+	
 	// ----------------------------------------------------------
+
+	private void processInvoice(Properties value) {
+		selectedVendor = new Vendor(value);
+		createAndShowProcessInvoiceView();
+	}
+
+	// ------------------------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------------------------
+
+	private void createAndShowProcessInvoiceView(){
+		Scene currentScene = (Scene) myViews.get("ProcessInvoiceView");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("ProcessInvoiceView", this);
+			currentScene = new Scene(newView);
+			myViews.put("ProcessInvoiceView", currentScene);
+		}
+
+		swapToView(currentScene);
+	}
+	
+	// ----------------------------------------------------------
+
 	private void createAndShowInventoryManagerView() {
 		Scene currentScene = (Scene) myViews.get("InventoryManagerView");
 		if (currentScene == null) {
@@ -366,7 +397,7 @@ public class InventoryManager implements IView, IModel {
 		swapToView(currentScene);
 
 	}
-
+	
 	// -----------------------------------------------------------------------------
 	public void swapToView(Scene newScene) {
 
