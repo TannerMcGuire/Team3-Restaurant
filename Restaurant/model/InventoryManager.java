@@ -94,13 +94,13 @@ public class InventoryManager implements IView, IModel {
 		// just set up dependencies for
 		// DEBUG System.out.println("Manager.sCR: key = " + key);
 		// This is where GUI popups change!!!
-		
-		//Inventory Start Screen
+
+		// Inventory Start Screen
 		if (key.equals("InventoryManagerView") == true) {
 			createAndShowInventoryManagerView();
-		} 
-		
-		//Inventory Item Type screen
+		}
+
+		// Inventory Item Type screen
 		else if (key.equals("InventoryItemTypeView") == true) {
 			if (((String) value).equals("addIIT") == true) {
 				history = "addIIT";
@@ -108,39 +108,35 @@ public class InventoryManager implements IView, IModel {
 			} else if (((String) value).equals("updateIIT") == true) {
 				history = "updateIIT";
 				createAndShowEnterInventoryItemTypeNameAndNotesScreen();
-			} else if (((String) value).equals("deleteIIT") == true){
+			} else if (((String) value).equals("deleteIIT") == true) {
 				history = "deleteIIT";
 				createAndShowInventoryItemTypeView();
 			}
-		} 
-		
-		//Update IIT
+		}
+
+		// Update IIT
 		else if (key.equals("SUBMIT IIT NAME AND NOTES")) {
 			createAndShowInventoryItemTypeSelectionScreen(((Properties) value).getProperty("ItemTypeName"),
 					((Properties) value).getProperty("Notes"));
 		}
-		
-		//Back to start
+
+		// Back to start
 		else if (key.equals("BACK")) {
 			createAndShowInventoryManagerView();
-		} 
-		
-		//Vendor Inventory Item Type changes
+		}
+
+		// Vendor Inventory Item Type changes
 		else if (key.equals("VendorInventoryItemTypeView") == true) {
 			history = (String) value;
 			createAndShowVendorInventoryItemTypeView();
 
-			}
+		}
 		// Vendor changes
 
 		else if (key.equals("VendorView") == true) {
-			if ((String) value == "modifyVendor") {
-				history = (String) value;
-				createAndShowVendorView();
-			} else if ((String) value == "addVendor") {
-				history = (String) value;
-				createAndShowVendorView();
-			}
+			history = (String) value;
+			createAndShowVendorView();
+
 		} else if (key.equals("ModifyVendorView") == true) {
 			try {
 				modifyVendor((Properties) value);
@@ -152,8 +148,10 @@ public class InventoryManager implements IView, IModel {
 				boolean flag = vendorFolder((Properties) value);
 				if (flag == true) {
 					try {
-						if (history.contentEquals("processInvoice")) searchActiveVendor((Properties) value);
-						else searchVendor((Properties) value);
+						if (history.contentEquals("processInvoice"))
+							searchActiveVendor((Properties) value);
+						else
+							searchVendor((Properties) value);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
