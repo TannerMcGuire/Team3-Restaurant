@@ -148,7 +148,12 @@ public class InventoryItem extends EntityBase implements IView {
 		persistentState.setProperty("Status", "Used");
 		update();
 	}
-	
+
+	public void expired() {
+		persistentState.setProperty("Status", "Expired");
+		update();
+	}
+
 	// -----------------------------------------------------------------------------------
 	public void update() {
 		updateStateInDatabase();
@@ -160,7 +165,7 @@ public class InventoryItem extends EntityBase implements IView {
 			if (persistentState.getProperty("Barcode") != null) {
 				if (!(InventoryManager.history.equals("processInvoice"))) {
 					Properties whereClause = new Properties();
-					whereClause.setProperty("InventoryItemTypeName", persistentState.getProperty("InventoryItemTypeName"));
+					whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
 					updatePersistentState(mySchema, persistentState, whereClause);
 					updateStatusMessage = "Inventory Item type data for barcode : "
 							+ persistentState.getProperty("Barcode") + " updated successfully in database!";

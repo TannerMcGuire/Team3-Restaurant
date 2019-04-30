@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Team3-Restaurant">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/Team3-Restaurant/mysql-connector-java-5.1.7-bin.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/Team3-Restaurant/mysql-connector-java-8.0.15.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

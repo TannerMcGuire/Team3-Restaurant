@@ -1,5 +1,6 @@
 package userinterface;
 
+import exception.InvalidPrimaryKeyException;
 import impresario.IModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,8 +19,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.TextField;
 import model.InventoryItem;
+import model.InventoryItemType;
 
 import java.awt.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ConfirmInventoryItemRemovalView extends View {
 
@@ -127,12 +133,12 @@ public class ConfirmInventoryItemRemovalView extends View {
 
             @Override
             public void handle(ActionEvent e) {
-                if (!((inventoryItem.getState("Status").toString()).equals("Unused"))){
+                if (!((inventoryItem.getState("Status").toString()).equals("Available"))){
                     displayMessage("Inventory Item not available.");
                 }
-                /*else if () {
-                    //DATE CHECK
-                } */
+                else if (!isExpired(inventoryItem)) {
+                    displayMessage("Inventory Item is expired.");
+                }
                 else {
                     displayMessage("Inventory Item Type removed.");
                     myModel.stateChangeRequest("InventoryItemRemoval", null);
@@ -160,6 +166,39 @@ public class ConfirmInventoryItemRemovalView extends View {
 
         return vBox;
 
+    }
+
+    private boolean isExpired(InventoryItem inventoryItemSelected) {
+
+        try {
+
+            Date dateReceived = new SimpleDateFormat("MM/dd/yyyy").parse(inventoryItemSelected.getState("DateReceived").toString());
+
+            InventoryItemType inventoryItemType = new InventoryItemType(inventoryItemSelected.getState("InventoryItemTypeName").toString());
+
+            int validityDays = Integer.parseInt(inventoryItemType.getState("ValidityDays").toString());
+
+            Date todayDate = new Date();
+
+            if (todayDate.after(addDays(dateReceived, validityDays))) {
+                inventoryItemSelected.expired();
+                return false;
+            }
+
+        } catch (InvalidPrimaryKeyException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    private static Date addDays(Date date, int days)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days); //minus number would decrement the days
+        return cal.getTime();
     }
 
     public void displayMessage(String message) {
