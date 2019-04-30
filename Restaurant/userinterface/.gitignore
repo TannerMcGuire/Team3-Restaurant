@@ -76,9 +76,17 @@
 /InventoryItemTypeCollectionView2$1.class
 /InventoryItemTypeCollectionView2$2.class
 /InventoryItemTypeCollectionView2$3.class
+<<<<<<< HEAD
 /ProcessInvoiceView.class
 /ProcessInvoiceView$1.class
 /ProcessInvoiceView$2.class
 /ProcessInvoiceView$3.class
 /ProcessInvoiceView$4.class
 /ProcessInvoiceView$5.class
+=======
+/VendorInventoryItemTypeTableModel.class
+/VendorInventoryItemTypeCollectionView.class
+/VendorInventoryItemTypeCollectionView$1.class
+/VendorInventoryItemTypeCollectionView$2.class
+/VendorInventoryItemTypeCollectionView$3.class
+>>>>>>> Tanner

@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -25,7 +24,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.InventoryItemType;
 import model.InventoryItemTypeCollection;
+import model.InventoryManager;
 import model.Vendor;
+import model.VendorCollection;
 
 import java.util.Properties;
 
@@ -60,6 +61,7 @@ public class InventoryItemTypeView extends View {
 		super(account, "InventoryItemTypeView");
 
 		history = (String) myModel.getState("his");
+		//System.out.println(history + " iitv");
 
 		// create a container for showing the contents
 		VBox container = new VBox(10);
@@ -85,7 +87,7 @@ public class InventoryItemTypeView extends View {
 		HBox container = new HBox();
 		container.setAlignment(Pos.CENTER);
 
-		Text titleText = new Text(" Restaurant Inventory ");
+		Text titleText = new Text(" Restaurant Inventory ");//change
 		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		titleText.setWrappingWidth(300);
 		titleText.setTextAlignment(TextAlignment.CENTER);
@@ -255,20 +257,20 @@ public class InventoryItemTypeView extends View {
 			String measureEntered = measure.getText();
 			String daysEntered = days.getText();
 			String orderEntered = reorder.getText();
-			if ((nameEntered == "") || (nameEntered.length() == 0) || (nameEntered.length() > 32)) {
+			if ((nameEntered.equals("")) || (nameEntered.length() == 0) || (nameEntered.length() > 32)) {
 				displayErrorMessage("Please enter a valid item name");
 				name.requestFocus();
 			} else if ((!(unitsEntered.matches("[0-9]+")) || Integer.parseInt(unitsEntered) < 0)) {
 				displayErrorMessage("Please enter positive integer for units");
 				unit.requestFocus();
-			} else if ((measureEntered == "") || (measureEntered.length() == 0) || (nameEntered.length() > 15)) {
+			} else if ((measureEntered.equals("")) || (measureEntered.length() == 0) || (nameEntered.length() > 15)) {
 				displayErrorMessage("Please enter type of measure ie bottle");
 				measure.requestFocus();
-			} else if ((daysEntered == "") || !(daysEntered.matches("-?[1-9]\\d*"))
+			} else if ((daysEntered.equals("")) || !(daysEntered.matches("-?[1-9]\\d*"))
 					|| (Integer.parseInt(daysEntered) < -1)) {
 				displayErrorMessage("Please enter positive integer for validity of item");
 				days.requestFocus();
-			} else if ((orderEntered == "") || !(orderEntered.matches("^\\$?[0-9]+\\.[0-9]+$"))
+			} else if ((orderEntered.equals("")) || !(orderEntered.matches("^\\$?[0-9]+\\.[0-9]+$"))
 					|| (Double.parseDouble(orderEntered) < 0)) {
 				displayErrorMessage("Please enter positive decimal for a reorder point");
 				reorder.requestFocus();
@@ -279,10 +281,8 @@ public class InventoryItemTypeView extends View {
 				processInventoryItemType(nameEntered, unitsEntered, measureEntered, daysEntered, orderEntered,
 						notesEntered);
 			}
-		} else if (((nameEntered == "") || (nameEntered.length() == 0))
-				&& ((notesEntered == "") || (notesEntered.length() == 0))) {
-			displayErrorMessage("Please enter a valid item name or notes");
-			name.requestFocus();
+		} else if ((nameEntered.equals("")) && (notesEntered.equals(""))) {
+			listAll();
 		} else {
 			processIIT(nameEntered, notesEntered);
 		}
@@ -296,13 +296,21 @@ public class InventoryItemTypeView extends View {
 		// clear fields for next time around
 		name.setText("");
 		notes.setText("");
-		if (history.equals("update")) {
-			myModel.stateChangeRequest("IITInfo", props);
-		} else {
-			 InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
+		if (history.equals("deleteIIT")) {
+			InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
 			 try {
 				ic.findInventoryItemType(props);
 				ic.createAndShowView2();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			 InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
+			 try {
+				ic.setManager((InventoryManager) ((VendorCollection) myModel).getManager());
+				//System.out.println(ic.getManager().getState("his")+" ic");
+				ic.findInventoryItemType(props);
+				ic.createAndShowView();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -310,6 +318,16 @@ public class InventoryItemTypeView extends View {
 		}
 	}
 
+	public void listAll() {
+		InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
+		 try {
+			ic.findAllInventoryItemTypes();
+			ic.createAndShowView();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void processInventoryItemType(String nameString, String unitString, String measureString, String dayString,
 			String orderString, String noteString) {
 		Properties props = new Properties();

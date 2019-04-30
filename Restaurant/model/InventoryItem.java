@@ -135,7 +135,6 @@ public class InventoryItem extends EntityBase {
 	/*public static int compare(InventoryItem a, InventoryItem b) {
 		String aID = (String) a.getState("barcode");
 		String bID = (String) b.getState("barcode");
-
 		return aID.compareTo(bID);
 	} */
 
@@ -207,4 +206,4 @@ public class InventoryItem extends EntityBase {
 				+ persistentState.getProperty("Status");
 
 	}
-}            
+} 

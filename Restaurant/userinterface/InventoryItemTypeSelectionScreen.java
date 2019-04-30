@@ -159,7 +159,8 @@ public class InventoryItemTypeSelectionScreen extends View {
 		scrollPane.setPrefSize(115, 150);
 		scrollPane.setContent(_tableOfInventoryItemType);
 
-		_doneBtn = new Button("SUBMIT");
+		_doneBtn = new Button("Submit");
+		_doneBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		_doneBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -174,7 +175,8 @@ public class InventoryItemTypeSelectionScreen extends View {
 			}
 		});
 
-		_backBtn = new Button("BACK");
+		_backBtn = new Button("Back");
+		_backBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		_backBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -182,10 +184,10 @@ public class InventoryItemTypeSelectionScreen extends View {
 			}
 		});
 
-		HBox btnContainer = new HBox(100);
+		HBox btnContainer = new HBox(10);
 		btnContainer.setAlignment(Pos.CENTER);
-		btnContainer.getChildren().add(_backBtn);
 		btnContainer.getChildren().add(_doneBtn);
+		btnContainer.getChildren().add(_backBtn);
 
 		vbox.getChildren().add(grid);
 		vbox.getChildren().add(scrollPane);

@@ -1,9 +1,6 @@
 package userinterface;
 
 import impresario.IModel;
-import impresario.IView;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -31,220 +27,240 @@ import java.util.regex.Pattern;
 
 public class InventoryItemTypeChangesScreen extends View {
 
-    private TextField _itemTypeName;
-    private TextField _units;
-    private TextField _unitMeasure;
-    private TextField _validityDays;
-    private TextField _reorderPoint;
-    private TextField _notes;
+	private TextField _itemTypeName;
+	private TextField _units;
+	private TextField _unitMeasure;
+	private TextField _validityDays;
+	private TextField _reorderPoint;
+	private TextField _notes;
 
-    private ComboBox<String> _status;
-    //private TextField _status;
+	// private TextField _status;
 
-    private Button _doneBtn;
-    private Button _backBtn;
+	private Button _doneBtn;
+	private Button _backBtn;
 
-    protected MessageView _statusLog;
+	protected MessageView _statusLog;
 
-    public InventoryItemTypeChangesScreen(IModel model) {
-        super(model, "InventoryItemTypeChangesScreen");
+	// constructor for this class -- takes a model object
+	// ----------------------------------------------------------
+	public InventoryItemTypeChangesScreen(IModel model) {
+		super(model, "InventoryItemTypeChangesScreen");
 
+		VBox container = new VBox(10);
+		container.setPadding(new Insets(15, 5, 5, 5));
 
-        VBox container = new VBox(10);
-        container.setPadding(new Insets(15, 5, 5, 5));
+		// create our GUI components, add them to this panel
+		container.getChildren().add(createTitle());
+		container.getChildren().add(createFormContent());
 
-        // create our GUI components, add them to this panel
-        container.getChildren().add(createTitle());
-        container.getChildren().add(createFormContent());
+		// Error message area
+		container.getChildren().add(createStatusLog("             "));
 
-        // Error message area
-        container.getChildren().add(createStatusLog("                                            "));
+		getChildren().add(container);
 
-        getChildren().add(container);
+	}
 
-    }
+	// Create the title container
+	// -------------------------------------------------------------
+	private Node createTitle() {
+		HBox container = new HBox();
+		container.setAlignment(Pos.CENTER);
 
-    private Node createTitle()
-    {
-        HBox container = new HBox();
-        container.setAlignment(Pos.CENTER);
+		javafx.scene.text.Text titleText = new Text(" Inventory Item Type Information ");
+		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		titleText.setWrappingWidth(400);
+		titleText.setTextAlignment(TextAlignment.CENTER);
+		titleText.setFill(Color.DARKGREEN);
+		container.getChildren().add(titleText);
 
-        javafx.scene.text.Text titleText = new Text(" Inventory Item Type Information ");
-        titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        titleText.setWrappingWidth(500);
-        titleText.setTextAlignment(TextAlignment.CENTER);
-        titleText.setFill(Color.DARKGREEN);
-        container.getChildren().add(titleText);
+		return container;
+	}
 
-        return container;
-    }
+	// Create the main form content
+	// -------------------------------------------------------------
+	private VBox createFormContent() {
+		VBox vbox = new VBox(10);
 
-    private VBox createFormContent() {
-        VBox vbox = new VBox(10);
+		GridPane grid = new GridPane();
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(25, 25, 25, 25));
 
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+		Text prompt = new Text(" Please enter new Inventory Item Type Information ");
+		prompt.setWrappingWidth(400);
+		prompt.setTextAlignment(TextAlignment.CENTER);
+		prompt.setFill(Color.BLACK);
+		grid.add(prompt, 0, 0, 2, 1);
 
-        Text prompt = new Text(" Please enter new Inventory Item Type Information ");
-        prompt.setWrappingWidth(500);
-        prompt.setTextAlignment(TextAlignment.CENTER);
-        prompt.setFill(Color.BLACK);
-        grid.add(prompt, 0, 0, 2, 1);
+		Text labelItemTypeName = new Text(" Item Type Name : ");
+		Text labelUnits = new Text(" Units : ");
+		Text labelUnitMeasure = new Text(" Unit Measure : ");
+		Text labelValidityDays = new Text(" Validity Days : ");
+		Text labelReorderPoint = new Text(" Reorder Point : ");
+		Text labelNotes = new Text(" Notes : ");
+		
+		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+		labelItemTypeName.setFont(myFont);
+		labelUnits.setFont(myFont);
+		labelUnitMeasure.setFont(myFont);
+		labelValidityDays.setFont(myFont);
+		labelReorderPoint.setFont(myFont);
+		labelNotes.setFont(myFont);
+		
+		labelItemTypeName.setWrappingWidth(150);
+		labelUnits.setWrappingWidth(150);
+		labelUnitMeasure.setWrappingWidth(150);
+		labelValidityDays.setWrappingWidth(150);
+		labelReorderPoint.setWrappingWidth(150);
+		labelNotes.setWrappingWidth(150);
+		
+		labelItemTypeName.setTextAlignment(TextAlignment.RIGHT);
+		labelUnits.setTextAlignment(TextAlignment.RIGHT);
+		labelUnitMeasure.setTextAlignment(TextAlignment.RIGHT);
+		labelValidityDays.setTextAlignment(TextAlignment.RIGHT);
+		labelReorderPoint.setTextAlignment(TextAlignment.RIGHT);
+		labelNotes.setTextAlignment(TextAlignment.RIGHT);
 
-        Text labelItemTypeName = new Text(" ItemTypeName : ");
-        Text labelUnits = new Text(" Units : ");
-        Text labelUnitMeasure = new Text(" UnitMeasure : ");
-        Text labelValidityDays = new Text(" ValidityDays : ");
-        Text labelReorderPoint = new Text(" ReorderPoint : ");
-        Text labelNotes = new Text(" Notes : ");
+		grid.add(labelItemTypeName, 0, 1);
+		grid.add(labelUnits, 0, 2);
+		grid.add(labelUnitMeasure, 0, 3);
+		grid.add(labelValidityDays, 0, 4);
+		grid.add(labelReorderPoint, 0, 5);
+		grid.add(labelNotes, 0, 6);
+		// grid.add(labelStatus, 0, 7);
 
-        Text labelStatus = new Text(" Status : ");
+		InventoryItemType selectedItem = ((InventoryItemTypeCollection) myModel.getState("InventoryItemTypeCollection"))
+				.getSelectInventoryItemType();
 
-        grid.add(labelItemTypeName, 0, 1, 2, 1);
-        grid.add(labelUnits, 0, 2, 2, 1);
-        grid.add(labelUnitMeasure, 0, 3, 2, 1);
-        grid.add(labelValidityDays, 0, 4, 2, 1);
-        grid.add(labelReorderPoint, 0, 5, 2, 1);
-        grid.add(labelNotes, 0, 6, 2, 1);
-       // grid.add(labelStatus, 0, 7, 2, 1);
+		_itemTypeName = new TextField(selectedItem.getState("ItemTypeName").toString());
+		_units = new TextField(selectedItem.getState("Units").toString());
+		_unitMeasure = new TextField(selectedItem.getState("UnitMeasure").toString());
+		_validityDays = new TextField(selectedItem.getState("ValidityDays").toString());
+		_reorderPoint = new TextField(selectedItem.getState("ReorderPoint").toString());
+		_notes = new TextField(selectedItem.getState("Notes").toString());
 
-        InventoryItemType selectedItem = ((InventoryItemTypeCollection)myModel.getState("InventoryItemTypeCollection")).getSelectInventoryItemType();
+		grid.add(_itemTypeName, 1, 1);
+		grid.add(_units, 1, 2);
+		grid.add(_unitMeasure, 1, 3);
+		grid.add(_validityDays, 1, 4);
+		grid.add(_reorderPoint, 1, 5);
+		grid.add(_notes, 1, 6);
+		
+		_doneBtn = new Button("Submit");
+		_doneBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+		_doneBtn.setOnAction(new EventHandler<ActionEvent>() {
 
-        _itemTypeName = new TextField(selectedItem.getState("ItemTypeName").toString());
-        _units = new TextField(selectedItem.getState("Units").toString());
-        _unitMeasure = new TextField(selectedItem.getState("UnitMeasure").toString());
-        _validityDays = new TextField(selectedItem.getState("ValidityDays").toString());
-        _reorderPoint = new TextField(selectedItem.getState("ReorderPoint").toString());
-        _notes = new TextField(selectedItem.getState("Notes").toString());
-        //_status = new TextField(selectedItem.getState("Status").toString());
+			@Override
+			public void handle(ActionEvent e) {
+				processInventoryItemTypeChange();
+				myModel.stateChangeRequest("DONE", null);
 
-//        ObservableList<String> options = FXCollections.observableArrayList("Active", "Inactive");
-//
-//        _status = new ComboBox<String>(options);
+			}
+		});
 
-        grid.add(_itemTypeName, 2, 1, 2, 1);
-        grid.add(_units, 2, 2, 2, 1);
-        grid.add(_unitMeasure, 2, 3, 2, 1);
-        grid.add(_validityDays, 2, 4, 2, 1);
-        grid.add(_reorderPoint, 2, 5, 2, 1);
-        grid.add(_notes, 2, 6, 2, 1);
-       // grid.add(_status, 2, 7, 2, 1);
+		_backBtn = new Button("Back");
+		_backBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+		_backBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				myModel.stateChangeRequest("BACK", null);
+			}
+		});
 
-        HBox buttonContainer = new HBox();
+		HBox btnContainer = new HBox(10);
+		btnContainer.setAlignment(Pos.CENTER);
+		btnContainer.getChildren().add(_doneBtn);
+		btnContainer.getChildren().add(_backBtn);
 
-        _doneBtn = new Button("DONE");
-        _doneBtn.setOnAction(new EventHandler<ActionEvent>() {
+		vbox.getChildren().add(grid);
+		vbox.getChildren().add(btnContainer);
 
-            @Override
-            public void handle(ActionEvent e) {
-                processInventoryItemTypeChange();
-                myModel.stateChangeRequest("DONE", null);
+		return vbox;
+	}
 
-            }
-        });
+	// -------------------------------------------------------------
+	public void processInventoryItemTypeChange() {
 
-        _backBtn = new Button("BACK");
-        _backBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                myModel.stateChangeRequest("BACK", null);
-            }
-        });
+		if (!isAlphaNumeric(_itemTypeName.getText()) || !isAlphaNumeric(_units.getText())
+				|| !isAlphaNumeric(_unitMeasure.getText()) || !isAlphaNumeric(_reorderPoint
+						.getText()) /*
+									 * || !isAlphaNumeric(_notes.getText()) || !isAlphaNumeric(_status.getText())
+									 */) {
 
-        HBox btnContainer = new HBox(100);
-        btnContainer.setAlignment(Pos.CENTER);
-        btnContainer.getChildren().add(_backBtn);
-        btnContainer.getChildren().add(_doneBtn);
-
-        vbox.getChildren().add(grid);
-        vbox.getChildren().add(btnContainer);
-
-
-        return vbox;
-    }
-
-    public void processInventoryItemTypeChange() {
-
-        if (!isAlphaNumeric(_itemTypeName.getText()) || !isAlphaNumeric(_units.getText()) ||
-            !isAlphaNumeric(_unitMeasure.getText()) || !isAlphaNumeric(_reorderPoint.getText()) ||
-            !isAlphaNumeric(_notes.getText()) /*|| !isAlphaNumeric(_status.getText())*/) {
-
-            displayMessage("Please enter only alphanumerical values.");
-            return ;
-        }
+			displayMessage("Please enter only alphanumerical values.");
+			return;
+		}
 //        if (_status.getSelectionModel().isEmpty()) {
 //            displayMessage("Please select a status.");
 //            return ;
 //        }
-        if (!isValidityDaysOk()) {
-            displayMessage("Validity Days must be greater than -2.");
-            return ;
-        }
+		if (!isValidityDaysOk()) {
+			displayMessage("Validity Days must be greater than -2.");
+			return;
+		}
 
-        Properties properties = new Properties();
+		Properties properties = new Properties();
 
-        properties.setProperty("ItemTypeName", _itemTypeName.getText());
-        properties.setProperty("Units", _units.getText());
-        properties.setProperty("UnitMeasure", _unitMeasure.getText());
-        properties.setProperty("ValidityDays", _validityDays.getText());
-        properties.setProperty("ReorderPoint", _reorderPoint.getText());
-        properties.setProperty("Notes", _notes.getText());
-        properties.setProperty("Status", "Active");
+		properties.setProperty("ItemTypeName", _itemTypeName.getText());
+		properties.setProperty("Units", _units.getText());
+		properties.setProperty("UnitMeasure", _unitMeasure.getText());
+		properties.setProperty("ValidityDays", _validityDays.getText());
+		properties.setProperty("ReorderPoint", _reorderPoint.getText());
+		properties.setProperty("Notes", _notes.getText());
+		properties.setProperty("Status", "Active");
 
-        displayMessage("Inventory Item Type updated.");
+		displayMessage("Inventory Item Type updated.");
 
-        myModel.stateChangeRequest("Submit new IIT Info", properties);
+		myModel.stateChangeRequest("Submit new IIT Info", properties);
 
+	}
 
-    }
+	// -------------------------------------------------------------
+	public void displayMessage(String message) {
+		_statusLog.displayMessage(message);
+	}
 
+	// -------------------------------------------------------------
+	private boolean isAlphaNumeric(String s) {
+		if (s.length() == 0)
+			return false;
+		String pattern = "^[a-zA-Z0-9]*$";
+		return s.matches(pattern);
+	}
 
+	// -------------------------------------------------------------
+	private boolean isValidityDaysOk() {
 
-    public void displayMessage(String message) {
-        _statusLog.displayMessage(message);
-    }
+		String pattern = "-?[1-9]\\d*|0";
+		String toCheck = _validityDays.getText();
 
-    private boolean isAlphaNumeric(String s){
-        if (s.length() == 0)
-            return false;
-        String pattern= "^[a-zA-Z0-9]*$";
-        return s.matches(pattern);
-    }
+		if (!toCheck.matches(pattern)) {
 
-    private boolean isValidityDaysOk() {
+			return false;
+		}
 
-        String pattern = "-?[1-9]\\d*|0";
-        String toCheck = _validityDays.getText();
+		if (toCheck.startsWith("-") && !isAlphaNumeric(toCheck.substring(1, toCheck.length()))) {
 
-        if (!toCheck.matches(pattern)) {
-            
-            return false;
-        }
+			return false;
+		}
 
-        if (toCheck.startsWith("-") && !isAlphaNumeric(toCheck.substring(1, toCheck.length()))) {
-            
-            return false;
-        }
+		int number = Integer.parseInt(_validityDays.getText());
+		if (number < -1) {
 
-        int number = Integer.parseInt(_validityDays.getText());
-        if (number < -1) {
-            
-            return false;
-        }
-        return true;
-    }
+			return false;
+		}
+		return true;
+	}
 
-    protected MessageView createStatusLog(String initialMessage)
-    {
-        _statusLog = new MessageView(initialMessage);
+	// -------------------------------------------------------------
+	protected MessageView createStatusLog(String initialMessage) {
+		_statusLog = new MessageView(initialMessage);
 
-        return _statusLog;
-    }
+		return _statusLog;
+	}
 
-    public void updateState(String key, Object value)
-    {
-    }
+	// -------------------------------------------------------------
+	public void updateState(String key, Object value) {
+	}
 }

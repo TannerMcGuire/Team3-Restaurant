@@ -11,7 +11,7 @@ import event.Event;
 import database.*;
 
 import impresario.IView;
-
+import userinterface.VendorCollectionView;
 import userinterface.View;
 import userinterface.ViewFactory;
 
@@ -25,7 +25,6 @@ public class VendorCollection extends EntityBase implements IView {
 	public static String v;
 	private Vendor selectedVendor;
 	private InventoryManager manager;
-
 	// GUI Components
 
 	// constructor for this class
@@ -69,7 +68,7 @@ public class VendorCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------------------------------
-	
+
 	public void findActiveVendor(Properties prop) throws Exception {
 		String name = prop.getProperty("Name");
 		String number = prop.getProperty("PhoneNumber");
@@ -79,6 +78,25 @@ public class VendorCollection extends EntityBase implements IView {
 		} else {
 			query = "SELECT * FROM " + myTableName + " WHERE (PhoneNumber = " + number + ") AND Status = 'Active'";
 		}
+		Vector allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null)
+			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
+				Properties nextVendorData = (Properties) allDataRetrieved.elementAt(cnt);
+				Vendor vendor = new Vendor(nextVendorData);
+
+				if (vendor != null)
+					addVendor(vendor);
+			}
+		else {
+
+			throw new InvalidPrimaryKeyException("No vendors matching: " + name + " or " + number);
+		}
+	}
+
+	public void findAllVendors() throws Exception {
+		String query;
+		query = "SELECT * FROM " + myTableName;
 
 		Vector allDataRetrieved = getSelectQueryResult(query);
 
@@ -91,7 +109,9 @@ public class VendorCollection extends EntityBase implements IView {
 					addVendor(vendor);
 			}
 		else {
-			throw new InvalidPrimaryKeyException("No vendors matching: " + name + " or " + number);
+
+			throw new InvalidPrimaryKeyException("No vendors found");
+
 		}
 	}
 
@@ -131,7 +151,7 @@ public class VendorCollection extends EntityBase implements IView {
 		else if (key.equals("VendorList"))
 			return this;
 		else if (key.equals("his"))
-			return " ";
+			return manager.getState("his");
 		return null;
 	}
 
@@ -151,11 +171,11 @@ public class VendorCollection extends EntityBase implements IView {
 					}
 				}
 			}
-		} else if (key.equals("ModifyVendorView") == true){
+		} else if (key.equals("ModifyVendorView") == true) {
 			String vendorID = (String) value;
 			selectedVendor = retrieve(vendorID);
 			createAndShowModifyView();
-		} else if (key.equals("ProcessInvoiceView") == true){
+		} else if (key.equals("ProcessInvoiceView") == true) {
 			String vendorID = (String) value;
 			selectedVendor = retrieve(vendorID);
 			createAndShowProcessInvoiceView();
@@ -217,8 +237,7 @@ public class VendorCollection extends EntityBase implements IView {
 	}
 
 	// -----------------------------------------------------------
-	
-	
+
 	protected void createAndShowModifyView() {
 		// create our new view
 		View newView = ViewFactory.createView("ModifyVendorView", selectedVendor);
@@ -227,9 +246,9 @@ public class VendorCollection extends EntityBase implements IView {
 		// make the view visible by installing it into the frame
 		swapToView(newScene);
 	}
-	
+
 	// -----------------------------------------------------------
-	
+
 	protected void createAndShowProcessInvoiceView() {
 		// create our new view
 		View newView = ViewFactory.createView("ProcessInvoiceView", selectedVendor);
@@ -272,13 +291,14 @@ public class VendorCollection extends EntityBase implements IView {
 		}
 		System.out.println("==============================================");
 	}
-	
+
 	public void setManager(InventoryManager manager) {
 		this.manager = manager;
+		// System.out.println((String) manager.getState("his") + " vc");
 	}
-	
+
 	public InventoryManager getManager() {
 		return manager;
 	}
-	
+
 }

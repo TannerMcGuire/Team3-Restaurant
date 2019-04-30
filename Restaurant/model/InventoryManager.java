@@ -82,43 +82,64 @@ public class InventoryManager implements IView, IModel {
 	public Object getState(String key) {
 		if (key.equals("his") == true)
 			return history;
-		else if(key.equals("selectedVendor")) {
+		else if (key.equals("selectedVendor")) {
 			return selectedVendor;
-		}
-		else return "";
+		} else
+			return "";
 	}
 
 	// ----------------------------------------------------------------
 	public void stateChangeRequest(String key, Object value) {
 		// STEP 4: Write the sCR method component for the key you
 		// just set up dependencies for
-		// DEBUG System.out.println("Librarian.sCR: key = " + key);
+		// DEBUG System.out.println("Manager.sCR: key = " + key);
 		// This is where GUI popups change!!!
+
+		// Inventory Start Screen
 		if (key.equals("InventoryManagerView") == true) {
 			createAndShowInventoryManagerView();
-		} else if (key.equals("InventoryItemTypeView") == true) {
+		}
+
+		// Inventory Item Type screen
+		else if (key.equals("InventoryItemTypeView") == true) {
 			if (((String) value).equals("addIIT") == true) {
 				history = "addIIT";
-			} else if (((String) value).equals("update") == true) {
-				history = "update";
-			} else if (((String) value).equals("deleteIIT") == true){
+				createAndShowInventoryItemTypeView();
+			} else if (((String) value).equals("updateIIT") == true) {
+				history = "updateIIT";
+				createAndShowEnterInventoryItemTypeNameAndNotesScreen();
+			} else if (((String) value).equals("deleteIIT") == true) {
 				history = "deleteIIT";
+				createAndShowInventoryItemTypeView();
 			}
-			createAndShowInventoryItemTypeView();
-		} else if (key.equals("MODIFY INVENTORY ITEM TYPE")) {
-			history = "";
-			createAndShowEnterInventoryItemTypeNameAndNotesScreen();
+		}
 
-		} else if (key.equals("SUBMIT IIT NAME AND NOTES")) {
+		// Update IIT
+		else if (key.equals("SUBMIT IIT NAME AND NOTES")) {
 			createAndShowInventoryItemTypeSelectionScreen(((Properties) value).getProperty("ItemTypeName"),
 					((Properties) value).getProperty("Notes"));
-		} else if (key.equals("BACK")) {
+		}
+
+		// Back to start
+		else if (key.equals("BACK")) {
 			createAndShowInventoryManagerView();
-		} else if (key.equals("VendorInventoryItemTypeView") == true) {
-			createAndShowVendorInventoryItemTypeView();
-		} else if (key.equals("VendorView") == true) {
+		}
+
+		// Vendor Inventory Item Type changes
+		else if (key.equals("VendorInventoryItemTypeView") == true) {
 			history = (String) value;
-			createAndShowVendorView();
+			//System.out.println(history);
+			createAndShowVendorInventoryItemTypeView();
+			}
+		// Vendor changes
+		else if (key.equals("VendorView") == true) {
+			if ((String) value == "modifyVendor") {
+				history = (String) value;
+				createAndShowVendorView();
+			} else if ((String) value == "addVendor") {
+				history = (String) value;
+				createAndShowVendorView();
+			}
 		} else if (key.equals("ModifyVendorView") == true) {
 			try {
 				modifyVendor((Properties) value);
@@ -135,6 +156,12 @@ public class InventoryManager implements IView, IModel {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				}
+			} else {
+				try {
+					searchVendor(value);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		} else if (key.equals("IITInfo") == true) {
@@ -166,7 +193,7 @@ public class InventoryManager implements IView, IModel {
 				e.printStackTrace();
 			}
 		}
-		
+
 		myRegistry.updateSubscribers(key, this);
 	}
 
@@ -201,11 +228,16 @@ public class InventoryManager implements IView, IModel {
 	}
 
 	// ----------------------------------------------------------
-	private void searchVendor(Properties vend) throws Exception {
+	private void searchVendor(Object vend) throws Exception {
 		VendorCollection vc = new VendorCollection();
 		vc.setManager(this);
-		vc.findVendor(vend);
-		createAndShowVendorCollectionView(vc);
+		if (vend == null) {
+			vc.findAllVendors();
+			createAndShowVendorCollectionView(vc);
+		} else {
+			vc.findVendor((Properties) vend);
+			createAndShowVendorCollectionView(vc);
+		}
 	}
 
 	// ----------------------------------------------------------
@@ -217,19 +249,20 @@ public class InventoryManager implements IView, IModel {
 	// ----------------------------------------------------------
 	private void searchIIT(Properties item) throws Exception {
 		InventoryItemTypeCollection iit = new InventoryItemTypeCollection();
+		iit.setManager(this);
 		iit.findInventoryItemType(item);
 		iit.createAndShowView();
 	}
 
 	// ------------------------------------------------------------
-	
+
 	private void searchActiveVendor(Properties vend) throws Exception {
 		VendorCollection vc = new VendorCollection();
 		vc.setManager(this);
 		vc.findActiveVendor(vend);
 		createAndShowVendorCollectionView(vc);
 	}
-	
+
 	// ----------------------------------------------------------
 
 	private void processInvoice(Properties value) {
@@ -240,7 +273,7 @@ public class InventoryManager implements IView, IModel {
 	// ------------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------------
 
-	private void createAndShowProcessInvoiceView(){
+	private void createAndShowProcessInvoiceView() {
 		Scene currentScene = (Scene) myViews.get("ProcessInvoiceView");
 		if (currentScene == null) {
 			// create our initial view
@@ -251,7 +284,7 @@ public class InventoryManager implements IView, IModel {
 
 		swapToView(currentScene);
 	}
-	
+
 	// ----------------------------------------------------------
 
 	private void createAndShowInventoryManagerView() {
@@ -265,20 +298,6 @@ public class InventoryManager implements IView, IModel {
 
 		swapToView(currentScene);
 
-	}
-
-	// ------------------------------------------------------------
-
-	private void createAndShowDeleteIITView() {
-		Scene localScene = myViews.get("InventoryItemTypeDeleteView");
-		if (localScene == null) {
-			// create our new view
-			View newView = ViewFactory.createView("InventoryItemTypeDeleteView", this);
-			localScene = new Scene(newView);
-			myViews.put("InventoryItemTypeDeleteView", localScene);
-		}
-
-		swapToView(localScene);
 	}
 
 	// ------------------------------------------------------------
@@ -397,7 +416,7 @@ public class InventoryManager implements IView, IModel {
 		swapToView(currentScene);
 
 	}
-	
+
 	// -----------------------------------------------------------------------------
 	public void swapToView(Scene newScene) {
 

@@ -5,4 +5,8 @@
 /Vendor.class
 /VendorCollection.class
 /VendorInventoryItemType.class
+<<<<<<< HEAD
 /InventoryItem.class
+=======
+/VendorInventoryItemTypeCollection.class
+>>>>>>> Tanner

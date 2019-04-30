@@ -30,12 +30,15 @@ public class VendorInventoryItemType extends EntityBase {
 
 	// constructor
 	// --------------------------------------------
+
 	public VendorInventoryItemType(String vendorID, String name) throws InvalidPrimaryKeyException {
+
 		super(myTableName);
 
 		setDependencies();
 
-		String query = "SELECT * FROM " + myTableName + " WHERE (VendorId = " + vendorID + ") AND (InventoryItemTypeName = '" + name + "')";
+		String query = "SELECT * FROM " + myTableName + " WHERE (VendorId = " + vendorID + ") AND (InventoryItemTypeName LIKE '%" + name + "%')";
+
 		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
 
 		// You must get one book at least
@@ -54,7 +57,7 @@ public class VendorInventoryItemType extends EntityBase {
 				while (allKeys.hasMoreElements() == true) {
 					String nextKey = (String) allKeys.nextElement();
 					String nextValue = retrievedVIITData.getProperty(nextKey);
-				
+
 					if (nextValue != null) {
 						persistentState.setProperty(nextKey, nextValue);
 					}
@@ -67,7 +70,6 @@ public class VendorInventoryItemType extends EntityBase {
 			throw new InvalidPrimaryKeyException("No vendor inventory item types matching id : " + vendorID + " and " + name + " found.");
 		}
 	}
-
 
 	public VendorInventoryItemType(Properties props) {
 		super(myTableName);
@@ -104,6 +106,24 @@ public class VendorInventoryItemType extends EntityBase {
 		myRegistry.updateSubscribers(key, this);
 	}
 
+	// -----------------------------------------------------------------------------------
+	public static int compare(VendorInventoryItemType a, VendorInventoryItemType b) {
+		String aID = (String) a.getState("Id");
+		String bID = (String) b.getState("Id");
+
+		return aID.compareTo(bID);
+	}
+
+	// -----------------------------------------------------------------------------------
+	public void delete(Properties query) {
+		try {
+			deletePersistentState(mySchema, query);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/** Called via the IView relationship */
 	// ----------------------------------------------------------
 	public void updateState(String key, Object value) {
@@ -127,8 +147,8 @@ public class VendorInventoryItemType extends EntityBase {
 			} else {
 				Integer viitId = insertAutoIncrementalPersistentState(mySchema, persistentState);
 				persistentState.setProperty("Id", "" + viitId.intValue());
-				updateStatusMessage = "VendorInventoryItemType for new vendor inventory item type : " + persistentState.getProperty("Id")
-						+ " successfully added to database!";
+				updateStatusMessage = "VendorInventoryItemType for new vendor inventory item type : "
+						+ persistentState.getProperty("Id") + " successfully added to database!";
 			}
 		} catch (SQLException ex) {
 			updateStatusMessage = "Error in inputting data in database!";
@@ -163,8 +183,8 @@ public class VendorInventoryItemType extends EntityBase {
 
 	// -----------------------------------------------------------------------------------
 	public String toString() {
-		return persistentState.getProperty("InventoryItemTypeName") + ", $" +persistentState.getProperty("VendorPrice")
-			+ ", " + persistentState.getProperty("DateofLastUpdate");
+		return persistentState.getProperty("InventoryItemTypeName") + ", $" + persistentState.getProperty("VendorPrice")
+				+ ", " + persistentState.getProperty("DateofLastUpdate");
 	}
 
 }
