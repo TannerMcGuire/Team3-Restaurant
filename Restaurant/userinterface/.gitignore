@@ -52,7 +52,6 @@
 /InventoryItemTypeView2$3.class
 /InventoryItemTypeView2$4.class
 /InventoryItemTypeView2.class
-<<<<<<< Updated upstream
 /EnterInventoryItemTypeAndNotesScreen.class
 /EnterInventoryItemTypeAndNotesScreen$1.class
 /InventoryItemTypeChangesScreen.class
@@ -63,21 +62,25 @@
 /InventoryItemTypeSelectionScreen$2.class
 /EnterInventoryItemTypeAndNotesScreen$2.class
 /InventoryItemTypeSelectionScreen$3.class
-=======
+/VendorItemTypeCollectionView$1.class
+/VendorItemTypeCollectionView$2.class
+/VendorItemTypeCollectionView$3.class
+/VendorItemTypeCollectionView.class
+/VendorItemTypeTableModel.class
 /ModifyVendorView$1.class
 /ModifyVendorView$2.class
 /ModifyVendorView$3.class
 /ModifyVendorView$4.class
 /ModifyVendorView.class
->>>>>>> Stashed changes
 /DeleteView.class
 /DeleteView$1.class
 /InventoryItemTypeCollectionView2.class
 /InventoryItemTypeCollectionView2$1.class
 /InventoryItemTypeCollectionView2$2.class
 /InventoryItemTypeCollectionView2$3.class
-/VendorInventoryItemTypeTableModel.class
-/VendorInventoryItemTypeCollectionView.class
-/VendorInventoryItemTypeCollectionView$1.class
-/VendorInventoryItemTypeCollectionView$2.class
-/VendorInventoryItemTypeCollectionView$3.class
+/ProcessInvoiceView.class
+/ProcessInvoiceView$1.class
+/ProcessInvoiceView$2.class
+/ProcessInvoiceView$3.class
+/ProcessInvoiceView$4.class
+/ProcessInvoiceView$5.class

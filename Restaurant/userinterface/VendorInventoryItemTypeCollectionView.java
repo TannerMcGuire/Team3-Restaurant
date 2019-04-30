@@ -219,10 +219,6 @@ public class VendorInventoryItemTypeCollectionView extends View {
 
 	// --------------------------------------------------------------------------
 	public void updateState(String key, Object value) {
-		if (key == null) {
-			tableOfVendorItemTypes.refresh();
-			displayMessage("VendorInventoryItemType Removed");
-		}
 		
 	}
 
@@ -230,18 +226,14 @@ public class VendorInventoryItemTypeCollectionView extends View {
 	protected void processVendorInventoryItemTypeSelected() {
 		VendorInventoryItemTypeTableModel selectedItem = tableOfVendorItemTypes.getSelectionModel().getSelectedItem();
 		if (selectedItem != null) {
-			String selectedID = selectedItem.getVendorID();
+			String selectedID = selectedItem.getId();
 			String selectedName = selectedItem.getInventoryItemTypeName();
-			try {
-				VendorInventoryItemType viit = new VendorInventoryItemType(selectedID,selectedName);
-				Properties prop = new Properties();
-				prop.setProperty("Id", selectedID);
-				prop.setProperty("InventoryItemTypeName", selectedName);
-				viit.delete(prop);
-			} catch (InvalidPrimaryKeyException e) {
-				e.printStackTrace();
-			}
-			updateState(null, null);
+			Properties prop = new Properties();
+			prop.setProperty("Id", selectedID);
+			prop.setProperty("InventoryItemTypeName", selectedName);
+			VendorInventoryItemType viit = new VendorInventoryItemType(prop);
+			viit.delete(prop);
+			displayMessage("VendorInventoryItemType Removed");
 		} 
 	}
 

@@ -116,7 +116,6 @@ public class VendorInventoryItemType extends EntityBase {
 	public void delete(Properties query) {
 		try {
 			deletePersistentState(mySchema, query);
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
