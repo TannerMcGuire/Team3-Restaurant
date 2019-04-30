@@ -127,7 +127,7 @@ public class ConfirmInventoryItemRemovalView extends View {
 
             @Override
             public void handle(ActionEvent e) {
-                if (!((inventoryItem.getState("Notes").toString()).equals("Available"))){
+                if (!((inventoryItem.getState("Status").toString()).equals("Unused"))){
                     displayMessage("Inventory Item not available.");
                 }
                 /*else if () {
