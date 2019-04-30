@@ -74,6 +74,7 @@ public class VendorCollectionView extends View {
 		populateFields();
 
 		manager = (InventoryManager) ((VendorCollection) myModel).getManager();
+
 		// System.out.println((String) myModel.getState("his") + " here");
 		// myModel.subscribe("InventoryManagerView", this);
 	}
@@ -173,17 +174,14 @@ public class VendorCollectionView extends View {
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.isPrimaryButtonDown() && event.getClickCount() >= 2) {
-<<<<<<< HEAD
-					select();
-=======
+
 					if (manager.getState("his").equals("addVIIT") || manager.getState("his").equals("deleteVIIT")) {
 						processVendorSelected();
 					}
-					if (manager.getState("his").equals("modifyVendor")) {
-						modifySelected();
-					}
->>>>>>> Tanner
+					else {
+						select();
 				}
+					}
 			}
 		});
 		ScrollPane scrollPane = new ScrollPane();
@@ -194,11 +192,13 @@ public class VendorCollectionView extends View {
 		submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				if (manager.getState("his").equals("addVIIT") || manager.getState("his").equals("deleteVIIT")) {
+				if (manager.getState("his") == "addVIIT" || manager.getState("his").equals("deleteVIIT")) {
 					processVendorSelected();
 				}
+
 				else {
 					select();
+
 				}
 			}
 		});
@@ -237,6 +237,7 @@ public class VendorCollectionView extends View {
 		if (manager.getState("his") == "processInvoice") {
 			processInvoice();
 		}
+
 	}
 
 	// --------------------------------------------------------------------------

@@ -212,6 +212,7 @@ public class PriceView extends View {
 		VendorInventoryItemType b = new VendorInventoryItemType(props);
 		b.update();
 		displayMessage("Vendor-Inventory Item Type successfully added to database");
+		myModel.stateChangeRequest("Success", null);
 	}
 
 	@Override

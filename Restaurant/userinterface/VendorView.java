@@ -23,7 +23,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.Vendor;
-import model.VendorCollection;
 
 import java.util.Properties;
 
@@ -200,7 +199,6 @@ public class VendorView extends View {
 	public void clearErrorMessage() {
 		statusLog.clearErrorMessage();
 	}
-
 	// ----------------------------------------------------------
 	public void processAction() {
 
@@ -208,14 +206,16 @@ public class VendorView extends View {
 
 		String nameEntered = name.getText();
 		String phoneEntered = phoneNum.getText();
-
-		if ((nameEntered.equals("")) || (nameEntered.length() == 0)) {
+		
+		
+		if ((nameEntered == "") || (nameEntered.length() == 0)) {
 			displayErrorMessage("Please enter a valid vendor name");
 			name.requestFocus();
-		} else if ((phoneEntered.equals("")) || (phoneEntered.length() != 12) || (!(checkPhoneNumber(phoneEntered)))) {
+		} else if ((phoneEntered == "") || (phoneEntered.length() != 12) || (!(checkPhoneNumber(phoneEntered)))) {
 			displayErrorMessage("Please enter a valid Phone Number");
 			phoneNum.requestFocus();
-		} else {
+		}
+		else {
 			processVendor(nameEntered, phoneEntered);
 		}
 	}
@@ -235,22 +235,23 @@ public class VendorView extends View {
 		displayMessage("Successfully added to database");
 		myModel.stateChangeRequest("Login", props);
 	}
-
+	
 	private void processSubmitModify() {
+
 		clearErrorMessage();
 		String nameEntered = name.getText();
 		String phoneEntered = phoneNum.getText();
-
-		if (nameEntered.equals("") && phoneEntered.equals("")){
-			listAll();
-		}else if ((phoneEntered.length() > 0) && ((phoneEntered.length() != 12) || (!(checkPhoneNumber(phoneEntered))))) {
-			displayErrorMessage("Please enter a valid Phone Number");
-			phoneNum.requestFocus();
-		} else {
+		
+		if ((nameEntered == "") || (nameEntered.length() == 0) && 
+			((phoneEntered == "") || (phoneEntered.length() < 12))) {
+			displayErrorMessage("Please enter a valid vendor name or phone number");
+			name.requestFocus();
+		}
+		else {
 			processModify(nameEntered, phoneEntered);
 		}
 	}
-
+	
 	private void processModify(String name, String phone) {
 		Properties props = new Properties();
 		props.setProperty("Name", name);
@@ -285,18 +286,15 @@ public class VendorView extends View {
 		
 	}
 
+	
 	public boolean checkPhoneNumber(String number) {
-		for (int i = 0; i < number.length(); i++) {
-			if ((i == 3 || i == 7) && number.charAt(i) != '-')
+		for(int i = 0; i < number.length(); i++) {
+			if((i==3||i==7) && number.charAt(i) != '-') 
 				return false;
-			else if (number.charAt(i) <= '0' && number.charAt(i) >= '9')
+			else if(number.charAt(i) <= '0' && number.charAt(i) >= '9') 
 				return false;
 		}
 		return true;
-	}
-
-	public void listAll() {
-		myModel.stateChangeRequest("VendorInfo", null);
 	}
 	
 	@Override

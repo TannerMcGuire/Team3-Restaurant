@@ -34,7 +34,6 @@ import javafx.stage.Stage;
 
 import java.util.Vector;
 import java.util.Enumeration;
-import java.util.Properties;
 
 // project imports
 import impresario.IModel;
@@ -70,9 +69,8 @@ public class InventoryItemTypeCollectionView extends View {
 		getChildren().add(container);
 
 		populateFields();
-
+		
 		manager = (InventoryManager) ((InventoryItemTypeCollection) myModel).getManager();
-		//System.out.println("here " + myModel.getState("his"));
 	}
 
 	// --------------------------------------------------------------------------
@@ -85,8 +83,7 @@ public class InventoryItemTypeCollectionView extends View {
 
 		ObservableList<InventoryItemTypeTableModel> tableData = FXCollections.observableArrayList();
 		try {
-			InventoryItemTypeCollection itemCollection = (InventoryItemTypeCollection) myModel
-					.getState("InventoryItemTypeList");
+			InventoryItemTypeCollection itemCollection = (InventoryItemTypeCollection) myModel.getState("InventoryItemTypeList");
 
 			Vector entryList = (Vector) itemCollection.getState("InventoryItemType");
 			Enumeration entries = entryList.elements();
@@ -139,7 +136,7 @@ public class InventoryItemTypeCollectionView extends View {
 		title.setTextAlignment(TextAlignment.CENTER);
 		title.setFill(Color.BLACK);
 		grid.add(title, 0, 0, 2, 1);
-
+		
 		Text prompt = new Text("Select proper InventoryItemType by double clicking or selecting and clicking submit");
 		prompt.setWrappingWidth(350);
 		prompt.setTextAlignment(TextAlignment.CENTER);
@@ -160,26 +157,24 @@ public class InventoryItemTypeCollectionView extends View {
 		TableColumn measureColumn = new TableColumn("Unit of Measure");
 		measureColumn.setMinWidth(150);
 		measureColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("unitMeasure"));
-
+		
 		TableColumn validityColumn = new TableColumn("Validity Days");
 		validityColumn.setMinWidth(150);
-		validityColumn
-				.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("validityDays"));
-
+		validityColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("validityDays"));
+		
 		TableColumn orderColumn = new TableColumn("Reorder Point");
 		orderColumn.setMinWidth(50);
 		orderColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("reorderPoint"));
-
+		
 		TableColumn noteColumn = new TableColumn("Notes");
 		noteColumn.setMinWidth(150);
 		noteColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("notes"));
-
+		
 		TableColumn statusColumn = new TableColumn("Status");
 		statusColumn.setMinWidth(50);
 		statusColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTypeTableModel, String>("status"));
 
-		tableOfItemTypes.getColumns().addAll(nameColumn, unitColumn, measureColumn, validityColumn, orderColumn,
-				noteColumn, statusColumn);
+		tableOfItemTypes.getColumns().addAll(nameColumn, unitColumn, measureColumn, validityColumn, orderColumn, noteColumn, statusColumn);
 
 		tableOfItemTypes.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -200,12 +195,12 @@ public class InventoryItemTypeCollectionView extends View {
 				processInventoryItemTypeSelected();
 			}
 		});
-
+		
 		backButton = new Button("Back");
 		backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				// myModel.stateChangeRequest("InventoryManagerView", null);
+				//myModel.stateChangeRequest("InventoryManagerView", null);
 				new model.InventoryManager();
 			}
 		});
@@ -231,12 +226,8 @@ public class InventoryItemTypeCollectionView extends View {
 		InventoryItemTypeTableModel selectedItem = tableOfItemTypes.getSelectionModel().getSelectedItem();
 		if (selectedItem != null) {
 			String selectedItemTypeName = selectedItem.getItemTypeName();
-			if (myModel.getState("his").equals("addVIIT")) {
-				myModel.stateChangeRequest("IITInfo", selectedItemTypeName);
-			} else if (myModel.getState("his").equals("deleteVIIT")) {
-				myModel.stateChangeRequest("deleteVIIT", selectedItemTypeName);
-			}
-		}
+			myModel.stateChangeRequest("IITInfo", selectedItemTypeName);
+		} 
 	}
 
 	// --------------------------------------------------------------------------

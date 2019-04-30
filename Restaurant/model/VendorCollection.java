@@ -11,7 +11,7 @@ import event.Event;
 import database.*;
 
 import impresario.IView;
-import userinterface.VendorCollectionView;
+
 import userinterface.View;
 import userinterface.ViewFactory;
 
@@ -25,6 +25,7 @@ public class VendorCollection extends EntityBase implements IView {
 	public static String v;
 	private Vendor selectedVendor;
 	private InventoryManager manager;
+
 	// GUI Components
 
 	// constructor for this class
@@ -116,6 +117,7 @@ public class VendorCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------------------------------
+
 	private int findIndexToAdd(Vendor a) {
 		// users.add(u);
 		int low = 0;
@@ -151,7 +153,7 @@ public class VendorCollection extends EntityBase implements IView {
 		else if (key.equals("VendorList"))
 			return this;
 		else if (key.equals("his"))
-			return manager.getState("his");
+			return " ";
 		return null;
 	}
 
@@ -294,7 +296,9 @@ public class VendorCollection extends EntityBase implements IView {
 
 	public void setManager(InventoryManager manager) {
 		this.manager = manager;
+
 		// System.out.println((String) manager.getState("his") + " vc");
+
 	}
 
 	public InventoryManager getManager() {
