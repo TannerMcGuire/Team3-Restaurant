@@ -127,8 +127,16 @@ public class ConfirmInventoryItemRemovalView extends View {
 
             @Override
             public void handle(ActionEvent e) {
-                displayMessage("Inventory Item Type removed.");
-                myModel.stateChangeRequest("InventoryItemRemoval", null);
+                if (!((inventoryItem.getState("Notes").toString()).equals("Available"))){
+                    displayMessage("Inventory Item not available.");
+                }
+                /*else if () {
+                    //DATE CHECK
+                } */
+                else {
+                    displayMessage("Inventory Item Type removed.");
+                    myModel.stateChangeRequest("InventoryItemRemoval", null);
+                }
 
             }
         });
