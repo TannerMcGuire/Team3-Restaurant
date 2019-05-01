@@ -50,11 +50,11 @@ public class Tester extends Application
 	//----------------------------------------------------------
 	public void start(Stage primaryStage)
 	{
-	   System.out.println("Restaurant Version 0.8");
+	   System.out.println("Restaurant Version 0.9");
 	   System.out.println("Copyright Team 3 2019");
 
            // Create the top-level container (main frame) and add contents to it.
-	   MainStageContainer.setStage(primaryStage, "Restaurant Inventory Version 0.8");
+	   MainStageContainer.setStage(primaryStage, "Restaurant Inventory Version 0.9");
 	   mainStage = MainStageContainer.getInstance();
 
 	   // Finish setting up the stage (ENABLE THE GUI TO BE CLOSED USING THE TOP RIGHT

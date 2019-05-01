@@ -28,6 +28,7 @@ public class InventoryManager implements IView, IModel {
 
 	private Vendor myVendor;
 	private InventoryItemType myIIT;
+	private InventoryItem myInventoryItem;
 	private VendorCollection accounts;
 	private Vendor selectedVendor;
 
@@ -84,6 +85,8 @@ public class InventoryManager implements IView, IModel {
 			return history;
 		else if (key.equals("selectedVendor")) {
 			return selectedVendor;
+		} else if (key.equals("SelectedInventoryItem")) {
+			return myInventoryItem;
 		} else
 			return "";
 	}
@@ -112,6 +115,10 @@ public class InventoryManager implements IView, IModel {
 				history = "deleteIIT";
 				createAndShowInventoryItemTypeView();
 			}
+		} else if (key.equals("MODIFY INVENTORY ITEM TYPE")) {
+			history = "";
+			createAndShowEnterInventoryItemTypeNameAndNotesScreen();
+
 		}
 
 		// Update IIT
@@ -191,6 +198,33 @@ public class InventoryManager implements IView, IModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		} else if (key.equals("SubmitBarcodeView") == true) {
+			if ((String) value == "removeItem") {
+				history = (String) value;
+				createAndShowSubmitBarcodeView();
+			} /*
+				 * else if ((String) value == "addVendor") { history = (String) value;
+				 * createAndShowVendorView(); } UPDATE WITH MODIFY ITEM STATUS
+				 */
+		} else if (key.equals("BarcodeSearch")) {
+			if (value != null) {
+				/*
+				 * System.out.println("BARCODE" + ((Properties)value).getProperty("Barcode"));
+				 * System.out.println("NAME" +
+				 * ((Properties)value).getProperty("InventoryItemTypeName"));
+				 * System.out.println("VENDORID" + ((Properties)value).getProperty("VendorId"));
+				 */
+				boolean flag = inventoryItemFolder((Properties) value);
+				if (flag == true) {
+					try {
+						searchInventoryItem((Properties) value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} else if (key.equals("InventoryItemRemoval")) {
+			myInventoryItem.takeOut();
 		}
 		myRegistry.updateSubscribers(key, this);
 	}
@@ -215,6 +249,20 @@ public class InventoryManager implements IView, IModel {
 			ex.printStackTrace();
 			return false;
 		}
+	}
+
+	public boolean inventoryItemFolder(Properties props) {
+		try {
+			myInventoryItem = new InventoryItem(props);
+			return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+
+	public InventoryItem getSelectedInventoryItem() {
+		return myInventoryItem;
 	}
 
 	/** Called via the IView relationship */
@@ -250,6 +298,11 @@ public class InventoryManager implements IView, IModel {
 		iit.setManager(this);
 		iit.findInventoryItemType(item);
 		iit.createAndShowView();
+	}
+
+	private void searchInventoryItem(Properties item) throws Exception { // FINISH THIS
+
+		createAndShowConfirmInventoryItemRemovalView(item);
 	}
 
 	// ------------------------------------------------------------
@@ -429,6 +482,31 @@ public class InventoryManager implements IView, IModel {
 
 	}
 
+	// ----------------------------------------------------------
+	private void createAndShowSubmitBarcodeView() {
+		Scene currentScene = (Scene) myViews.get("SubmitBarcodeView");
+		if (currentScene == null) {
+			// create our new view
+			View newView = ViewFactory.createView("SubmitBarcodeView", this);
+			currentScene = new Scene(newView);
+			myViews.put("SubmitBarcodeView", currentScene);
+		}
+
+		swapToView(currentScene);
+	}
+
+	private void createAndShowConfirmInventoryItemRemovalView(Properties item) { // FINISH THIS
+		Scene currentScene = (Scene) myViews.get("ConfirmInventoryItemRemovalView");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("ConfirmInventoryItemRemovalView", this);
+			currentScene = new Scene(newView);
+			myViews.put("ConfirmInventoryItemRemovalView ", currentScene);
+		}
+
+		swapToView(currentScene);
+	}
+
 	// -----------------------------------------------------------------------------
 	public void swapToView(Scene newScene) {
 
@@ -457,5 +535,4 @@ public class InventoryManager implements IView, IModel {
 		myRegistry.unSubscribe(key, subscriber);
 
 	}
-
 }

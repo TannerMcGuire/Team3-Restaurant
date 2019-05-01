@@ -12,11 +12,16 @@ import javax.swing.JFrame;
 import exception.InvalidPrimaryKeyException;
 import database.*;
 
+import impresario.IView;
+
 import model.InventoryManager;
+import userinterface.View;
+import userinterface.ViewFactory;
 
 /** The class containing the Vendor for the database application */
 //==============================================================
-public class InventoryItem extends EntityBase {
+public class InventoryItem extends EntityBase implements IView {
+
 	private static final String myTableName = "InventoryItem";
 
 	protected Properties dependencies;
@@ -29,7 +34,9 @@ public class InventoryItem extends EntityBase {
 	// ----------------------------------------------------------
 	public InventoryItem(int barcode) throws InvalidPrimaryKeyException {
 		//UPDATE FOR USE CASE 8
-		//----METHOD FOR INVENTORYITEM CONSTRUCTOR BELOW----
+
+		//----METHOD FOR INVENTORYITEMTYPE CONSTRUCTOR BELOW----
+
 		super(myTableName);
 
 		setDependencies();
@@ -41,9 +48,10 @@ public class InventoryItem extends EntityBase {
 		if (allDataRetrieved != null) {
 			int size = allDataRetrieved.size();
 
-			// There should be EXACTLY one InventoryItem. More than that is an error
+			// There should be EXACTLY one vendor. More than that is an error
 			if (size != 1) {
-				throw new InvalidPrimaryKeyException("Multiple or no items matching barcode : " + barcode + " found.");
+				throw new InvalidPrimaryKeyException("Multiple items matching barcode : " + barcode + " found.");
+
 			} else {
 				// copy all the retrieved data into persistent state
 				Properties retrievedVendorData = allDataRetrieved.elementAt(0);
@@ -61,7 +69,8 @@ public class InventoryItem extends EntityBase {
 
 			}
 		}
-		// If no InventoryItem found for this barcode, throw an exception
+
+		// If no vendor found for this ID, throw an exception
 		else {
 			throw new InvalidPrimaryKeyException("No inventory matching barcode : " + barcode + " found.");
 		}
@@ -135,6 +144,10 @@ public class InventoryItem extends EntityBase {
 	/*public static int compare(InventoryItem a, InventoryItem b) {
 		String aID = (String) a.getState("barcode");
 		String bID = (String) b.getState("barcode");
+<<<<<<< HEAD
+=======
+
+>>>>>>> Derek
 		return aID.compareTo(bID);
 	} */
 
@@ -143,7 +156,12 @@ public class InventoryItem extends EntityBase {
 		persistentState.setProperty("Status", "Used");
 		update();
 	}
-	
+
+	public void expired() {
+		persistentState.setProperty("Status", "Expired");
+		update();
+	}
+
 	// -----------------------------------------------------------------------------------
 	public void update() {
 		updateStateInDatabase();
@@ -155,11 +173,19 @@ public class InventoryItem extends EntityBase {
 			if (persistentState.getProperty("Barcode") != null) {
 				if (!(InventoryManager.history.equals("processInvoice"))) {
 					Properties whereClause = new Properties();
-					whereClause.setProperty("InventoryItemTypeName", persistentState.getProperty("InventoryItemTypeName"));
+//<<<<<<< HEAD
+//					whereClause.setProperty("InventoryItemTypeName", persistentState.getProperty("InventoryItemTypeName"));
+//					updatePersistentState(mySchema, persistentState, whereClause);
+//					updateStatusMessage = "Inventory Item type data for barcode : "
+//							+ persistentState.getProperty("Barcode") + " updated successfully in database!";
+//				} else {					
+//=======
+					whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
 					updatePersistentState(mySchema, persistentState, whereClause);
 					updateStatusMessage = "Inventory Item type data for barcode : "
 							+ persistentState.getProperty("Barcode") + " updated successfully in database!";
-				} else {					
+				} else {
+//>>>>>>> Derek
 					insertPersistentState(mySchema, persistentState);
 					updateStatusMessage = "Inventory Item Type data for new Inventory Item : "
 							+ persistentState.getProperty("Barcode") + " shelved successfully in database!";
@@ -206,4 +232,4 @@ public class InventoryItem extends EntityBase {
 				+ persistentState.getProperty("Status");
 
 	}
-} 
+}

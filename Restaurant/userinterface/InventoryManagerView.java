@@ -199,7 +199,7 @@ public class InventoryManagerView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+			myModel.stateChangeRequest("SubmitBarcodeView", "removeItem");
 			}
 		});
 		//grid.add(removeItemButton, 1, 8);
