@@ -108,6 +108,23 @@ public class VendorInventoryItemType extends EntityBase {
 		myRegistry.updateSubscribers(key, this);
 	}
 
+	// -----------------------------------------------------------------------------------
+	public static int compare(VendorInventoryItemType a, VendorInventoryItemType b) {
+		String aID = (String) a.getState("Id");
+		String bID = (String) b.getState("Id");
+
+		return aID.compareTo(bID);
+	}
+
+	// -----------------------------------------------------------------------------------
+	public void delete(Properties query) {
+		try {
+			deletePersistentState(mySchema, query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/** Called via the IView relationship */
 	// ----------------------------------------------------------
 	public void updateState(String key, Object value) {

@@ -155,6 +155,12 @@ public class InventoryManager implements IView, IModel {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				} else {
+					try {
+						searchVendor(value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		} else if (key.equals("IITInfo") == true) {
@@ -220,11 +226,16 @@ public class InventoryManager implements IView, IModel {
 	}
 
 	// ----------------------------------------------------------
-	private void searchVendor(Properties vend) throws Exception {
+	private void searchVendor(Object vend) throws Exception {
 		VendorCollection vc = new VendorCollection();
 		vc.setManager(this);
-		vc.findVendor(vend);
-		createAndShowVendorCollectionView(vc);
+		if (vend == null) {
+			vc.findAllVendors();
+			createAndShowVendorCollectionView(vc);
+		} else {
+			vc.findVendor((Properties) vend);
+			createAndShowVendorCollectionView(vc);
+		}
 	}
 
 	// ----------------------------------------------------------

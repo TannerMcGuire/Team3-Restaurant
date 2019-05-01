@@ -153,7 +153,7 @@ public class VendorCollection extends EntityBase implements IView {
 		else if (key.equals("VendorList"))
 			return this;
 		else if (key.equals("his"))
-			return " ";
+			return manager.getState("his");
 		return null;
 	}
 

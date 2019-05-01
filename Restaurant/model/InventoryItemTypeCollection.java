@@ -15,7 +15,7 @@ import impresario.IView;
 import userinterface.View;
 import userinterface.ViewFactory;
 
-/** The class containing the InventoryItemTypeCollection for the Inventory Management application */
+/** The class containing the AccountCollection for the ATM application */
 //==============================================================
 public class InventoryItemTypeCollection extends EntityBase implements IView {
 	private static final String myTableName = "InventoryItemType";
@@ -61,10 +61,30 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 
 				if (inventoryItemType != null)
 					if (!(inventoryItemType.getState("Status").equals("Inactive")))
-					addInventoryItemType(inventoryItemType);
+						addInventoryItemType(inventoryItemType);
 			}
 		else {
 			throw new InvalidPrimaryKeyException("No item types matching: " + name + " or " + notes);
+		}
+	}
+
+	// ----------------------------------------------------------------------------------
+	public void findAllInventoryItemTypes() throws Exception {
+		String query;
+		query = "SELECT * FROM " + myTableName;
+
+		Vector allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null)
+			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
+				Properties nextIITData = (Properties) allDataRetrieved.elementAt(cnt);
+				InventoryItemType inventoryItemType = new InventoryItemType(nextIITData);
+
+				if (inventoryItemType != null)
+					addInventoryItemType(inventoryItemType);
+			}
+		else {
+			throw new InvalidPrimaryKeyException("No item types found");
 		}
 	}
 
@@ -176,6 +196,10 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 			return this;
 		else if (key.equals("InventoryItemTypeList"))
 			return this;
+		else if (key.equals("his")) {
+			//System.out.println(manager);
+			return manager.getState("his");
+			}
 		return null;
 	}
 
@@ -186,6 +210,16 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 		} else if (key.equals("IITInfo") == true) {
 			iname = (String) value;
 			createAndShowVIITPriceView();
+		} else if (key.equals("deleteVIIT") == true){
+			Properties prop = new Properties();
+			prop.setProperty("InventoryItemTypeName", (String) value);
+			VendorInventoryItemTypeCollection viit = new VendorInventoryItemTypeCollection();
+			try {
+				viit.findVendorInventoryItemType(prop);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			viit.createAndShowView();
 		} else if (key.equals("IITchange") == true) {
 			iname = (String) value;
 			try {
@@ -269,6 +303,22 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 
 	}
 
+	// ------------------------------------------------------
+		public void createAndShowVendorInventoryItemTypeCollection() {
+
+			Scene localScene = myViews.get("VendorInventoryItemTypeCollectionView");
+
+			if (localScene == null) {
+				// create our new view
+				View newView = ViewFactory.createView("VendorInventoryItemTypeCollectionView", this);
+				localScene = new Scene(newView);
+				myViews.put("VendorInventoryItemTypeCollectionView", localScene);
+			}
+			// make the view visible by installing it into the frame
+			swapToView(localScene);
+
+		}
+	
 	// ------------------------------------------------------------
 	public void createAndShowInventoryItemTypeSelectionScreens() {
 		Scene currentScene = (Scene) myViews.get("InventoryItemTypeSelectionScreen");
@@ -368,10 +418,11 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 		}
 		System.out.println("===========================================================");
 	}
-	
+
 	public void setManager(InventoryManager manager) {
 		this.manager = manager;
 	}
+
 	public InventoryManager getManager() {
 		return manager;
 	}
