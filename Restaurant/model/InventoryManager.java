@@ -225,7 +225,16 @@ public class InventoryManager implements IView, IModel {
 			}
 		} else if (key.equals("InventoryItemRemoval")) {
 			myInventoryItem.takeOut();
-		} else if (key.equals("full"))
+		} else if (key.equals("full")) {
+			history = (String) value;
+			InventoryItemCollection iic = new InventoryItemCollection();
+			try {
+				iic.findAvailableInventoryItems();
+				iic.createAndShowView();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		myRegistry.updateSubscribers(key, this);
 	}
 

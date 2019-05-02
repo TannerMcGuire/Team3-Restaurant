@@ -40,8 +40,9 @@ public class ViewFactory {
 			return new SubmitBarcodeView(model);
 		} else if (viewName.equals("ConfirmInventoryItemRemovalView") == true) {
 			return new ConfirmInventoryItemRemovalView(model);
-		}
-		return null;
+		} else if (viewName.equals("InventoryItemCollectionView") == true) {
+			return new InventoryItemCollectionView(model);
+		} return null;
 	}
 
 	/*

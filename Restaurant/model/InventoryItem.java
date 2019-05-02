@@ -141,15 +141,12 @@ public class InventoryItem extends EntityBase implements IView {
 	}
 
 	// -----------------------------------------------------------------------------------
-	/*public static int compare(InventoryItem a, InventoryItem b) {
+	public static int compare(InventoryItem a, InventoryItem b) {
 		String aID = (String) a.getState("barcode");
 		String bID = (String) b.getState("barcode");
-<<<<<<< HEAD
-=======
 
->>>>>>> Derek
 		return aID.compareTo(bID);
-	} */
+	}
 
 	// -----------------------------------------------------------------------------------
 	public void takeOut() {
@@ -212,7 +209,7 @@ public class InventoryItem extends EntityBase implements IView {
 		v.addElement(persistentState.getProperty("InventoryItemTypeName"));
 		v.addElement(persistentState.getProperty("VendorId"));
 		v.addElement(persistentState.getProperty("DateReceived"));
-		v.addElement(persistentState.getProperty("DateofLastUse"));
+		v.addElement(persistentState.getProperty("DateOfLastUse"));
 		v.addElement(persistentState.getProperty("Notes"));
 		v.addElement(persistentState.getProperty("Status"));
 
