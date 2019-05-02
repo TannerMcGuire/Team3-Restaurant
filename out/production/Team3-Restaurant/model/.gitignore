@@ -1,0 +1,15 @@
+/EntityBase.class
+/InventoryItemType.class
+/InventoryItemTypeCollection.class
+/InventoryManager.class
+/Vendor.class
+/VendorCollection.class
+/VendorInventoryItemType.class
+<<<<<<< HEAD
+<<<<<<< HEAD
+/InventoryItem.class
+=======
+/VendorInventoryItemTypeCollection.class
+>>>>>>> Tanner
+=======
+>>>>>>> parent of 4a9badb...  Working UC 7
