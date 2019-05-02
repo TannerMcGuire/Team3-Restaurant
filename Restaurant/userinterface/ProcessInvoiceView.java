@@ -269,7 +269,7 @@ public class ProcessInvoiceView extends View {
 			if(allowed) {
 				displayMessage("Enter item information");
 				
-				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 				LocalDate now = LocalDate.now();
 				String currentDate = dtf.format(now);
 				date.setText(currentDate);
@@ -350,11 +350,11 @@ public class ProcessInvoiceView extends View {
 	
 	public boolean checkDate(String check) {
 		if(check.length() != 10) return false;
-		if(!check.matches("^[0-9-]*$")) return false;
-		for(int i = 0; i < check.length(); i++) {
-			if((i==2||i==5) && check.charAt(i) != '-')
-				return false;
-		}
+		if(!check.matches("^[0-9]{4}/[0-9]{2}/[0-9]{2}$")) return false;
+//		for(int i = 0; i < check.length(); i++) {
+//			if((i==5||i==7) && check.charAt(i) != '/')
+//				return false;
+//		}
 		return true;
 	}
 

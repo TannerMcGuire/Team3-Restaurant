@@ -107,13 +107,13 @@ public class VendorView extends View {
 		grid.add(nameLabel, 0, 1);
 
 		name = new TextField();
-		name.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				processAction();
-			}
-		});
+//		name.setOnAction(new EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent e) {
+//				processAction();
+//			}
+//		});
 		grid.add(name, 1, 1);
 
 		Text phoneLabel = new Text(" Vendor Phone Number : ");
@@ -123,13 +123,13 @@ public class VendorView extends View {
 		grid.add(phoneLabel, 0, 2);
 
 		phoneNum = new TextField();
-		phoneNum.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				processAction();
-			}
-		});
+//		phoneNum.setOnAction(new EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent e) {
+//				processAction();
+//			}
+//		});
 		grid.add(phoneNum, 1, 2);
 
 		HBox buttons = new HBox(10);

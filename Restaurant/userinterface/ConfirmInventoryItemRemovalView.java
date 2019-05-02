@@ -169,7 +169,7 @@ public class ConfirmInventoryItemRemovalView extends View {
 
 		try {
 
-			Date dateReceived = new SimpleDateFormat("MM/dd/yyyy")
+			Date dateReceived = new SimpleDateFormat("yyyy/MM/dd")
 					.parse(inventoryItemSelected.getState("DateReceived").toString());
 
 			InventoryItemType inventoryItemType = new InventoryItemType(

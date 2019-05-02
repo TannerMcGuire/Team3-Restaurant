@@ -232,7 +232,7 @@ public class InventoryManagerView extends View {
 
 			@Override
 			public void handle(ActionEvent e) {
-				processAction(e);
+				myModel.stateChangeRequest("full", "inventory");
 			}
 		});
 		//grid.add(inventoryButton, 1, 11);
