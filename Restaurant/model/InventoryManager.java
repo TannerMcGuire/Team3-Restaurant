@@ -1,8 +1,10 @@
 package model;
 
+import java.util.Enumeration;
 // system imports
 import java.util.Hashtable;
 import java.util.Properties;
+import java.util.Vector;
 
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -225,7 +227,14 @@ public class InventoryManager implements IView, IModel {
 			}
 		} else if (key.equals("InventoryItemRemoval")) {
 			myInventoryItem.takeOut();
-		} else if (key.equals("full"))
+		} else if (key.equals("reorder")) { 
+			try {
+				history = "reorder";
+				obtainReorder();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else if (key.equals("full"))
 		myRegistry.updateSubscribers(key, this);
 	}
 
@@ -319,6 +328,28 @@ public class InventoryManager implements IView, IModel {
 	private void processInvoice(Properties value) {
 		selectedVendor = new Vendor(value);
 		createAndShowProcessInvoiceView();
+	}
+	
+	// ----------------------------------------------------------
+	
+	private void obtainReorder() throws Exception {
+		InventoryItemTypeCollection available = new InventoryItemTypeCollection();
+		available.findActiveInventoryItemTypes();
+		Vector list = (Vector) available.getState("InventoryItemType");
+		Enumeration entries = list.elements();
+		InventoryItemTypeCollection reorder = new InventoryItemTypeCollection();
+		
+		while(entries.hasMoreElements() == true) {
+			InventoryItemType current = (InventoryItemType)entries.nextElement();
+			InventoryItemCollection iic = new InventoryItemCollection();
+			iic.findWithName((String) current.getState("ItemTypeName"));
+			Vector items = (Vector) iic.getState("InventoryItems");
+			if (items.size() <= Integer.parseInt((String) current.getState("ReorderPoint"))) {
+				reorder.addInventoryItemType(current);
+			}
+		}
+		reorder.setManager(this);
+		reorder.createAndShowView();
 	}
 
 	// ------------------------------------------------------------------------------------------------

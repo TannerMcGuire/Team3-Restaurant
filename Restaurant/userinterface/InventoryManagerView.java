@@ -294,6 +294,10 @@ public class InventoryManagerView extends View {
 		if(evt.getSource() == processButton) {
 			myModel.stateChangeRequest("VendorView", "processInvoice");
 		}
+		
+		if(evt.getSource() == reorderButton) {
+			myModel.stateChangeRequest("reorder", null);
+		}
 
 	}
 

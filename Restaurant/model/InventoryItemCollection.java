@@ -53,7 +53,7 @@ public class InventoryItemCollection extends EntityBase implements IView {
 		String barcode = prop.getProperty("Barcode");
 		String query;
 		if (name != null) {
-			query = "SELECT * FROM " + myTableName + " WHERE (InventoryItemType Name LIKE '%" + name + "%')";
+			query = "SELECT * FROM " + myTableName + " WHERE (InventoryItemTypeName LIKE '%" + name + "%')";
 		} else {
 		query = "SELECT * FROM " + myTableName + " WHERE (Barcode.equals(barcode)";
 		}
@@ -79,9 +79,9 @@ public class InventoryItemCollection extends EntityBase implements IView {
 		String barcode = prop.getProperty("Barcode");
 		String query;
 		if (name != null) {
-			query = "SELECT * FROM " + myTableName + " WHERE (InventoryItemType Name LIKE '%" + name + "%')";
+			query = "SELECT * FROM " + myTableName + " WHERE InventoryItemTypeName LIKE '%" + name + "%' AND Status ='Available'";
 		} else {
-		query = "SELECT * FROM " + myTableName + " WHERE (Barcode.equals(barcode)";
+		query = "SELECT * FROM " + myTableName + " WHERE (Barcode.equals(barcode) AND Status ='Available'";
 		}
 		Vector allDataRetrieved = getSelectQueryResult(query);
 
@@ -120,9 +120,32 @@ public class InventoryItemCollection extends EntityBase implements IView {
 
 		}
 	}
+	
+	public void findWithName(String name) throws Exception {
+		String query = "";
+		if (name != null) {
+			query = "SELECT * FROM " + myTableName + " WHERE (InventoryItemTypeName LIKE '%" + name + "%' AND Status ='Available')";
+		}
+		Vector allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null)
+			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
+				Properties nextInventoryItemData = (Properties) allDataRetrieved.elementAt(cnt);
+				InventoryItem InventoryItem = new InventoryItem(nextInventoryItemData);
+
+				if (InventoryItem != null)
+					addInventoryItem(InventoryItem);
+			}
+		else {
+
+			throw new InvalidPrimaryKeyException("No available Inventory Items matching: " + name);
+		}
+	}
+
 
 	// ----------------------------------------------------------------------------------
 
+	@SuppressWarnings("static-access")
 	private int findIndexToAdd(InventoryItem a) {
 		// users.add(u);
 		int low = 0;
