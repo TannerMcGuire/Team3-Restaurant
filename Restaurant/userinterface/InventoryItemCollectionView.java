@@ -49,7 +49,7 @@ import model.InventoryItemCollection;
 
 //==============================================================================
 public class InventoryItemCollectionView extends View {
-	protected TableView<VendorTableModel> tableOfVendors;
+	protected TableView<InventoryItemTableModel> tableOfVendors;
 	protected Button submitButton;
 	protected Button backButton;
 	private InventoryManager manager;
@@ -106,6 +106,7 @@ public class InventoryItemCollectionView extends View {
 
 			}
 
+		
 			tableOfInventoryItems.setItems(tableData);
 		} catch (Exception e) {// SQLException e) {
 			// Need to handle this exception
@@ -156,15 +157,15 @@ public class InventoryItemCollectionView extends View {
 
 		TableColumn InventoryItemBarcodeColumn = new TableColumn("Barcode");
 		InventoryItemBarcodeColumn.setMinWidth(30);
-		InventoryItemBarcodeColumn.setCellValueFactory(new PropertyValueFactory<VendorTableModel, String>("VendorId"));
+		InventoryItemBarcodeColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTableModel, String>("InventoryItemId"));
 
 		TableColumn nameColumn = new TableColumn("Inventory Item Type Name");
 		nameColumn.setMinWidth(200);
-		nameColumn.setCellValueFactory(new PropertyValueFactory<VendorTableModel, String>("InventoryItemTypeName"));
+		nameColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTableModel, String>("InventoryItemTypeName"));
 
-		TableColumn vendorIdColumn = new TableColumn("vendor Id");
-		vendorIdColumn.setMinWidth(150);
-		vendorIdColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTableModel, String>("InventoryItemId"));
+		TableColumn InventoryItemIdColumn = new TableColumn("InventoryItem Id");
+		InventoryItemIdColumn.setMinWidth(150);
+		InventoryItemIdColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTableModel, String>("InventoryItemId"));
 
 		TableColumn DateRecievedColumn = new TableColumn("Current Date");
 		DateRecievedColumn.setMinWidth(50);
@@ -184,7 +185,7 @@ public class InventoryItemCollectionView extends View {
 		notesColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTableModel, String>("notes"));
 
 		
-		tableOfInventoryItems.getColumns().addAll( InventoryItemBarcodeColumn, nameColumn, vendorIdColumn, DateRecievedColumn, dateOfLastUseColumn,  statusColumn, notesColumn);
+		tableOfInventoryItems.getColumns().addAll( InventoryItemBarcodeColumn, nameColumn, InventoryItemIdColumn, DateRecievedColumn, dateOfLastUseColumn,  statusColumn, notesColumn);
 
 /*		tableOfInventoryItems.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -245,7 +246,7 @@ public class InventoryItemCollectionView extends View {
 	// --------------------------------------------------------------------------
 
 /*	private void select() {
-		if (manager.getState("his") == "addVendor") {
+		if (manager.getState("his") == "addInventoryItem") {
 			processVendorSelected();
 		}
 		if (manager.getState("his") == "modifyVendor") {
