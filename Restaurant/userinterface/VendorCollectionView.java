@@ -260,7 +260,6 @@ public class VendorCollectionView extends View {
 		VendorTableModel selectedItem = tableOfVendors.getSelectionModel().getSelectedItem();
 
 		if (selectedItem != null) {
-			String selectedVendorID = selectedItem.getVendorId();
 			Properties prop = new Properties();
 			prop.setProperty("Id", selectedItem.getVendorId());
 			prop.setProperty("Name", selectedItem.getName());

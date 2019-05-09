@@ -33,6 +33,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.util.Vector;
+
+import exception.InvalidPrimaryKeyException;
+
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -42,11 +45,11 @@ import model.InventoryItem;
 import model.InventoryItemCollection;
 import model.InventoryManager;
 
-
 //==============================================================================
 public class InventoryItemCollectionView extends View {
 	protected TableView<InventoryItemTableModel> tableOfInventoryItems;
 	protected Button backButton;
+	protected Button submitButton;
 	private InventoryManager manager;
 
 	protected MessageView statusLog;
@@ -71,7 +74,7 @@ public class InventoryItemCollectionView extends View {
 		populateFields();
 
 		manager = (InventoryManager) ((InventoryItemCollection) myModel).getManager();
-		//System.out.println("here " + myModel.getState("his"));
+		// System.out.println("here " + myModel.getState("his"));
 	}
 
 	// --------------------------------------------------------------------------
@@ -84,12 +87,11 @@ public class InventoryItemCollectionView extends View {
 
 		ObservableList<InventoryItemTableModel> tableData = FXCollections.observableArrayList();
 		try {
-			InventoryItemCollection itemCollection = (InventoryItemCollection) myModel
-					.getState("InventoryItemList");
+			InventoryItemCollection itemCollection = (InventoryItemCollection) myModel.getState("InventoryItemList");
 
 			Vector entryList = (Vector) itemCollection.getState("InventoryItem");
 			Enumeration entries = entryList.elements();
-			
+
 			while (entries.hasMoreElements() == true) {
 				InventoryItem nextInventoryItem = (InventoryItem) entries.nextElement();
 				Vector<String> view = nextInventoryItem.getEntryListView();
@@ -170,28 +172,56 @@ public class InventoryItemCollectionView extends View {
 		statusColumn.setMinWidth(50);
 		statusColumn.setCellValueFactory(new PropertyValueFactory<InventoryItemTableModel, String>("status"));
 
-		tableOfInventoryItems.getColumns().addAll(barcodeColumn, nameColumn, vendorColumn, receivedColumn, useColumn, noteColumn, statusColumn);
+		tableOfInventoryItems.getColumns().addAll(barcodeColumn, nameColumn, vendorColumn, receivedColumn, useColumn,
+				noteColumn, statusColumn);
 
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setPrefSize(300, 200);
 		scrollPane.setContent(tableOfInventoryItems);
-		
-		backButton = new Button("Back");
-		backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-		backButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				new model.InventoryManager();
-			}
-		});
 
-		HBox btnContainer = new HBox(10);
-		btnContainer.setAlignment(Pos.CENTER);
-		btnContainer.getChildren().add(backButton);
+		if (myModel.getState("his").equals("removeItem")) {
 
-		vbox.getChildren().add(grid);
-		vbox.getChildren().add(scrollPane);
-		vbox.getChildren().add(btnContainer);
+			submitButton = new Button("Submit");
+			submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+			submitButton.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent e) {
+					processAction(e);
+				}
+			});
 
+			backButton = new Button("Back");
+			backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+			backButton.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent e) {
+					new model.InventoryManager();
+				}
+			});
+
+			HBox btnContainer = new HBox(10);
+			btnContainer.setAlignment(Pos.CENTER);
+			btnContainer.getChildren().add(submitButton);
+			btnContainer.getChildren().add(backButton);
+
+			vbox.getChildren().add(grid);
+			vbox.getChildren().add(scrollPane);
+			vbox.getChildren().add(btnContainer);
+		} else {
+			backButton = new Button("Back");
+			backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+			backButton.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent e) {
+					new model.InventoryManager();
+				}
+			});
+
+			HBox btnContainer = new HBox(10);
+			btnContainer.setAlignment(Pos.CENTER);
+			btnContainer.getChildren().add(backButton);
+
+			vbox.getChildren().add(grid);
+			vbox.getChildren().add(scrollPane);
+			vbox.getChildren().add(btnContainer);
+		}
 		return vbox;
 	}
 
@@ -199,6 +229,40 @@ public class InventoryItemCollectionView extends View {
 	public void updateState(String key, Object value) {
 	}
 
+	// ----------------------------------------------------------
+	public void processAction(Event evt) {
+		InventoryItemTableModel itemSelected = tableOfInventoryItems.getSelectionModel().getSelectedItem();
+		if (itemSelected != null) {
+			String selectedBarcode = itemSelected.getBarcode();
+			processBarcode(selectedBarcode);
+		}
+	}
+
+	private void processBarcode(String barcodeString) {
+
+		int barcode = Integer.parseInt(barcodeString);
+
+		try {
+			InventoryItem inventoryItem = new InventoryItem(barcode);
+
+			Properties props = new Properties();
+
+			props.setProperty("Barcode", barcodeString);
+			props.setProperty("InventoryItemTypeName", inventoryItem.getState("InventoryItemTypeName").toString());
+			props.setProperty("VendorId", inventoryItem.getState("VendorId").toString());
+			props.setProperty("DateReceived", inventoryItem.getState("DateReceived").toString());
+			props.setProperty("DateOfLastUse", inventoryItem.getState("DateOfLastUse").toString());
+			props.setProperty("Notes", inventoryItem.getState("Notes").toString());
+			props.setProperty("Status", inventoryItem.getState("Status").toString());
+
+			myModel.stateChangeRequest("BarcodeSearch", props);
+		} catch (InvalidPrimaryKeyException e) {
+			e.printStackTrace();
+		}
+
+
+	}
+	
 	// --------------------------------------------------------------------------
 	protected MessageView createStatusLog(String initialMessage) {
 		statusLog = new MessageView(initialMessage);

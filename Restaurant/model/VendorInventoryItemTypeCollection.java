@@ -120,8 +120,17 @@ public class VendorInventoryItemTypeCollection extends EntityBase implements IVi
 			return vendorItemList;
 		} else if (key.equals("VendorInventoryItemTypeList"))
 			return this;
+		else if (key.equals("itemName")) {
+			Vector<VendorInventoryItemType> list = new Vector<VendorInventoryItemType>();
+			for (int i = 0; i <  vendorItemList.size(); i++) {
+				list.add(vendorItemList.elementAt(i));
+			}
+			return list;
+		}
 		else if (key.equals("his"))
 			return " ";
+		else if (key.equals("self"))
+			return manager;
 		return null;
 	}
 

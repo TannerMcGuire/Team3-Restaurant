@@ -182,14 +182,16 @@ public class PriceView extends View {
 	public void clearErrorMessage() {
 		statusLog.clearErrorMessage();
 	}
+
 	// ----------------------------------------------------------
 	public void processAction(Event evt) {
 
 		clearErrorMessage();
 
 		String priceEntered = price.getText();
-		
-		if ((priceEntered == "") || (priceEntered.length() == 0) || !(priceEntered.matches("^\\$?[0-9]+\\.[0-9][0-9]$"))) {
+
+		if ((priceEntered == "") || (priceEntered.length() == 0)
+				|| !(priceEntered.matches("^\\$?[0-9]+\\.[0-9][0-9]$"))) {
 			displayErrorMessage("Please enter a valid price with decimal point");
 			price.requestFocus();
 		} else {
@@ -199,20 +201,22 @@ public class PriceView extends View {
 
 	private void processPrice(String priceString) {
 		Properties props = new Properties();
-		props.setProperty("VendorId", VendorCollection.v);
+		props.setProperty("VendorId", (String) myModel.getState("id"));
 		props.setProperty("InventoryItemTypeName", InventoryItemTypeCollection.iname);
 		props.setProperty("VendorPrice", priceString);
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = new Date();
 		props.setProperty("DateofLastUpdate", dateFormat.format(date));
-		
+
 		// clear fields for next time around
 		price.setText("");
 
 		VendorInventoryItemType b = new VendorInventoryItemType(props);
 		b.update();
-		displayMessage("Vendor-Inventory Item Type successfully added to database");
-		myModel.stateChangeRequest("Success", null);
+		if (b.updateStatusMessage.equals("Error in inputting data in database!"))
+			displayErrorMessage("Error in putting data in database");
+		else
+			displayMessage("Vendor-Inventory Item Type successfully added to database");
 	}
 
 	@Override

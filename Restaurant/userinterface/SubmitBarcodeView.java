@@ -23,6 +23,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.InventoryItem;
+import model.InventoryItemCollection;
+import model.InventoryManager;
 
 import java.util.Properties;
 
@@ -193,8 +195,14 @@ public class SubmitBarcodeView extends View {
 		String barcodeEntered = barcode.getText();
 
 		if ((barcodeEntered == "") || (barcodeEntered.length() != 9)){
-			displayErrorMessage("Please enter a valid barcode");
-			barcode.requestFocus();
+			InventoryItemCollection iic = new InventoryItemCollection();
+			try {
+				iic.findAvailableInventoryItems();
+				iic.setManager((InventoryManager) myModel);
+				iic.createAndShowView();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		else {
 			processBarcode(barcodeEntered);

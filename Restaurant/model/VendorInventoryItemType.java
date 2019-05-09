@@ -26,7 +26,7 @@ public class VendorInventoryItemType extends EntityBase {
 
 	// GUI
 
-	private String updateStatusMessage = "";
+	public String updateStatusMessage = "";
 
 	// constructor
 	// --------------------------------------------
@@ -146,10 +146,10 @@ public class VendorInventoryItemType extends EntityBase {
 				updateStatusMessage = "VendorInventoryItemType for id : " + persistentState.getProperty("Id")
 						+ " updated successfully in database!";
 			} else {
-				Integer viitId = insertAutoIncrementalPersistentState(mySchema, persistentState);
-				persistentState.setProperty("Id", "" + viitId.intValue());
-				updateStatusMessage = "VendorInventoryItemType for new vendor inventory item type : " + persistentState.getProperty("Id")
-						+ " successfully added to database!";
+				Integer Id = insertAutoIncrementalPersistentState(mySchema, persistentState);
+				persistentState.setProperty("Id", "" + Id.intValue());
+				updateStatusMessage = "Vendor data for new vendor : " + persistentState.getProperty("Id")
+						+ " shelved successfully in database!";
 			}
 		} catch (SQLException ex) {
 			updateStatusMessage = "Error in inputting data in database!";

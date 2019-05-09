@@ -27,8 +27,11 @@ import model.InventoryItemTypeCollection;
 import model.InventoryManager;
 import model.Vendor;
 import model.VendorCollection;
+import model.VendorInventoryItemType;
+import model.VendorInventoryItemTypeCollection;
 
 import java.util.Properties;
+import java.util.Vector;
 
 import exception.InvalidPrimaryKeyException;
 // project imports
@@ -61,7 +64,7 @@ public class InventoryItemTypeView extends View {
 		super(account, "InventoryItemTypeView");
 
 		history = (String) myModel.getState("his");
-		//System.out.println(history + " iitv");
+		// System.out.println(history + " iitv");
 
 		// create a container for showing the contents
 		VBox container = new VBox(10);
@@ -87,7 +90,7 @@ public class InventoryItemTypeView extends View {
 		HBox container = new HBox();
 		container.setAlignment(Pos.CENTER);
 
-		Text titleText = new Text(" Restaurant Inventory ");//change
+		Text titleText = new Text(" Restaurant Inventory ");// change
 		titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		titleText.setWrappingWidth(300);
 		titleText.setTextAlignment(TextAlignment.CENTER);
@@ -281,8 +284,12 @@ public class InventoryItemTypeView extends View {
 				processInventoryItemType(nameEntered, unitsEntered, measureEntered, daysEntered, orderEntered,
 						notesEntered);
 			}
-		} else if ((nameEntered.equals("")) && (notesEntered.equals(""))) {
+		} else if ((nameEntered.equals("")) && (notesEntered.equals(""))
+				&& (!history.equals("deleteVIIT") && !history.equals("addVIIT"))) {
 			listAll();
+		} else if (history.equals("deleteVIIT") || history.equals("addVIIT")) {
+			Vendor v = (Vendor) myModel.getState("id");
+			listByVendor((String) v.getState("ID"));
 		} else {
 			processIIT(nameEntered, notesEntered);
 		}
@@ -298,36 +305,72 @@ public class InventoryItemTypeView extends View {
 		notes.setText("");
 		if (history.equals("deleteIIT")) {
 			InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
-			 try {
+			try {
 				ic.findInventoryItemType(props);
 				ic.createAndShowView2();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else {
-			 InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
-			 try {
+			InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
+			try {
 				ic.setManager((InventoryManager) ((VendorCollection) myModel).getManager());
-				//System.out.println(ic.getManager().getState("his")+" ic");
+				// System.out.println(ic.getManager().getState("his")+" ic");
 				ic.findInventoryItemType(props);
 				ic.createAndShowView();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-					
+
 		}
 	}
 
 	public void listAll() {
 		InventoryItemTypeCollection ic = new InventoryItemTypeCollection();
-		 try {
+		ic.setManager((InventoryManager) myModel.getState("self"));
+		try {
 			ic.findAllInventoryItemTypes();
 			ic.createAndShowView();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public void listByVendor(String vendID) {
+		VendorInventoryItemTypeCollection vic = new VendorInventoryItemTypeCollection();
+		InventoryItemTypeCollection iitc = new InventoryItemTypeCollection();
+		vic.setManager((InventoryManager) myModel.getState("self"));
+		Properties prop = new Properties();
+		prop.setProperty("VendorID", vendID);
+		VendorCollection vc = new VendorCollection();
+		vc.setVendor(prop);
+		if (history.equals("deleteVIIT")) {
+			try {
+				vic.findVendorInventoryItemType(prop);
+				Vector<VendorInventoryItemType> list = (Vector<VendorInventoryItemType>) vic.getState("itemName");
+				System.out.println(list);
+				for (int i = 0; i < list.size(); i++) {
+					prop.setProperty("ItemTypeName", (String) list.get(i).getState("InventoryItemTypeName"));
+					iitc.findInventoryItemTypesWithNameLike(prop.getProperty("ItemTypeName"));
+				}
+				iitc.setManager((InventoryManager) myModel.getState("self"));
+				iitc.createAndShowView();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				iitc.setV(vc.getV());
+				iitc.setManager((InventoryManager) myModel.getState("self"));
+				iitc.findAllInventoryItemTypes();
+				iitc.createAndShowView();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private void processInventoryItemType(String nameString, String unitString, String measureString, String dayString,
 			String orderString, String noteString) {
 		Properties props = new Properties();

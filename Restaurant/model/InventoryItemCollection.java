@@ -24,6 +24,8 @@ public class InventoryItemCollection extends EntityBase implements IView {
 	private InventoryItem _selectedInventoryItem;
 	public static String iname;
 	private InventoryManager manager;
+	private InventoryItem myInventoryItem;
+	
 	// GUI Components
 
 	// constructor for this class
@@ -147,8 +149,10 @@ public class InventoryItemCollection extends EntityBase implements IView {
 			return this;
 		else if (key.equals("InventoryItemList"))
 			return this;
+		else if (key.equals("SelectedInventoryItem"))
+			return _selectedInventoryItem;
 		else if (key.equals("his")) {
-			// System.out.println(manager);
+			//System.out.println(manager);
 			return manager.getState("his");
 		}
 		return null;
@@ -158,10 +162,34 @@ public class InventoryItemCollection extends EntityBase implements IView {
 	public void stateChangeRequest(String key, Object value) {
 		if (key.equals("InventoryManagerView") == true) {
 			createAndShowInventoryManagerView();
+		} else if (key.equals("BarcodeSearch")) {
+			if (value != null) {
+				boolean flag = inventoryItemFolder((Properties) value);
+				if (flag == true) {
+					try {
+						InventoryItem a = new InventoryItem((Properties) value);
+						setSelectedInventoryItem(a);
+						searchInventoryItem((Properties) value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 		myRegistry.updateSubscribers(key, this);
 	}
-
+	
+	// ----------------------------------------------------------------
+	public boolean inventoryItemFolder(Properties props) {
+		try {
+			myInventoryItem = new InventoryItem(props);
+			return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
 	// ----------------------------------------------------------
 	public InventoryItem retrieve(String name) {
 		InventoryItem retValue = null;
@@ -204,6 +232,25 @@ public class InventoryItemCollection extends EntityBase implements IView {
 
 	}
 
+	// ------------------------------------------------------
+	private void searchInventoryItem(Properties item) throws Exception { // FINISH THIS
+
+		createAndShowConfirmInventoryItemRemovalView(item);
+	}
+
+	// ------------------------------------------------------
+	private void createAndShowConfirmInventoryItemRemovalView(Properties item) { // FINISH THIS
+		Scene currentScene = (Scene) myViews.get("ConfirmInventoryItemRemovalView");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("ConfirmInventoryItemRemovalView", this);
+			currentScene = new Scene(newView);
+			myViews.put("ConfirmInventoryItemRemovalView ", currentScene);
+		}
+
+		swapToView(currentScene);
+	}
+
 	// ------------------------------------------------------------
 	private void createAndShowInventoryManagerView() {
 		Scene currentScene = (Scene) myViews.get("InventoryManagerView");
@@ -238,6 +285,10 @@ public class InventoryItemCollection extends EntityBase implements IView {
 		this.manager = manager;
 	}
 
+	public void setSelectedInventoryItem(InventoryItem a) {
+		_selectedInventoryItem = a;
+	}
+	
 	public InventoryManager getManager() {
 		return manager;
 	}

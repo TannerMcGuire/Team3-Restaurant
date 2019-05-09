@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.InventoryManager;
+import model.VendorCollection;
 
 import java.util.Properties;
 import java.util.Vector;
@@ -139,7 +140,6 @@ public class VendorInventoryItemTypeView extends View{
 		backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				//myModel.stateChangeRequest("InventoryManagerView", null);
 				new model.InventoryManager();
 			}
 		});
@@ -177,8 +177,14 @@ public class VendorInventoryItemTypeView extends View{
 
 		if (((vendorEntered == null) || (vendorEntered.length() == 0))
 				&& ((phoneEntered == null) || (phoneEntered.length() == 0))) {
-			displayErrorMessage("Please enter a part of vendor name or vendor phone number");
-			vendorName.requestFocus();
+			VendorCollection vc = new VendorCollection();
+			try {
+				vc.findAllVendors();
+				vc.setManager((InventoryManager) myModel);
+				vc.createAndShowView();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else
 			processVendorInfo(vendorEntered, phoneEntered);
 	}

@@ -26,7 +26,7 @@ public class Vendor extends EntityBase implements IView {
 
 	// GUI Components
 
-	private String updateStatusMessage = "";
+	public String updateStatusMessage = "";
 
 	// constructor for this class
 	// ----------------------------------------------------------
@@ -99,8 +99,10 @@ public class Vendor extends EntityBase implements IView {
 	public Object getState(String key) {
 		if (key.equals("UpdateStatusMessage") == true)
 			return updateStatusMessage;
-
-		return persistentState.getProperty(key);
+		else if (key.equals("ID"))
+			return persistentState.getProperty("Id");
+		else
+			return persistentState.getProperty(key);
 	}
 
 	// ----------------------------------------------------------------
@@ -138,20 +140,40 @@ public class Vendor extends EntityBase implements IView {
 				updateStatusMessage = "Vendor data for vendor ID : " + persistentState.getProperty("Id")
 						+ " updated successfully in database!";
 			} else {
-				Integer Id = insertAutoIncrementalPersistentState(mySchema, persistentState);
-				persistentState.setProperty("Id", "" + Id.intValue());
-				updateStatusMessage = "Vendor data for new vendor : " + persistentState.getProperty("Id")
-						+ " shelved successfully in database!";
+				VendorCollection vc = new VendorCollection();
+				try {
+					vc.findAllVendors();
+
+					Vector list = (Vector) vc.getState("Vendors");
+					for (int i = 0; i < list.size(); i++) {
+						Vendor old = vc.retrieve(Integer.toString(i + 1));
+						if (old.persistentState.getProperty("Name").equals(persistentState.getProperty("Name")))
+							if (old.persistentState.getProperty("PhoneNumber")
+									.equals(persistentState.getProperty("PhoneNumber"))) {
+								updateStatusMessage = "Vendor already exists!";
+							}
+					}
+					if (updateStatusMessage.equals("Vendor already exists!")) {
+
+					} else {
+						Integer Id = insertAutoIncrementalPersistentState(mySchema, persistentState);
+						persistentState.setProperty("Id", "" + Id.intValue());
+						updateStatusMessage = "Vendor data for new vendor : " + persistentState.getProperty("Id")
+								+ " shelved successfully in database!";
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException ex) {
 			updateStatusMessage = "Error in shelving vendor data in database!";
 		}
-		//System.out.println("updateStateInDatabase " + updateStatusMessage);
+		// System.out.println("updateStateInDatabase " + updateStatusMessage);
 	}
 
 	/**
-	 * This method is needed solely to enable the Vendor information to be displayable
-	 * in a table
+	 * This method is needed solely to enable the Vendor information to be
+	 * displayable in a table
 	 *
 	 */
 	// --------------------------------------------------------------------------
