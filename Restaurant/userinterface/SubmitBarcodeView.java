@@ -218,8 +218,6 @@ public class SubmitBarcodeView extends View {
 			props.setProperty("Notes", inventoryItem.getState("Notes").toString());
 			props.setProperty("Status", inventoryItem.getState("Status").toString());
 
-
-
 			myModel.stateChangeRequest("BarcodeSearch", props);
 		} catch (InvalidPrimaryKeyException e) {
 			e.printStackTrace();

@@ -97,12 +97,10 @@ public class InventoryManager implements IView, IModel {
 		// just set up dependencies for
 		// DEBUG System.out.println("Manager.sCR: key = " + key);
 		// This is where GUI popups change!!!
-
 		// Inventory Start Screen
 		if (key.equals("InventoryManagerView") == true) {
 			createAndShowInventoryManagerView();
 		}
-
 		// Inventory Item Type screen
 		else if (key.equals("InventoryItemTypeView") == true) {
 			if (((String) value).equals("addIIT") == true) {
@@ -199,21 +197,14 @@ public class InventoryManager implements IView, IModel {
 				e.printStackTrace();
 			}
 		} else if (key.equals("SubmitBarcodeView") == true) {
-			if ((String) value == "removeItem") {
+			if (value.equals("removeItem")) {
 				history = (String) value;
-				createAndShowSubmitBarcodeView();
-			} /*
-				 * else if ((String) value == "addVendor") { history = (String) value;
-				 * createAndShowVendorView(); } UPDATE WITH MODIFY ITEM STATUS
-				 */
+			} else if (value.equals("modifyItem")) {
+				history = (String) value;
+			}
+			createAndShowSubmitBarcodeView();
 		} else if (key.equals("BarcodeSearch")) {
 			if (value != null) {
-				/*
-				 * System.out.println("BARCODE" + ((Properties)value).getProperty("Barcode"));
-				 * System.out.println("NAME" +
-				 * ((Properties)value).getProperty("InventoryItemTypeName"));
-				 * System.out.println("VENDORID" + ((Properties)value).getProperty("VendorId"));
-				 */
 				boolean flag = inventoryItemFolder((Properties) value);
 				if (flag == true) {
 					try {
@@ -225,7 +216,12 @@ public class InventoryManager implements IView, IModel {
 			}
 		} else if (key.equals("InventoryItemRemoval")) {
 			myInventoryItem.takeOut();
-		} else if (key.equals("full"))
+
+		} else if (key.equals("full")) {
+
+		} else if (key.equals("InventoryItemModified")) {
+			myInventoryItem.modifyItem((String) value);
+		}
 		myRegistry.updateSubscribers(key, this);
 	}
 
@@ -300,9 +296,13 @@ public class InventoryManager implements IView, IModel {
 		iit.createAndShowView();
 	}
 
-	private void searchInventoryItem(Properties item) throws Exception { // FINISH THIS
+	private void searchInventoryItem(Properties item) throws Exception {
 
-		createAndShowConfirmInventoryItemRemovalView(item);
+		if (history.equals("removeItem"))
+			createAndShowConfirmInventoryItemRemovalView();
+		else if (history.equals("modifyItem")) {
+			createAndShowModifyInventoryItemView();
+		}
 	}
 
 	// ------------------------------------------------------------
@@ -495,13 +495,25 @@ public class InventoryManager implements IView, IModel {
 		swapToView(currentScene);
 	}
 
-	private void createAndShowConfirmInventoryItemRemovalView(Properties item) { // FINISH THIS
+	private void createAndShowConfirmInventoryItemRemovalView() {
 		Scene currentScene = (Scene) myViews.get("ConfirmInventoryItemRemovalView");
 		if (currentScene == null) {
 			// create our initial view
 			View newView = ViewFactory.createView("ConfirmInventoryItemRemovalView", this);
 			currentScene = new Scene(newView);
 			myViews.put("ConfirmInventoryItemRemovalView ", currentScene);
+		}
+
+		swapToView(currentScene);
+	}
+
+	private void createAndShowModifyInventoryItemView() {
+		Scene currentScene = (Scene) myViews.get("ModifyInventoryItemView");
+		if (currentScene == null) {
+			// create our new view
+			View newView = ViewFactory.createView("ModifyInventoryItemView", this);
+			currentScene = new Scene(newView);
+			myViews.put("ModifyInventoryItemView", currentScene);
 		}
 
 		swapToView(currentScene);

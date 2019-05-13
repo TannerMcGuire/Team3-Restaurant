@@ -157,6 +157,12 @@ public class InventoryItem extends EntityBase implements IView {
 		update();
 	}
 
+	public void modifyItem(String status) {
+		persistentState.setProperty("Status", status);
+		update();
+
+	}
+
 	public void expired() {
 		persistentState.setProperty("Status", "Expired");
 		update();
