@@ -72,7 +72,7 @@ public class InventoryItemTypeCollectionView extends View {
 		populateFields();
 
 		manager = (InventoryManager) ((InventoryItemTypeCollection) myModel).getManager();
-		//System.out.println("here " + myModel.getState("his"));
+		// System.out.println("here " + myModel.getState("his"));
 	}
 
 	// --------------------------------------------------------------------------
@@ -248,6 +248,7 @@ public class InventoryItemTypeCollectionView extends View {
 			} else if (myModel.getState("his").equals("deleteVIIT")) {
 				myModel.stateChangeRequest("deleteVIIT", selectedItemTypeName);
 			}
+
 		}
 	}
 

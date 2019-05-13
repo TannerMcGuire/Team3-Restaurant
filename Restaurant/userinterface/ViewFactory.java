@@ -42,8 +42,9 @@ public class ViewFactory {
 			return new ConfirmInventoryItemRemovalView(model);
 		} else if (viewName.equals("ModifyInventoryItemView") == true) {
 			return new ModifyInventoryItemView(model);
-		}
-		return null;
+		} else if (viewName.equals("InventoryItemCollectionView") == true) {
+			return new InventoryItemCollectionView(model);
+		} return null;
 	}
 
 	/*

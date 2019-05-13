@@ -177,11 +177,10 @@ public class VendorCollectionView extends View {
 
 					if (manager.getState("his").equals("addVIIT") || manager.getState("his").equals("deleteVIIT")) {
 						processVendorSelected();
-					}
-					else {
+					} else {
 						select();
-				}
 					}
+				}
 			}
 		});
 		ScrollPane scrollPane = new ScrollPane();
@@ -207,17 +206,22 @@ public class VendorCollectionView extends View {
 		backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 
-	public void handle(ActionEvent e) {
-		// myModel.stateChangeRequest("InventoryManagerView", null);
-		new model.InventoryManager();
-	}});
+			public void handle(ActionEvent e) {
+				// myModel.stateChangeRequest("InventoryManagerView", null);
+				new model.InventoryManager();
+			}
+		});
 
-	HBox btnContainer = new HBox(
-			10);btnContainer.setAlignment(Pos.CENTER);btnContainer.getChildren().add(submitButton);btnContainer.getChildren().add(backButton);
+		HBox btnContainer = new HBox(10);
+		btnContainer.setAlignment(Pos.CENTER);
+		btnContainer.getChildren().add(submitButton);
+		btnContainer.getChildren().add(backButton);
 
-	vbox.getChildren().add(grid);vbox.getChildren().add(scrollPane);vbox.getChildren().add(btnContainer);
+		vbox.getChildren().add(grid);
+		vbox.getChildren().add(scrollPane);
+		vbox.getChildren().add(btnContainer);
 
-	return vbox;
+		return vbox;
 	}
 
 	// --------------------------------------------------------------------------
@@ -256,7 +260,6 @@ public class VendorCollectionView extends View {
 		VendorTableModel selectedItem = tableOfVendors.getSelectionModel().getSelectedItem();
 
 		if (selectedItem != null) {
-			String selectedVendorID = selectedItem.getVendorId();
 			Properties prop = new Properties();
 			prop.setProperty("Id", selectedItem.getVendorId());
 			prop.setProperty("Name", selectedItem.getName());

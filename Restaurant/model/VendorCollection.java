@@ -22,7 +22,7 @@ public class VendorCollection extends EntityBase implements IView {
 
 	private Vector<Vendor> vendorList;
 	private InventoryItemType myIIT;
-	public static String v;
+	private InventoryItemTypeCollection myIITC = new InventoryItemTypeCollection();
 	private Vendor selectedVendor;
 	private InventoryManager manager;
 
@@ -116,6 +116,28 @@ public class VendorCollection extends EntityBase implements IView {
 		}
 	}
 
+	public void findVendorId(Properties prop) throws Exception {
+		String id = prop.getProperty("VendorID");
+		String query;
+		query = "SELECT * FROM " + myTableName + " WHERE (Id = " + id + ")";
+
+		Vector allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null)
+			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
+				Properties nextVendorData = (Properties) allDataRetrieved.elementAt(cnt);
+				Vendor vendor = new Vendor(nextVendorData);
+
+				if (vendor != null)
+					addVendor(vendor);
+			}
+		else {
+
+			throw new InvalidPrimaryKeyException("No vendors found");
+
+		}
+	}
+	
 	// ----------------------------------------------------------------------------------
 
 	private int findIndexToAdd(Vendor a) {
@@ -154,13 +176,18 @@ public class VendorCollection extends EntityBase implements IView {
 			return this;
 		else if (key.equals("his"))
 			return manager.getState("his");
+		else if (key.equals("id"))
+			return selectedVendor;
+		else if (key.equals("self"))
+			return manager;
 		return null;
 	}
 
 	// ----------------------------------------------------------------
 	public void stateChangeRequest(String key, Object value) {
 		if (key.equals("InventoryItemTypeView") == true) {
-			v = (String) value;
+			String vendorID = (String) value;
+			selectedVendor = retrieve(vendorID);
 			createAndShowIITView();
 		} else if (key.equals("IITInfo") == true) {
 			if (value != null) {
@@ -223,7 +250,7 @@ public class VendorCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------
-	protected void createAndShowView() {
+	public void createAndShowView() {
 
 		Scene localScene = myViews.get("VendorCollectionView");
 
@@ -305,4 +332,16 @@ public class VendorCollection extends EntityBase implements IView {
 		return manager;
 	}
 
+	public Vendor getV() {
+		return selectedVendor;
+	}
+	
+	public void setVendor(Properties p) {
+		try {
+			findVendorId(p);
+			selectedVendor = vendorList.firstElement();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

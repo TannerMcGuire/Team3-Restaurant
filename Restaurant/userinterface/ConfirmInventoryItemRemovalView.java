@@ -102,7 +102,7 @@ public class ConfirmInventoryItemRemovalView extends View {
 		grid.add(labelNotes, 0, 6, 2, 1);
 
 		InventoryItem inventoryItem = (InventoryItem) myModel.getState("SelectedInventoryItem");
-
+		
 		/*
 		 * System.out.println(inventoryItem.getState("Barcode"));
 		 * System.out.println(inventoryItem.getState("InventoryItemTypeName"));
@@ -117,6 +117,13 @@ public class ConfirmInventoryItemRemovalView extends View {
 		dateOfLastUse = new TextField(inventoryItem.getState("DateOfLastUse").toString());
 		notes = new TextField(inventoryItem.getState("Notes").toString());
 
+		barcode.setEditable(false);
+		inventoryItemTypeName.setEditable(false);
+		vendorId.setEditable(false);
+		dateReceived.setEditable(false);
+		dateOfLastUse.setEditable(false);
+		notes.setEditable(false);
+		
 		grid.add(barcode, 2, 1, 2, 1);
 		grid.add(inventoryItemTypeName, 2, 2, 2, 1);
 		grid.add(vendorId, 2, 3, 2, 1);
@@ -148,15 +155,16 @@ public class ConfirmInventoryItemRemovalView extends View {
 
 			@Override
 			public void handle(ActionEvent event) {
-				myModel.stateChangeRequest("BACK", null);
+				new model.InventoryManager();
 			}
 		});
 
 		HBox btnContainer = new HBox(100);
 		btnContainer.setAlignment(Pos.CENTER);
 
-		btnContainer.getChildren().add(noBtn);
 		btnContainer.getChildren().add(yesBtn);
+		btnContainer.getChildren().add(noBtn);
+		
 
 		vBox.getChildren().add(grid);
 		vBox.getChildren().add(btnContainer);

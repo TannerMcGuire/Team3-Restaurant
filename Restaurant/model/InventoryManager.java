@@ -83,14 +83,16 @@ public class InventoryManager implements IView, IModel {
 	// Example for later
 	// ----------------------------------------------------------
 	public Object getState(String key) {
-		if (key.equals("his") == true)
+		if (key.equals("his"))
 			return history;
 		else if (key.equals("selectedVendor")) {
 			return selectedVendor;
 		} else if (key.equals("SelectedInventoryItem")) {
 			return myInventoryItem;
+		} else if (key.equals("self")) {
+			return this;
 		} else
-			return "";
+			return null;
 	}
 
 	// ----------------------------------------------------------------
@@ -227,8 +229,16 @@ public class InventoryManager implements IView, IModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}else if (key.equals("full")) {
-			
+		} else if (key.equals("full")) {
+			history = (String) value;
+			InventoryItemCollection iic = new InventoryItemCollection();
+			iic.setManager(this);
+			try {
+				iic.findAvailableInventoryItems();
+				iic.createAndShowView();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		myRegistry.updateSubscribers(key, this);
 	}
@@ -352,7 +362,6 @@ public class InventoryManager implements IView, IModel {
 	}
 
 	// ------------------------------------------------------------------------------------------------
-	// ------------------------------------------------------------------------------------------------
 
 	private void createAndShowProcessInvoiceView() {
 		Scene currentScene = (Scene) myViews.get("ProcessInvoiceView");
@@ -379,20 +388,6 @@ public class InventoryManager implements IView, IModel {
 
 		swapToView(currentScene);
 
-	}
-
-	// ------------------------------------------------------------
-
-	private void createAndShowDeleteIITView() {
-		Scene localScene = myViews.get("InventoryItemTypeDeleteView");
-		if (localScene == null) {
-			// create our new view
-			View newView = ViewFactory.createView("InventoryItemTypeDeleteView", this);
-			localScene = new Scene(newView);
-			myViews.put("InventoryItemTypeDeleteView", localScene);
-		}
-
-		swapToView(localScene);
 	}
 
 	// ------------------------------------------------------------
@@ -431,6 +426,13 @@ public class InventoryManager implements IView, IModel {
 			} else if (notes != null) {
 				inventoryItemTypeCollection.findInventoryItemTypesWithNotesLike(notes);
 				inventoryItemTypeCollection.createAndShowInventoryItemTypeSelectionScreens();
+			} else if (itemTypeName == null && notes == null) {
+				try {
+					inventoryItemTypeCollection.findAllInventoryItemTypes();
+					inventoryItemTypeCollection.createAndShowInventoryItemTypeSelectionScreens();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (InvalidPrimaryKeyException e) {
 

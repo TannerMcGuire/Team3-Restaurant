@@ -22,6 +22,7 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 
 	private Vector<InventoryItemType> inventoryItemTypeList;
 	private InventoryItemType _selectedInventoryItemType;
+	private Vendor v;
 	public static String iname;
 	private InventoryManager manager;
 	// GUI Components
@@ -220,9 +221,12 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 			return this;
 		else if (key.equals("InventoryItemTypeList"))
 			return this;
-		else if (key.equals("his")) {
+		else if (key.equals("id")) {
+			return v.getState("ID");
+		} else if (key.equals("his")) {
+			//System.out.println(manager);
 			return manager.getState("his");
-			}
+		}
 		return null;
 	}
 
@@ -232,8 +236,8 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 			createAndShowInventoryManagerView();
 		} else if (key.equals("IITInfo") == true) {
 			iname = (String) value;
-			createAndShowVIITPriceView();
-		} else if (key.equals("deleteVIIT") == true){
+				createAndShowVIITPriceView();
+		} else if (key.equals("deleteVIIT") == true) {
 			Properties prop = new Properties();
 			prop.setProperty("InventoryItemTypeName", (String) value);
 			VendorInventoryItemTypeCollection viit = new VendorInventoryItemTypeCollection();
@@ -260,10 +264,6 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 		} else if (key.equals("Submit new IIT Info")) {
 			InventoryItemType inventoryItemType = new InventoryItemType();
 			inventoryItemType.stateChangeRequest("SUBMIT", (Properties) value);
-		}
-
-		else if (key.equals("Success") == true) {
-			createAndShowYay();
 		}
 		myRegistry.updateSubscribers(key, this);
 	}
@@ -327,21 +327,21 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	}
 
 	// ------------------------------------------------------
-		public void createAndShowVendorInventoryItemTypeCollection() {
+	public void createAndShowVendorInventoryItemTypeCollection() {
 
-			Scene localScene = myViews.get("VendorInventoryItemTypeCollectionView");
+		Scene localScene = myViews.get("VendorInventoryItemTypeCollectionView");
 
-			if (localScene == null) {
-				// create our new view
-				View newView = ViewFactory.createView("VendorInventoryItemTypeCollectionView", this);
-				localScene = new Scene(newView);
-				myViews.put("VendorInventoryItemTypeCollectionView", localScene);
-			}
-			// make the view visible by installing it into the frame
-			swapToView(localScene);
-
+		if (localScene == null) {
+			// create our new view
+			View newView = ViewFactory.createView("VendorInventoryItemTypeCollectionView", this);
+			localScene = new Scene(newView);
+			myViews.put("VendorInventoryItemTypeCollectionView", localScene);
 		}
-	
+		// make the view visible by installing it into the frame
+		swapToView(localScene);
+
+	}
+
 	// ------------------------------------------------------------
 	public void createAndShowInventoryItemTypeSelectionScreens() {
 		Scene currentScene = (Scene) myViews.get("InventoryItemTypeSelectionScreen");
@@ -412,20 +412,6 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 
 	}
 
-	// ------------------------------------------------------------
-	private void createAndShowYay() {
-		Scene currentScene = (Scene) myViews.get("Yay");
-		if (currentScene == null) {
-			// create our initial view
-			View newView = ViewFactory.createView("Yay", this); // USE VIEW FACTORY
-			currentScene = new Scene(newView);
-			myViews.put("Yay", currentScene);
-		}
-
-		swapToView(currentScene);
-
-	}
-
 	// -----------------------------------------------------------------------------------
 	protected void initializeSchema(String tableName) {
 		if (mySchema == null) {
@@ -446,6 +432,10 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 		this.manager = manager;
 	}
 
+	public void setV(Vendor vend) {
+		v = vend;
+	}
+	
 	public InventoryManager getManager() {
 		return manager;
 	}

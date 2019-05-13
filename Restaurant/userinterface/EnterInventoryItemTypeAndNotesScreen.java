@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import model.InventoryItemTypeCollection;
 
 import java.util.Properties;
 
@@ -98,7 +99,10 @@ public class EnterInventoryItemTypeAndNotesScreen extends View {
 			@Override
 			public void handle(ActionEvent event) {
 				if (name.getText().isEmpty() && notes.getText().isEmpty()) {
-
+					Properties properties = new Properties();
+					properties.setProperty("ItemTypeName", name.getText());
+					properties.setProperty("Notes", notes.getText());
+					myModel.stateChangeRequest("SUBMIT IIT NAME AND NOTES", properties);
 				} else {
 					Properties properties = new Properties();
 					if (name.getText() != null) {
@@ -108,7 +112,6 @@ public class EnterInventoryItemTypeAndNotesScreen extends View {
 					if (notes.getText() != null) {
 						properties.setProperty("Notes", notes.getText());
 					}
-
 					myModel.stateChangeRequest("SUBMIT IIT NAME AND NOTES", properties);
 				}
 			}

@@ -15,21 +15,17 @@ import impresario.IView;
 import userinterface.View;
 import userinterface.ViewFactory;
 
-
 /** The class containing the AccountCollection for the ATM application */
 //==============================================================
 public class InventoryItemCollection extends EntityBase implements IView {
 	private static final String myTableName = "InventoryItem";
-
 	private static final InventoryItem InventoryItem = null;
 
-	private Vector<InventoryItem> InventoryItemList;
-//	private InventoryItemType myIIT;
-//	public static String v;
-//	private Vendor selectedVendor;
-//	private InventoryManager manager;
-
+	private Vector<InventoryItem> inventoryItemList;
+	private InventoryItem _selectedInventoryItem;
+	public static String iname;
 	private InventoryManager manager;
+	private InventoryItem myInventoryItem;
 
 	// GUI Components
 
@@ -37,14 +33,15 @@ public class InventoryItemCollection extends EntityBase implements IView {
 	// ----------------------------------------------------------
 	public InventoryItemCollection() {
 		super(myTableName);
-		InventoryItemList = new Vector<InventoryItem>();
+		inventoryItemList = new Vector<InventoryItem>();
+		_selectedInventoryItem = new InventoryItem();
 	}
 
 	// ----------------------------------------------------------------------------------
 	private void addInventoryItem(InventoryItem a) {
 		// patronlist.add(a);
 		int index = findIndexToAdd(a);
-		InventoryItemList.insertElementAt(a, index); // To build up a collection sorted on some key
+		inventoryItemList.insertElementAt(a, index); // To build up a collection sorted on some key
 	}
 
 	// ----------------------------------------------------------------------------------
@@ -55,7 +52,7 @@ public class InventoryItemCollection extends EntityBase implements IView {
 		if (name != null) {
 			query = "SELECT * FROM " + myTableName + " WHERE (InventoryItemTypeName LIKE '%" + name + "%')";
 		} else {
-		query = "SELECT * FROM " + myTableName + " WHERE (Barcode.equals(barcode)";
+			query = "SELECT * FROM " + myTableName + " WHERE (Barcode.equals(barcode)";
 		}
 		Vector allDataRetrieved = getSelectQueryResult(query);
 
@@ -68,20 +65,20 @@ public class InventoryItemCollection extends EntityBase implements IView {
 					addInventoryItem(InventoryItem);
 			}
 		else {
-			throw new InvalidPrimaryKeyException("No Inventory Items Matching: " + barcode );
+			throw new InvalidPrimaryKeyException("No Inventory Items Matching: " + barcode);
 		}
 	}
 
 	// ----------------------------------------------------------------------------------
-
 	public void findAvailiableInventoryItem(Properties prop) throws Exception {
 		String name = prop.getProperty("name");
 		String barcode = prop.getProperty("Barcode");
 		String query;
 		if (name != null) {
-			query = "SELECT * FROM " + myTableName + " WHERE InventoryItemTypeName LIKE '%" + name + "%' AND Status ='Available'";
+			query = "SELECT * FROM " + myTableName + " WHERE InventoryItemTypeName LIKE '%" + name
+					+ "%' AND Status ='Available'";
 		} else {
-		query = "SELECT * FROM " + myTableName + " WHERE (Barcode.equals(barcode) AND Status ='Available'";
+			query = "SELECT * FROM " + myTableName + " WHERE (Barcode.equals(barcode) AND Status ='Available'";
 		}
 		Vector allDataRetrieved = getSelectQueryResult(query);
 
@@ -98,9 +95,9 @@ public class InventoryItemCollection extends EntityBase implements IView {
 			throw new InvalidPrimaryKeyException("No Inventory Items matching: " + barcode);
 		}
 	}
-	
 
-	public void findAllII() throws Exception {
+	// ----------------------------------------------------------------------------------
+	public void findAllInventoryItems() throws Exception {
 		String query;
 		query = "SELECT * FROM " + myTableName;
 
@@ -108,23 +105,23 @@ public class InventoryItemCollection extends EntityBase implements IView {
 
 		if (allDataRetrieved != null)
 			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
-				Properties nextInventoryItemData = (Properties) allDataRetrieved.elementAt(cnt);
-				InventoryItem InventoryItem = new InventoryItem(nextInventoryItemData);
+				Properties nextIIData = (Properties) allDataRetrieved.elementAt(cnt);
+				InventoryItem inventoryItem = new InventoryItem(nextIIData);
 
-				if (InventoryItem != null)
-					addInventoryItem(InventoryItem);
+				if (inventoryItem != null)
+					addInventoryItem(inventoryItem);
 			}
 		else {
-
-			throw new InvalidPrimaryKeyException("No InventoryItems found");
-
+			throw new InvalidPrimaryKeyException("No Inventory Items found");
 		}
 	}
-	
+
+	// ----------------------------------------------------------------------------------
 	public void findWithName(String name) throws Exception {
 		String query = "";
 		if (name != null) {
-			query = "SELECT * FROM " + myTableName + " WHERE (InventoryItemTypeName LIKE '%" + name + "%' AND Status ='Available')";
+			query = "SELECT * FROM " + myTableName + " WHERE (InventoryItemTypeName LIKE '%" + name
+					+ "%' AND Status ='Available')";
 		}
 		Vector allDataRetrieved = getSelectQueryResult(query);
 
@@ -142,20 +139,37 @@ public class InventoryItemCollection extends EntityBase implements IView {
 		}
 	}
 
+	// ----------------------------------------------------------------------------------
+	public void findAvailableInventoryItems() throws Exception {
+		String query;
+		query = "SELECT * FROM " + myTableName + " WHERE (Status = 'Available')";
+
+		Vector allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null)
+			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++) {
+				Properties nextIIData = (Properties) allDataRetrieved.elementAt(cnt);
+				InventoryItem inventoryItem = new InventoryItem(nextIIData);
+
+				if (inventoryItem != null)
+					addInventoryItem(inventoryItem);
+			}
+		else {
+			throw new InvalidPrimaryKeyException("No item types found");
+		}
+	}
 
 	// ----------------------------------------------------------------------------------
-
-	@SuppressWarnings("static-access")
 	private int findIndexToAdd(InventoryItem a) {
 		// users.add(u);
 		int low = 0;
-		int high = InventoryItemList.size() - 1;
+		int high = inventoryItemList.size() - 1;
 		int middle;
 
 		while (low <= high) {
 			middle = (low + high) / 2;
 
-			InventoryItem midSession = InventoryItemList.elementAt(middle);
+			InventoryItem midSession = inventoryItemList.elementAt(middle);
 
 			int result = InventoryItem.compare(a, midSession);
 
@@ -176,18 +190,41 @@ public class InventoryItemCollection extends EntityBase implements IView {
 	 */
 	// ----------------------------------------------------------
 	public Object getState(String key) {
-		if (key.equals("InventoryItems"))
-			return InventoryItemList;
-		else if (key.equals("nventoryItemList"))
+		if (key.equals("InventoryItem"))
+			return inventoryItemList;
+		else if (key.equals("InventoryItems"))
+			return inventoryItemList;
+		else if (key.equals("InventoryItemCollection"))
 			return this;
-		else if (key.equals("his"))
+		else if (key.equals("InventoryItemList"))
+			return this;
+		else if (key.equals("SelectedInventoryItem"))
+			return _selectedInventoryItem;
+		else if (key.equals("his")) {
+			// System.out.println(manager);
 			return manager.getState("his");
+		}
 		return null;
 	}
 
 	// ----------------------------------------------------------------
 	public void stateChangeRequest(String key, Object value) {
-		if (key.equals("InventoryItemTypeView") == true) {
+		if (key.equals("InventoryManagerView") == true) {
+			createAndShowInventoryManagerView();
+		} else if (key.equals("BarcodeSearch")) {
+			if (value != null) {
+				boolean flag = inventoryItemFolder((Properties) value);
+				if (flag == true) {
+					try {
+						InventoryItem a = new InventoryItem((Properties) value);
+						setSelectedInventoryItem(a);
+						searchInventoryItem((Properties) value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} else if (key.equals("InventoryItemTypeView") == true) {
 			String v = (String) value;
 			createAndShowIITView();
 		} else if (key.equals("IITInfo") == true) {
@@ -201,26 +238,29 @@ public class InventoryItemCollection extends EntityBase implements IView {
 					}
 				}
 			}
-		}/* else if (key.equals("ModifyVendorView") == true) {
-			String vendorID = (String) value;
-			selectedVendor = retrieve(vendorID);
-			createAndShowModifyView();
-		} else if (key.equals("ProcessInvoiceView") == true) {
-			String vendorID = (String) value;
-			selectedVendor = retrieve(vendorID);
-			createAndShowProcessInvoiceView();
-		}*/
+		}
 		myRegistry.updateSubscribers(key, this);
 	}
 
+	// ----------------------------------------------------------------
+	public boolean inventoryItemFolder(Properties props) {
+		try {
+			myInventoryItem = new InventoryItem(props);
+			return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+
 	// ----------------------------------------------------------
-	public InventoryItem retrieve(String Barcode) {
+	public InventoryItem retrieve(String barcode) {
 		InventoryItem retValue = null;
-		for (int cnt = 0; cnt < InventoryItemList.size(); cnt++) {
-			InventoryItem nextInventoryItem = InventoryItemList.elementAt(cnt);
-			String nextBarcode = (String) nextInventoryItem.getState("Barcode");
-			if (nextBarcode.equals(Barcode) == true) {
-				retValue = nextInventoryItem;
+		for (int cnt = 0; cnt < inventoryItemList.size(); cnt++) {
+			InventoryItem nextII = inventoryItemList.elementAt(cnt);
+			String nextIIID = (String) nextII.getState("Barcode");
+			if (nextIIID.equals(barcode) == true) {
+				retValue = nextII;
 				return retValue; // we should say 'break;' here
 			}
 		}
@@ -232,6 +272,27 @@ public class InventoryItemCollection extends EntityBase implements IView {
 	// ----------------------------------------------------------
 	public void updateState(String key, Object value) {
 		stateChangeRequest(key, value);
+	}
+
+	// ------------------------------------------------------
+	public InventoryItem getSelectInventoryItemType() {
+		return _selectedInventoryItem;
+	}
+
+	// ------------------------------------------------------
+	public void createAndShowView() {
+
+		Scene localScene = myViews.get("InventoryItemCollectionView");
+
+		if (localScene == null) {
+			// create our new view
+			View newView = ViewFactory.createView("InventoryItemCollectionView", this);
+			localScene = new Scene(newView);
+			myViews.put("InventoryItemCollectionView", localScene);
+		}
+		// make the view visible by installing it into the frame
+		swapToView(localScene);
+
 	}
 
 	// ------------------------------------------------------
@@ -251,59 +312,43 @@ public class InventoryItemCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------
-	protected void createAndShowView() {
-
-		Scene localScene = myViews.get("InventoryItemCollectionView");
-
-		if (localScene == null) {
-			// create our new view
-			View newView = ViewFactory.createView("InventoryItemCollectionView", this);
-			localScene = new Scene(newView);
-			myViews.put("InventoryItemCollectionView", localScene);
-		}
-		// make the view visible by installing it into the frame
-		swapToView(localScene);
-
-	}
-
-	// -----------------------------------------------------------
-
-/*	protected void createAndShowModifyView() {
-		// create our new view
-		View newView = ViewFactory.createView("ModifyVendorView", selectedVendor);
-		Scene newScene = new Scene(newView);
-
-		// make the view visible by installing it into the frame
-		swapToView(newScene);
-	}
-*/
-	// -----------------------------------------------------------
-
-/*	protected void createAndShowProcessInvoiceView() {
-		// create our new view
-		View newView = ViewFactory.createView("ProcessInvoiceView", selectedVendor);
-		Scene newScene = new Scene(newView);
-
-		// make the view visible by installing it into the frame
-		swapToView(newScene);
-	}
-*/
-	// ----------------------------------------------------------
-	public boolean inventoryItemFolder(Properties props) {
-		try {
-			InventoryItem myII = new InventoryItem(props);
-			return true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
-		}
-	}
-
-	// ----------------------------------------------------------
 	private void searchIIT(Properties item) throws Exception {
 		InventoryItemTypeCollection iit = new InventoryItemTypeCollection();
 		iit.findInventoryItemType(item);
 		iit.createAndShowView();
+	}
+
+	// ------------------------------------------------------
+	private void searchInventoryItem(Properties item) throws Exception { // FINISH THIS
+
+		createAndShowConfirmInventoryItemRemovalView(item);
+	}
+
+	// ------------------------------------------------------
+	private void createAndShowConfirmInventoryItemRemovalView(Properties item) { // FINISH THIS
+		Scene currentScene = (Scene) myViews.get("ConfirmInventoryItemRemovalView");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("ConfirmInventoryItemRemovalView", this);
+			currentScene = new Scene(newView);
+			myViews.put("ConfirmInventoryItemRemovalView ", currentScene);
+		}
+
+		swapToView(currentScene);
+	}
+
+	// ------------------------------------------------------------
+	private void createAndShowInventoryManagerView() {
+		Scene currentScene = (Scene) myViews.get("InventoryManagerView");
+		if (currentScene == null) {
+			// create our initial view
+			View newView = ViewFactory.createView("InventoryManagerView", this); // USE VIEW FACTORY
+			currentScene = new Scene(newView);
+			myViews.put("InventoryManagerView", currentScene);
+		}
+
+		swapToView(currentScene);
+
 	}
 
 	// -----------------------------------------------------------------------------------
@@ -314,23 +359,23 @@ public class InventoryItemCollection extends EntityBase implements IView {
 	}
 
 	// -----------------------------------------------------------------------------------
-	public void printInventoryItems() {
-		System.out.println("================= Vendor List ================");
-		for (int cnt = 0; cnt < InventoryItemList.size(); cnt++) {
-			System.out.println(InventoryItemList.get(cnt));
+	public void printItemTypes() {
+		System.out.println("================= Inventory Item List ================");
+		for (int cnt = 0; cnt < inventoryItemList.size(); cnt++) {
+			System.out.println(inventoryItemList.get(cnt));
 		}
-		System.out.println("==============================================");
+		System.out.println("======================================================");
 	}
 
 	public void setManager(InventoryManager manager) {
 		this.manager = manager;
+	}
 
-		// System.out.println((String) manager.getState("his") + " vc");
-
+	public void setSelectedInventoryItem(InventoryItem a) {
+		_selectedInventoryItem = a;
 	}
 
 	public InventoryManager getManager() {
 		return manager;
 	}
-
 }

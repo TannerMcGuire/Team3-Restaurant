@@ -4,56 +4,67 @@ import java.util.Vector;
 
 import javafx.beans.property.SimpleStringProperty;
 
-//==============================================================================
-public class InventoryItemTableModel
-{
-	private final SimpleStringProperty Barcode, InventoryItemTypeName, VendorId, 
-		DateRecieved, dateOfLastUse,  status, notes;
+public class InventoryItemTableModel {
+	private final SimpleStringProperty barcode;
+	private final SimpleStringProperty itemName;
+	private final SimpleStringProperty vendorId;
+	private final SimpleStringProperty dateReceived;
+	private final SimpleStringProperty dateLastUsed;
+	private final SimpleStringProperty notes;
+	private final SimpleStringProperty status;
 
 	// ----------------------------------------------------------------------------
-	public InventoryItemTableModel(Vector<String> vendorData) {
-		Barcode = new SimpleStringProperty(vendorData.elementAt(0));
-		InventoryItemTypeName = new SimpleStringProperty(vendorData.elementAt(1));
-		VendorId = new SimpleStringProperty(vendorData.elementAt(2));
-		DateRecieved = new SimpleStringProperty(vendorData.elementAt(3));
-		dateOfLastUse = new SimpleStringProperty(vendorData.elementAt(4));
-		status = new SimpleStringProperty(vendorData.elementAt(5));
-		notes = new SimpleStringProperty(vendorData.elementAt(6));
-		
+	public InventoryItemTableModel(Vector<String> iiData) {
+		barcode = new SimpleStringProperty(iiData.elementAt(0));
+		itemName = new SimpleStringProperty(iiData.elementAt(1));
+		vendorId = new SimpleStringProperty(iiData.elementAt(2));
+		dateReceived = new SimpleStringProperty(iiData.elementAt(3));
+		dateLastUsed = new SimpleStringProperty(iiData.elementAt(4));
+		notes = new SimpleStringProperty(iiData.elementAt(5));
+		status = new SimpleStringProperty(iiData.elementAt(6));
 	}
 
-	public String getBarcode()
-	{
-		return Barcode.get();
+	public String getBarcode() {
+		return barcode.get();
 	}
-
-	public String getInventoryItemTypeName()
-	{
-		return InventoryItemTypeName.get();
+	public void setBarcode(String num) {
+		barcode.set(num);
 	}
-
-	public String getVendorId()
-	{
-		return VendorId.get();
+	public String getItemName() {
+		return itemName.get();
 	}
-
-	public String getDateRecieved()
-	{
-		return DateRecieved.get();
+	public void setItemName(String n) {
+		itemName.set(n);
 	}
-
-	public String getDateOfLastUse()
-	{
-		return dateOfLastUse.get();
+	public String getVendorID() {
+		return vendorId.get();
 	}
-
-	public String getStatus()
-	{
-		return status.get();
+	public void setVendorID(String i) {
+		vendorId.set(i);
 	}
-
-	public String getNotes()
-	{
+	public String getDateReceived() {
+		return dateReceived.get();
+	}
+	public void setDateReceived(String d) {
+		dateReceived.set(d);
+	}
+	public String getDateLastUsed() {
+		return dateLastUsed.get();
+	}
+	public void setDateLastUsed(String d) {
+		dateLastUsed.set(d);
+	}
+	public String getNotes() {
 		return notes.get();
 	}
+	public void setNotes(String n) {
+		notes.set(n);
+	}
+	public String getStatus() {
+		return status.get();
+	}
+	public void setStatus(String s) {
+		status.set(s);
+	}
+
 }
