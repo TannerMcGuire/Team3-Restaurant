@@ -18,3 +18,4 @@
 [4/29/19 5:18 PM]|InventoryItem|insertPersistentState|Error|NOTAG|null<SQL Exception: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ' 'Unused' , '04-29-2019' , 1 , 'donuts' , '04-29-2019' , '' )' at line 1>
 [4/29/19 5:23 PM]|InventoryItem|insertPersistentState|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'hfjsjsjfh' in 'field list'>
 [4/29/19 5:26 PM]|InventoryItem|insertPersistentState|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'jfhfhfjfj' in 'field list'>
+[5/7/19 4:37 PM]|InventoryItemCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Name LIKE '%Donut%')' at line 1>

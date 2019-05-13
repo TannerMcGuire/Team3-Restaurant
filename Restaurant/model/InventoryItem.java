@@ -141,15 +141,11 @@ public class InventoryItem extends EntityBase implements IView {
 	}
 
 	// -----------------------------------------------------------------------------------
-	/*public static int compare(InventoryItem a, InventoryItem b) {
-		String aID = (String) a.getState("barcode");
-		String bID = (String) b.getState("barcode");
-<<<<<<< HEAD
-=======
-
->>>>>>> Derek
+	public static int compare(InventoryItem a, InventoryItem b) {
+		String aID = (String) a.getState("Barcode");
+		String bID = (String) b.getState("Barcode");
 		return aID.compareTo(bID);
-	} */
+	}
 
 	// -----------------------------------------------------------------------------------
 	public void takeOut() {
@@ -179,19 +175,12 @@ public class InventoryItem extends EntityBase implements IView {
 			if (persistentState.getProperty("Barcode") != null) {
 				if (!(InventoryManager.history.equals("processInvoice"))) {
 					Properties whereClause = new Properties();
-//<<<<<<< HEAD
-//					whereClause.setProperty("InventoryItemTypeName", persistentState.getProperty("InventoryItemTypeName"));
-//					updatePersistentState(mySchema, persistentState, whereClause);
-//					updateStatusMessage = "Inventory Item type data for barcode : "
-//							+ persistentState.getProperty("Barcode") + " updated successfully in database!";
-//				} else {					
-//=======
+
 					whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
 					updatePersistentState(mySchema, persistentState, whereClause);
 					updateStatusMessage = "Inventory Item type data for barcode : "
 							+ persistentState.getProperty("Barcode") + " updated successfully in database!";
 				} else {
-//>>>>>>> Derek
 					insertPersistentState(mySchema, persistentState);
 					updateStatusMessage = "Inventory Item Type data for new Inventory Item : "
 							+ persistentState.getProperty("Barcode") + " shelved successfully in database!";

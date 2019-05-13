@@ -134,17 +134,28 @@ public class InventoryItemTypeCollectionView extends View {
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
 
-		Text title = new Text("LIST OF INVENTORY ITEM TYPES");
-		title.setWrappingWidth(350);
-		title.setTextAlignment(TextAlignment.CENTER);
-		title.setFill(Color.BLACK);
-		grid.add(title, 0, 0, 2, 1);
-
-		Text prompt = new Text("Select proper InventoryItemType by double clicking or selecting and clicking submit");
-		prompt.setWrappingWidth(350);
-		prompt.setTextAlignment(TextAlignment.CENTER);
-		prompt.setFill(Color.BLACK);
-		grid.add(prompt, 0, 1, 2, 1);
+		if(!myModel.getState("his").equals("reorder")) {
+			Text title = new Text("LIST OF INVENTORY ITEM TYPES");
+			title.setWrappingWidth(350);
+			title.setTextAlignment(TextAlignment.CENTER);
+			title.setFill(Color.BLACK);
+			grid.add(title, 0, 0, 2, 1);
+		
+			System.out.println("history: " +myModel.getState("his"));
+			Text prompt = new Text("Select proper InventoryItemType by double clicking or selecting and clicking submit");
+			prompt.setWrappingWidth(350);
+			prompt.setTextAlignment(TextAlignment.CENTER);
+			prompt.setFill(Color.BLACK);
+			grid.add(prompt, 0, 1, 2, 1);
+		}
+		
+		else {
+			Text title = new Text("Reorder List");
+			title.setWrappingWidth(350);
+			title.setTextAlignment(TextAlignment.CENTER);
+			title.setFill(Color.BLACK);
+			grid.add(title, 0, 0, 2, 1);
+		}
 
 		tableOfItemTypes = new TableView<InventoryItemTypeTableModel>();
 		tableOfItemTypes.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -212,7 +223,8 @@ public class InventoryItemTypeCollectionView extends View {
 
 		HBox btnContainer = new HBox(10);
 		btnContainer.setAlignment(Pos.CENTER);
-		btnContainer.getChildren().add(submitButton);
+		if(!myModel.getState("his").equals("reorder"))
+			btnContainer.getChildren().add(submitButton);
 		btnContainer.getChildren().add(backButton);
 
 		vbox.getChildren().add(grid);

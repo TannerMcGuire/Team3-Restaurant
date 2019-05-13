@@ -35,7 +35,7 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------------------------------
-	private void addInventoryItemType(InventoryItemType a) {
+	public void addInventoryItemType(InventoryItemType a) {
 		// patronlist.add(a);
 		int index = findIndexToAdd(a);
 		inventoryItemTypeList.insertElementAt(a, index); // To build up a collection sorted on some key
@@ -158,6 +158,30 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 	}
 
 	// ----------------------------------------------------------------------------------
+	public void findActiveInventoryItemTypes()
+			throws InvalidPrimaryKeyException {
+
+		String query = "SELECT * FROM " + myTableName + " WHERE Status = 'Active';";
+
+		Vector<Properties> allDataRetrieved = getSelectQueryResult(query);
+
+		if (allDataRetrieved != null) {
+
+			for (int index = 0; index < allDataRetrieved.size(); index++) {
+
+				Properties inventoryItemTypeProperties = (Properties) allDataRetrieved.elementAt(index);
+
+				InventoryItemType inventoryItemType = new InventoryItemType(inventoryItemTypeProperties);
+
+				inventoryItemTypeList.add(inventoryItemType);
+			}
+		} else {
+			throw new InvalidPrimaryKeyException(
+					"No InventoryItemTypes active ItemTypeName");
+		}
+	}
+
+	// ----------------------------------------------------------------------------------
 	private int findIndexToAdd(InventoryItemType a) {
 		// users.add(u);
 		int low = 0;
@@ -197,7 +221,6 @@ public class InventoryItemTypeCollection extends EntityBase implements IView {
 		else if (key.equals("InventoryItemTypeList"))
 			return this;
 		else if (key.equals("his")) {
-			//System.out.println(manager);
 			return manager.getState("his");
 			}
 		return null;
