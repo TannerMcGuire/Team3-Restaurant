@@ -179,7 +179,7 @@ public class InventoryItemCollectionView extends View {
 		scrollPane.setPrefSize(300, 200);
 		scrollPane.setContent(tableOfInventoryItems);
 
-		if (myModel.getState("his").equals("removeItem")) {
+		if (myModel.getState("his").equals("removeItem") || myModel.getState("his").equals("modifyItem")) {
 
 			submitButton = new Button("Submit");
 			submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
@@ -255,14 +255,16 @@ public class InventoryItemCollectionView extends View {
 			props.setProperty("Notes", inventoryItem.getState("Notes").toString());
 			props.setProperty("Status", inventoryItem.getState("Status").toString());
 
-			myModel.stateChangeRequest("BarcodeSearch", props);
+			if (myModel.getState("his").equals("removeItem"))
+				myModel.stateChangeRequest("BarcodeSearch", props);
+			else
+				myModel.stateChangeRequest("SearchBarcode", props);
 		} catch (InvalidPrimaryKeyException e) {
 			e.printStackTrace();
 		}
 
-
 	}
-	
+
 	// --------------------------------------------------------------------------
 	protected MessageView createStatusLog(String initialMessage) {
 		statusLog = new MessageView(initialMessage);

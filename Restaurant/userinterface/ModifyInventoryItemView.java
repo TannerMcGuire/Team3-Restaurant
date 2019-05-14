@@ -103,7 +103,7 @@ public class ModifyInventoryItemView extends View {
         grid.add(labelNotes, 0, 6, 2, 1);
 
         InventoryItem inventoryItem = (InventoryItem) myModel.getState("SelectedInventoryItem");
-
+        
         barcode = new TextField(inventoryItem.getState("Barcode").toString());
         barcode.setDisable(true);
         inventoryItemTypeName = new TextField(inventoryItem.getState("InventoryItemTypeName").toString());
@@ -152,11 +152,9 @@ public class ModifyInventoryItemView extends View {
 
         backBtn = new Button("BACK");
         backBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                myModel.stateChangeRequest("BACK", null);
-            }
+        	public void handle(ActionEvent e) {
+				new model.InventoryManager();
+			}
         });
 
         HBox btnContainer = new HBox(100);

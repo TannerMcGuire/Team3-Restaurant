@@ -194,7 +194,7 @@ public class SubmitBarcodeView extends View {
 
 		String barcodeEntered = barcode.getText();
 
-		if ((barcodeEntered == "") || (barcodeEntered.length() != 9)){
+		if ((barcodeEntered.length() == 0) || (barcodeEntered.length() > 9)){
 			InventoryItemCollection iic = new InventoryItemCollection();
 			try {
 				iic.findAvailableInventoryItems();
@@ -225,7 +225,7 @@ public class SubmitBarcodeView extends View {
 			props.setProperty("DateOfLastUse", inventoryItem.getState("DateOfLastUse").toString());
 			props.setProperty("Notes", inventoryItem.getState("Notes").toString());
 			props.setProperty("Status", inventoryItem.getState("Status").toString());
-
+			
 			myModel.stateChangeRequest("BarcodeSearch", props);
 		} catch (InvalidPrimaryKeyException e) {
 			e.printStackTrace();

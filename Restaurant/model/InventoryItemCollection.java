@@ -224,6 +224,21 @@ public class InventoryItemCollection extends EntityBase implements IView {
 					}
 				}
 			}
+		} else if (key.equals("InventoryItemModified")) {
+			_selectedInventoryItem.modifyItem((String) value);
+		} else if (key.equals("SearchBarcode")) {
+			if (value != null) {
+				boolean flag = inventoryItemFolder((Properties) value);
+				if (flag == true) {
+					try {
+						InventoryItem a = new InventoryItem((Properties) value);
+						setSelectedInventoryItem(a);
+						modifyInventoryItem((Properties) value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		} else if (key.equals("InventoryItemTypeView") == true) {
 			String v = (String) value;
 			createAndShowIITView();
@@ -324,6 +339,25 @@ public class InventoryItemCollection extends EntityBase implements IView {
 		createAndShowConfirmInventoryItemRemovalView(item);
 	}
 
+	// ------------------------------------------------------
+	private void modifyInventoryItem(Properties item) throws Exception { // FINISH THIS
+
+		createAndShowModifyInventoryItemView(item);
+	}
+
+	// ------------------------------------------------------
+	private void createAndShowModifyInventoryItemView(Properties item) {
+		Scene currentScene = (Scene) myViews.get("ModifyInventoryItemView");
+		if (currentScene == null) {
+			// create our new view
+			View newView = ViewFactory.createView("ModifyInventoryItemView", this);
+			currentScene = new Scene(newView);
+			myViews.put("ModifyInventoryItemView", currentScene);
+		}
+
+		swapToView(currentScene);
+	}
+	
 	// ------------------------------------------------------
 	private void createAndShowConfirmInventoryItemRemovalView(Properties item) { // FINISH THIS
 		Scene currentScene = (Scene) myViews.get("ConfirmInventoryItemRemovalView");

@@ -50,11 +50,11 @@ public class Tester extends Application
 	//----------------------------------------------------------
 	public void start(Stage primaryStage)
 	{
-	   System.out.println("Restaurant Version 0.95");
+	   System.out.println("Restaurant Version 1.0");
 	   System.out.println("Copyright Team 3 2019");
 
            // Create the top-level container (main frame) and add contents to it.
-	   MainStageContainer.setStage(primaryStage, "Restaurant Inventory Version 0.95");
+	   MainStageContainer.setStage(primaryStage, "Restaurant Inventory Version 1.0");
 	   mainStage = MainStageContainer.getInstance();
 
 	   // Finish setting up the stage (ENABLE THE GUI TO BE CLOSED USING THE TOP RIGHT
@@ -96,3 +96,6 @@ public class Tester extends Application
 	}
 
 }
+/*
+ * Contributing members Tanner McGuire, Derek Hanley, David Kayltyuk, Bastien Montauge, Ryan BeGell
+ */
