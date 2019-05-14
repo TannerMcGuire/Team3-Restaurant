@@ -266,7 +266,7 @@ public class InventoryItemTypeView extends View {
 			} else if ((!(unitsEntered.matches("[0-9]+")) || Integer.parseInt(unitsEntered) < 0)) {
 				displayErrorMessage("Please enter positive integer for units");
 				unit.requestFocus();
-			} else if ((measureEntered.equals("")) || (measureEntered.length() == 0) || (nameEntered.length() > 15)) {
+			} else if ((measureEntered.equals("")) || (measureEntered.length() == 0) || (measureEntered.length() > 15)) {
 				displayErrorMessage("Please enter type of measure ie bottle");
 				measure.requestFocus();
 			} else if ((daysEntered.equals("")) || !(daysEntered.matches("-?[1-9]\\d*"))

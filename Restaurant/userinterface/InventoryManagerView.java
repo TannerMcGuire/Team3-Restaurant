@@ -100,8 +100,8 @@ public class InventoryManagerView extends View {
 	private GridPane createFormContents() {
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
-		//grid.setHgap(10);
-		//grid.setVgap(10);
+		grid.setHgap(5);
+		grid.setVgap(5);
 		grid.setPadding(new Insets(25, 25, 25, 25));
 
 		// data entry fields
@@ -252,7 +252,7 @@ public class InventoryManagerView extends View {
 		doneButton = new Button("DONE");
 		doneButton.setTextFill(Color.WHITE);
 		//doneButton.setMinWidth(255);
-		doneButton.setMinSize(500, 75);
+		doneButton.setMinSize(515, 75);
 		doneButton.setStyle("-fx-background-color: black");
 		doneButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -263,10 +263,10 @@ public class InventoryManagerView extends View {
 		//grid.add(doneButton, 1, 12);
 
 		VBox btnContainer = new VBox(10);
-		HBox btnContainer1 = new HBox(0);
-		HBox btnContainer2 = new HBox(0);
-		HBox btnContainer3 = new HBox(0);
-		HBox btnContainer4 = new HBox(0);
+		HBox btnContainer1 = new HBox(5);
+		HBox btnContainer2 = new HBox(5);
+		HBox btnContainer3 = new HBox(5);
+		HBox btnContainer4 = new HBox(5);
 		btnContainer.setAlignment(Pos.BOTTOM_CENTER);
 		btnContainer1.getChildren().add(addIITButton);
 		btnContainer1.getChildren().add(updateIITButton);

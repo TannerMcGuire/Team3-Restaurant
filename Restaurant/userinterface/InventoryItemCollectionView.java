@@ -134,6 +134,7 @@ public class InventoryItemCollectionView extends View {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
+		//grid.setMinSize(, 460);
 
 		Text title = new Text("FULL LIST OF INVENTORY ITEMS");
 		title.setWrappingWidth(350);
@@ -176,7 +177,7 @@ public class InventoryItemCollectionView extends View {
 				noteColumn, statusColumn);
 
 		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setPrefSize(300, 200);
+		scrollPane.setPrefSize(515, 400);
 		scrollPane.setContent(tableOfInventoryItems);
 
 		if (myModel.getState("his").equals("removeItem")) {

@@ -102,6 +102,7 @@ public class ProcessInvoiceView extends View {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
+		grid.setMinSize(515, 500);
 
 		Text prompt = new Text("Please Inventory Item Information From Invoice");
 		prompt.setWrappingWidth(400);

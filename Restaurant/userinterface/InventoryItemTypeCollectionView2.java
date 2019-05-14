@@ -187,7 +187,7 @@ public class InventoryItemTypeCollectionView2 extends View {
 			}
 		});
 		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setPrefSize(300, 200);
+		scrollPane.setPrefSize(460, 460);
 		scrollPane.setContent(tableOfItemTypes);
 
 		submitButton = new Button("Submit");

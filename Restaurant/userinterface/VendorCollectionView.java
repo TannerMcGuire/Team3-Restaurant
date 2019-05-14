@@ -184,7 +184,7 @@ public class VendorCollectionView extends View {
 			}
 		});
 		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setPrefSize(300, 200);
+		scrollPane.setPrefSize(515, 400);
 		scrollPane.setContent(tableOfVendors);
 
 		submitButton = new Button("Submit");

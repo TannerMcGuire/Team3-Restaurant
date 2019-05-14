@@ -156,7 +156,7 @@ public class InventoryItemTypeSelectionScreen extends View {
 //			}
 //		});
 		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setPrefSize(115, 150);
+		scrollPane.setPrefSize(515, 400);
 		scrollPane.setContent(_tableOfInventoryItemType);
 
 		_doneBtn = new Button("Submit");
