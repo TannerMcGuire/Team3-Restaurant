@@ -30,7 +30,7 @@ import java.util.Properties;
 
 // project imports
 import impresario.IModel;
-import sun.dc.pr.PRError;
+//import sun.dc.pr.PRError;
 
 /** The class containing the Submit Barcode View for the Restaurant application */
 //==============================================================
@@ -94,6 +94,7 @@ public class SubmitBarcodeView extends View {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
+		grid.setMinSize(550, 460);
 
 		Text prompt = new Text("Please Enter Inventory Item Barcode");
 		prompt.setWrappingWidth(400);

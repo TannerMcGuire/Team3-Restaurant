@@ -124,7 +124,7 @@ public class InventoryItemTypeView extends View {
 		nameLabel.setTextAlignment(TextAlignment.RIGHT);
 		grid.add(nameLabel, 0, 1);
 		name = new TextField();
-
+		grid.setMinSize(550, 460);
 		grid.add(name, 1, 1);
 
 		if (history.equals("addIIT")) {
@@ -210,7 +210,7 @@ public class InventoryItemTypeView extends View {
 
 		vbox.getChildren().add(grid);
 		vbox.getChildren().add(buttons);
-
+		
 		return vbox;
 	}
 

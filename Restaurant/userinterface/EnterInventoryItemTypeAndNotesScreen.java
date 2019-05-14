@@ -67,6 +67,7 @@ public class EnterInventoryItemTypeAndNotesScreen extends View {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
+		grid.setMinSize(550, 460);
 
 		Text prompt = new Text("Please Enter Inventory Item Information");
 		prompt.setWrappingWidth(400);

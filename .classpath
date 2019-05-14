@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="Restaurant"/>
-	<classpathentry kind="lib" path="D:/Brockport/Eclipse/Team3-Restaurant/Restaurant/mysql-connector-java-5.1.7-bin.jar"/>
-	<classpathentry kind="lib" path="D:/Brockport/Eclipse/Team3-Restaurant/Restaurant/mysql-connector-java-8.0.15.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/david/OneDrive/Documents/School/Brockport.Spring.2019/CSC 429 - Object Oriented Software Development/FinalCode/mysql-connector-java-5.1.7-bin.jar"/>
 	<classpathentry kind="output" path="Restaurant"/>
 </classpath>

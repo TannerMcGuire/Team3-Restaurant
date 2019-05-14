@@ -100,13 +100,14 @@ public class InventoryManagerView extends View {
 	private GridPane createFormContents() {
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
-		grid.setHgap(10);
-		grid.setVgap(10);
+		//grid.setHgap(10);
+		//grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
 
 		// data entry fields
-		addIITButton = new Button("Add Inventory Item Type");
-		addIITButton.setMinWidth(255);
+		addIITButton = new Button("Add Inventory\nItem Type");
+		//addIITButton.setMinWidth(255);
+		addIITButton.setMinSize(125, 125);
 		addIITButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -116,8 +117,9 @@ public class InventoryManagerView extends View {
 		});
 		//grid.add(addIITButton, 1, 0);
 		
-		updateIITButton = new Button("Update Inventory Item Type");
-		updateIITButton.setMinWidth(255);
+		updateIITButton = new Button("Update Inventory\nItem Type");
+		//updateIITButton.setMinWidth(255);
+		updateIITButton.setMinSize(125, 125);
 		updateIITButton.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
@@ -127,8 +129,9 @@ public class InventoryManagerView extends View {
 		});
 		//grid.add(updateIITButton, 1, 1);
 		
-		deleteIITButton = new Button("Delete Inventory Item Type");
-		deleteIITButton.setMinWidth(255);
+		deleteIITButton = new Button("Delete Inventory\nItem Type");
+		//deleteIITButton.setMinWidth(255);
+		deleteIITButton.setMinSize(125, 125);
 		deleteIITButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -139,7 +142,8 @@ public class InventoryManagerView extends View {
 		//grid.add(deleteIITButton, 1, 2);
 		
 		addVendorButton = new Button("Add Vendor");
-		addVendorButton.setMinWidth(255);
+		//addVendorButton.setMinWidth(255);
+		addVendorButton.setMinSize(125, 125);
 		addVendorButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -150,7 +154,8 @@ public class InventoryManagerView extends View {
 		//grid.add(addVendorButton, 1, 3);
 		
 		modifyVendorButton = new Button("Modify Vendor");
-		modifyVendorButton.setMinWidth(255);
+		//modifyVendorButton.setMinWidth(255);
+		modifyVendorButton.setMinSize(125, 125);
 		modifyVendorButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -160,8 +165,9 @@ public class InventoryManagerView extends View {
 		});
 		//grid.add(modifyVendorButton, 1, 4);
 		
-		addVIITButton = new Button("Add Vendor Inventory Item Type");
-		addVIITButton.setMinWidth(255);
+		addVIITButton = new Button("Add Vendor\nInventory\nItem Type");
+		//addVIITButton.setMinWidth(255);
+		addVIITButton.setMinSize(125, 125);
 		addVIITButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -171,8 +177,9 @@ public class InventoryManagerView extends View {
 		});
 		//grid.add(addVIITButton, 1, 5);
 		
-		deleteVIITButton = new Button("Delete Vendor Inventory Item Type");
-		deleteVIITButton.setMinWidth(255);
+		deleteVIITButton = new Button("Delete Vendor\nInventory\nItem Type");
+		//deleteVIITButton.setMinWidth(255);
+		deleteVIITButton.setMinSize(125, 125);
 		deleteVIITButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -183,7 +190,8 @@ public class InventoryManagerView extends View {
 		//grid.add(deleteVIITButton, 1, 6);
 		
 		processButton = new Button("Process Invoice");
-		processButton.setMinWidth(255);
+		//processButton.setMinWidth(255);
+		processButton.setMinSize(125, 125);
 		processButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -194,7 +202,8 @@ public class InventoryManagerView extends View {
 		//grid.add(processButton, 1, 7);
 		
 		removeItemButton = new Button("Remove Item");
-		removeItemButton.setMinWidth(255);
+		//removeItemButton.setMinWidth(255);
+		removeItemButton.setMinSize(125, 125);
 		removeItemButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -204,8 +213,9 @@ public class InventoryManagerView extends View {
 		});
 		//grid.add(removeItemButton, 1, 8);
 		
-		modifyIIstatusButton = new Button("Modify Inventory Item Status");
-		modifyIIstatusButton.setMinWidth(255);
+		modifyIIstatusButton = new Button("Modify Inventory\nItem Status");
+		//modifyIIstatusButton.setMinWidth(255);
+		modifyIIstatusButton.setMinSize(125, 125);
 		modifyIIstatusButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -216,7 +226,8 @@ public class InventoryManagerView extends View {
 		//grid.add(modifyIIstatusButton, 1, 9);
 		
 		reorderButton = new Button("Reorder List");
-		reorderButton.setMinWidth(255);
+		//reorderButton.setMinWidth(255);
+		reorderButton.setMinSize(125, 125);
 		reorderButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -227,7 +238,8 @@ public class InventoryManagerView extends View {
 		//grid.add(reorderButton, 1, 10);
 		
 		inventoryButton = new Button("View Inventory");
-		inventoryButton.setMinWidth(255);
+		//inventoryButton.setMinWidth(255);
+		inventoryButton.setMinSize(125, 125);
 		inventoryButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -239,7 +251,8 @@ public class InventoryManagerView extends View {
 		
 		doneButton = new Button("DONE");
 		doneButton.setTextFill(Color.WHITE);
-		doneButton.setMinWidth(255);
+		//doneButton.setMinWidth(255);
+		doneButton.setMinSize(500, 75);
 		doneButton.setStyle("-fx-background-color: black");
 		doneButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -250,22 +263,30 @@ public class InventoryManagerView extends View {
 		//grid.add(doneButton, 1, 12);
 
 		VBox btnContainer = new VBox(10);
+		HBox btnContainer1 = new HBox(0);
+		HBox btnContainer2 = new HBox(0);
+		HBox btnContainer3 = new HBox(0);
+		HBox btnContainer4 = new HBox(0);
 		btnContainer.setAlignment(Pos.BOTTOM_CENTER);
-		btnContainer.getChildren().add(addIITButton);
-		btnContainer.getChildren().add(updateIITButton);
-		btnContainer.getChildren().add(deleteIITButton);
-		btnContainer.getChildren().add(addVendorButton);
-		btnContainer.getChildren().add(modifyVendorButton);
-		btnContainer.getChildren().add(addVIITButton);
-		btnContainer.getChildren().add(deleteVIITButton);
-		btnContainer.getChildren().add(processButton);
-		btnContainer.getChildren().add(removeItemButton);
-		btnContainer.getChildren().add(modifyIIstatusButton);
-		btnContainer.getChildren().add(reorderButton);
-		btnContainer.getChildren().add(inventoryButton);
-		btnContainer.getChildren().add(doneButton);
-		grid.add(btnContainer, 1, 0);
+		btnContainer1.getChildren().add(addIITButton);
+		btnContainer1.getChildren().add(updateIITButton);
+		btnContainer1.getChildren().add(deleteIITButton);
+		btnContainer1.getChildren().add(addVendorButton);
+		btnContainer2.getChildren().add(modifyVendorButton);
+		btnContainer2.getChildren().add(addVIITButton);
+		btnContainer2.getChildren().add(deleteVIITButton);
+		btnContainer2.getChildren().add(processButton);
+		btnContainer3.getChildren().add(removeItemButton);
+		btnContainer3.getChildren().add(modifyIIstatusButton);
+		btnContainer3.getChildren().add(reorderButton);
+		btnContainer3.getChildren().add(inventoryButton);
+		btnContainer4.getChildren().add(doneButton);
+		grid.add(btnContainer1, 0, 1);
+		grid.add(btnContainer2, 0, 2);
+		grid.add(btnContainer3, 0, 3);
+		grid.add(btnContainer4, 0, 4);
 		
+		grid.setMinSize(500, 500);
 		return grid;
 	}
 
